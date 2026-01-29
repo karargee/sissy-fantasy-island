@@ -1,5 +1,6 @@
 import './globals.css'
 import ShoppingCart from '@/components/ShoppingCart'
+import { Analytics } from '@vercel/analytics/next'
 
 export default function RootLayout({
   children,
@@ -11,6 +12,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         {children}
         <ShoppingCart />
+        <Analytics />
       </body>
     </html>
   )
