@@ -125,7 +125,7 @@ function AgeGate({ onConfirm }) {
 
 /* Countdown */
 function Countdown() {
-  const target = new Date("2026-03-30T19:00:00");
+  const target = new Date("2026-04-18T19:00:00");
   const [diff, setDiff] = useState(null);
 
   useEffect(() => {
@@ -392,7 +392,7 @@ export default function Home() {
         <h1>TRANS PARTY</h1>
         <p className="tagline">Subs. Doms. No limits. One unforgettable night.</p>
         <div className="event-details">
-          <span>📅 March 30, 2026</span>
+          <span>📅 April 18, 2026</span>
           <span>📍 San Francisco, CA — Private Location</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
