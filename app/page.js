@@ -96,7 +96,7 @@ const VENUE_AREAS = [
 ];
 
 const FAQS = [
-  { q: "Where is the event?", a: "San Francisco, CA. The exact venue address is private and only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
+  { q: "Where is the event?", a: "Charlotte, North Carolina. The exact venue address is private and only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
   { q: "Is this event 21+?", a: "Yes. Valid government ID required at the door. No exceptions." },
   { q: "What's the dress code?", a: "Leather, latex, harnesses, lingerie, or creative kink wear encouraged. No streetwear on the dungeon floor." },
   { q: "Is the venue accessible?", a: "Fully wheelchair accessible with gender-neutral restrooms and private changing areas." },
@@ -125,7 +125,7 @@ function AgeGate({ onConfirm }) {
 
 /* Countdown */
 function Countdown() {
-  const target = new Date("2026-04-18T19:00:00");
+  const target = new Date("2026-05-02T19:00:00");
   const [diff, setDiff] = useState(null);
 
   useEffect(() => {
@@ -392,8 +392,8 @@ export default function Home() {
         <h1>TRANS PARTY</h1>
         <p className="tagline">Subs. Doms. No limits. One unforgettable night.</p>
         <div className="event-details">
-          <span>📅 April 18, 2026</span>
-          <span>📍 San Francisco, CA — Private Location</span>
+          <span>📅 May 2, 2026</span>
+          <span>📍 Charlotte, NC — Private Location</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
         <Countdown />
