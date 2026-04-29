@@ -72,7 +72,7 @@ export default function Rules() {
       </Link>
       <h1 style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>📜 House Rules & Etiquette</h1>
       <p style={{ opacity: 0.6, marginBottom: "3rem", lineHeight: 1.6 }}>
-        Trans Party is built on respect, consent, and community. These rules exist to keep everyone safe and ensure
+        Trans & Sex Party is built on respect, consent, and community. These rules exist to keep everyone safe and ensure
         we all have an incredible night. By purchasing a ticket, you agree to follow these rules.
       </p>
 

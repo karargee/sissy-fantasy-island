@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Trans Party 🏳️‍⚧️",
-  description: "Get your tickets to the biggest trans party of the year!",
+  title: "Trans & Sex Party 🏳️‍⚧️",
+  description: "The ultimate sex party for men who love trans women. Get your tickets now.",
 };
 
 export default function RootLayout({ children }) {

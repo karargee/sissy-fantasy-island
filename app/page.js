@@ -8,60 +8,73 @@ const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const TICKETS = [
   {
-    name: "Sub Entry",
+    name: "Basic Entry",
     emoji: "🔗",
-    price: 500,
+    price: 300,
     color: "#5bcefa",
-    initialSlots: 20,
+    initialSlots: 30,
     perks: [
       "Entry to the main dungeon floor",
-      "Complimentary collar & tag",
-      "Access to all play areas",
       "1 welcome drink",
+      "Access to open play areas",
       "Consent & safety workshop included",
     ],
   },
   {
-    name: "Dom Pass",
+    name: "Costume Package",
+    emoji: "👗",
+    price: 450,
+    color: "#f5a9b8",
+    initialSlots: 25,
+    perks: [
+      "Everything in Basic Entry",
+      "Full costume provided (leather, latex, or lingerie set)",
+      "Accessories: collar, cuffs, or harness",
+      "Private changing room access",
+      "Costume fitting before the event",
+    ],
+  },
+  {
+    name: "VIP Dom Pass",
     emoji: "⛓️",
-    price: 1000,
+    price: 600,
     color: "#d63384",
     popular: true,
     initialSlots: 20,
     perks: [
-      "Everything in Sub Entry",
+      "Everything in Costume Package",
       "VIP throne lounge with open bar",
       "Private play rooms access",
-      "Exclusive leather swag bag",
       "Priority entry — skip the line",
       "Meet & greet with performers",
+      "Exclusive leather swag bag",
     ],
   },
   {
     name: "Dungeon Master",
     emoji: "👑",
-    price: 1500,
+    price: 900,
     color: "#6f42c1",
-    initialSlots: 20,
+    initialSlots: 15,
     perks: [
-      "Everything in Dom Pass",
+      "Everything in VIP Dom Pass",
+      "Premium costume (custom-fitted latex or leather outfit)",
       "Private backstage dungeon access",
       "Champagne & bottle service all night",
       "Professional kink-themed photo shoot",
       "Exclusive after-party (50 people only)",
-      "Custom engraved leather cuff",
-      "Limo pickup within city limits",
+      "Limo pickup within Las Vegas",
     ],
   },
   {
     name: "Masked Session",
     emoji: "🎭",
-    price: 750,
+    price: 400,
     color: "#1a1a2e",
     masked: true,
-    initialSlots: 15,
+    initialSlots: 20,
     perks: [
-      "Complimentary venetian mask at entry",
+      "Complimentary venetian mask & costume at entry",
       "Access to the masked-only dungeon wing",
       "No names, no IDs on the floor — full anonymity",
       "Separate discreet entrance & exit",
@@ -96,7 +109,7 @@ const VENUE_AREAS = [
 ];
 
 const FAQS = [
-  { q: "Where is the event?", a: "Charlotte, North Carolina. The exact venue address is private and only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
+  { q: "Where is the event?", a: "The Venetian Resort, Las Vegas, Nevada. The exact room and floor details are private and only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
   { q: "Is this event 21+?", a: "Yes. Valid government ID required at the door. No exceptions." },
   { q: "What's the dress code?", a: "Leather, latex, harnesses, lingerie, or creative kink wear encouraged. No streetwear on the dungeon floor." },
   { q: "Is the venue accessible?", a: "Fully wheelchair accessible with gender-neutral restrooms and private changing areas." },
@@ -125,7 +138,7 @@ function AgeGate({ onConfirm }) {
 
 /* Countdown */
 function Countdown() {
-  const target = new Date("2026-05-02T19:00:00");
+  const target = new Date("2026-05-08T19:00:00");
   const [diff, setDiff] = useState(null);
 
   useEffect(() => {
@@ -161,7 +174,7 @@ function Countdown() {
 
 /* BTC Confirmation Form */
 function BtcConfirmForm() {
-  const [form, setForm] = useState({ email: "", tier: "Sub Entry", txid: "" });
+  const [form, setForm] = useState({ email: "", tier: "Basic Entry", txid: "" });
   const [sent, setSent] = useState(false);
 
   function handleSubmit(e) {
@@ -193,10 +206,11 @@ function BtcConfirmForm() {
         onChange={(e) => setForm({ ...form, tier: e.target.value })}
         className="form-input form-select"
       >
-        <option value="Sub Entry">🔗 Sub Entry — $500</option>
-        <option value="Dom Pass">⛓️ Dom Pass — $1,000</option>
-        <option value="Dungeon Master">👑 Dungeon Master — $1,500</option>
-        <option value="Masked Session">🎭 Masked Session — $750</option>
+        <option value="Basic Entry">🔗 Basic Entry — $300</option>
+        <option value="Costume Package">👗 Costume Package — $450</option>
+        <option value="VIP Dom Pass">⛓️ VIP Dom Pass — $600</option>
+        <option value="Dungeon Master">👑 Dungeon Master — $900</option>
+        <option value="Masked Session">🎭 Masked Session — $400</option>
         <option value="Gift Card">🎁 Gift Card — $500</option>
         <option value="Livestream">🎥 Livestream Donation</option>
       </select>
@@ -308,7 +322,7 @@ export default function Home() {
   const [verified, setVerified] = useState(false);
   const [denied, setDenied] = useState(false);
   const [loading, setLoading] = useState(null);
-  const [quantities, setQuantities] = useState({ "Sub Entry": 1, "Dom Pass": 1, "Dungeon Master": 1, "Masked Session": 1 });
+  const [quantities, setQuantities] = useState({ "Basic Entry": 1, "Costume Package": 1, "VIP Dom Pass": 1, "Dungeon Master": 1, "Masked Session": 1 });
   const [payModal, setPayModal] = useState(null); // { tier, qty, price, mode: 'buy'|'donate' }
   const [payMethod, setPayMethod] = useState(null); // 'card'|'btc'|'gift'
   const [openFaq, setOpenFaq] = useState(null);
@@ -389,15 +403,16 @@ export default function Home() {
         <div className="hero-img-wrap">
           <img src="/hero.jpg" alt="Trans Party" className="hero-img" />
         </div>
-        <h1>TRANS PARTY</h1>
-        <p className="tagline">Subs. Doms. No limits. One unforgettable night.</p>
+        <h1>TRANS & SEX PARTY</h1>
+        <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
-          <span>📅 May 2, 2026</span>
-          <span>📍 Charlotte, NC — Private Location</span>
+          <span>📅 May 8–9, 2026</span>
+          <span>📍 The Venetian Resort — Las Vegas, NV</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
         <Countdown />
       </section>
+
 
       {/* Masked Session Banner */}
       <section className="section">
@@ -405,7 +420,7 @@ export default function Home() {
           <div className="masked-banner-emoji">🎭</div>
           <h2>Masked Sessions — Total Anonymity</h2>
           <p>Not ready to show your face? We got you. Our masked sessions offer a completely anonymous experience — separate entrance, no names, no IDs on the floor. Every attendee and staff member wears a mask. What happens behind the mask, stays behind the mask.</p>
-          <div className="masked-price">$750 <span>per person</span></div>
+          <div className="masked-price">$400 <span>per person</span></div>
           <button className="buy-btn masked-buy-btn" onClick={scrollToTickets}>Get Masked Tickets</button>
         </div>
       </section>
@@ -449,6 +464,27 @@ export default function Home() {
       </section>
 
 
+
+      {/* Past Events Gallery */}
+      <section className="section">
+        <h2>📸 Past Events</h2>
+        <p style={{ textAlign: "center", opacity: 0.6, marginBottom: "2rem", maxWidth: 600, margin: "0 auto 2rem" }}>All faces blurred for privacy. What happens at the party, stays at the party.</p>
+        <div className="gallery-grid">
+          {[
+            { src: "/gallery1.jpg", caption: "Main dungeon floor — NYC 2025" },
+            { src: "/gallery2.jpg", caption: "VIP throne lounge" },
+            { src: "/gallery3.jpg", caption: "Live rope & aerial show" },
+            { src: "/gallery4.jpg", caption: "Masked session wing" },
+          ].map((img, i) => (
+            <div key={i} className="gallery-item">
+              <div className="gallery-placeholder">
+                <span>{["⛓️", "👑", "🪢", "🎭"][i]}</span>
+              </div>
+              <p className="gallery-caption">{img.caption}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Testimonials */}
       <section className="section">
@@ -617,7 +653,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>🏳️⚧️ Trans Party 2025 — Your body, your rules 🏳️⚧️</p>
+        <p>🏳️⚧️ Trans & Sex Party 2026 — Your body, your rules 🏳️⚧️</p>
         <p>Secure payments by Stripe · All sales final · 21+ only</p>
       </footer>
 
