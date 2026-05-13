@@ -406,7 +406,7 @@ export default function Home() {
         <h1>TRANS & SEX PARTY</h1>
         <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
-          <span>📅 May 8–9, 2026</span>
+          <span>📅 May 29–30, 2026</span>
           <span>📍 The Venetian Resort — Las Vegas, NV</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
