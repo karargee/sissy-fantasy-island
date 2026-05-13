@@ -138,7 +138,7 @@ function AgeGate({ onConfirm }) {
 
 /* Countdown */
 function Countdown() {
-  const target = new Date("2026-04-18T19:00:00");
+  const target = new Date("2026-05-29T19:00:00");
   const [diff, setDiff] = useState(null);
 
   useEffect(() => {
