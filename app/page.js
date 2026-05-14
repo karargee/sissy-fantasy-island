@@ -138,7 +138,7 @@ function AgeGate({ onConfirm }) {
 
 /* Countdown */
 function Countdown() {
-  const target = new Date("2026-05-02T19:00:00");
+  const target = new Date("2026-05-30T19:00:00");
   const [diff, setDiff] = useState(null);
 
   useEffect(() => {
@@ -406,7 +406,7 @@ export default function Home() {
         <h1>TRANS & SEX PARTY</h1>
         <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
-          <span>📅 May 2, 2026</span>
+          <span>📅 May 30, 2026</span>
           <span>📍 Charlotte, NC — Private Location</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
