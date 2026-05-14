@@ -109,7 +109,7 @@ const VENUE_AREAS = [
 ];
 
 const FAQS = [
-  { q: "Where is the event?", a: "The Venetian Resort, Las Vegas, Nevada. The exact room and floor details are private and only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
+  { q: "Where is the event?", a: "The Clift Royal Sonesta, San Francisco, California. The exact room and floor details are private and only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
   { q: "Is this event 21+?", a: "Yes. Valid government ID required at the door. No exceptions." },
   { q: "What's the dress code?", a: "Leather, latex, harnesses, lingerie, or creative kink wear encouraged. No streetwear on the dungeon floor." },
   { q: "Is the venue accessible?", a: "Fully wheelchair accessible with gender-neutral restrooms and private changing areas." },
@@ -407,7 +407,7 @@ export default function Home() {
         <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
           <span>📅 May 29–30, 2026</span>
-          <span>📍 The Venetian Resort — Las Vegas, NV</span>
+          <span>📍 The Clift Royal Sonesta — San Francisco, CA</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
         <Countdown />
