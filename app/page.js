@@ -449,6 +449,49 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Tickets */}
+      <section className="section" ref={ticketsRef}>
+        <h2>🎟️ Get Your Tickets</h2>
+        <div className="tickets-grid">
+          {TICKETS.map((t) => (
+            <div key={t.name} className={`ticket-card ${t.masked ? "ticket-card-masked" : ""}`} style={{ borderTop: `4px solid ${t.color}` }}>
+              {t.popular && <div className="popular-badge">🔥 MOST POPULAR</div>}
+              {t.masked && <div className="popular-badge" style={{ background: "linear-gradient(135deg, #1a1a2e, #4a4a6a)" }}>🎭 DISCREET</div>}
+              {t.giftCard && <div className="popular-badge" style={{ background: "linear-gradient(135deg, #f5a9b8, #d63384)" }}>🎁 GIFT</div>}
+              <div className="ticket-emoji">{t.emoji}</div>
+              <h3>{t.name}</h3>
+              <div className="price" style={{ color: t.color }}>
+                ${t.price.toLocaleString()}
+              </div>
+              <SlotCounter initial={t.initialSlots} />
+              <ul className="perks">
+                {t.perks.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+              <div className="qty-selector">
+                <button className="qty-btn" onClick={() => updateQty(t.name, -1)}>−</button>
+                <span className="qty-num">{quantities[t.name]}</span>
+                <button className="qty-btn" onClick={() => updateQty(t.name, 1)}>+</button>
+              </div>
+              <div className="ticket-total">
+                Total: ${(t.price * quantities[t.name]).toLocaleString()}
+              </div>
+              <button
+                className="buy-btn"
+                style={{ background: `linear-gradient(135deg, ${t.color}, #6f42c1)` }}
+                onClick={() => openPayModal(t.name)}
+              >
+                {`Buy ${quantities[t.name]} Ticket${quantities[t.name] > 1 ? "s" : ""}`}
+              </button>
+              <div className="payment-icons">
+                <span className="btc-badge">₿ Bitcoin</span><span className="btc-badge" style={{background:"rgba(245,169,184,0.15)",borderColor:"rgba(245,169,184,0.3)",color:"#f5a9b8"}}>🎁 Gift Card</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Venue Map */}
       <section className="section">
         <h2>🗺️ Venue Layout</h2>
@@ -496,49 +539,6 @@ export default function Home() {
               <div className="testimonial-author">
                 <strong>{t.name}</strong>
                 <span className="testimonial-role">{t.role}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Tickets */}
-      <section className="section" ref={ticketsRef}>
-        <h2>🎟️ Get Your Tickets</h2>
-        <div className="tickets-grid">
-          {TICKETS.map((t) => (
-            <div key={t.name} className={`ticket-card ${t.masked ? "ticket-card-masked" : ""}`} style={{ borderTop: `4px solid ${t.color}` }}>
-              {t.popular && <div className="popular-badge">🔥 MOST POPULAR</div>}
-              {t.masked && <div className="popular-badge" style={{ background: "linear-gradient(135deg, #1a1a2e, #4a4a6a)" }}>🎭 DISCREET</div>}
-              {t.giftCard && <div className="popular-badge" style={{ background: "linear-gradient(135deg, #f5a9b8, #d63384)" }}>🎁 GIFT</div>}
-              <div className="ticket-emoji">{t.emoji}</div>
-              <h3>{t.name}</h3>
-              <div className="price" style={{ color: t.color }}>
-                ${t.price.toLocaleString()}
-              </div>
-              <SlotCounter initial={t.initialSlots} />
-              <ul className="perks">
-                {t.perks.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
-              <div className="qty-selector">
-                <button className="qty-btn" onClick={() => updateQty(t.name, -1)}>−</button>
-                <span className="qty-num">{quantities[t.name]}</span>
-                <button className="qty-btn" onClick={() => updateQty(t.name, 1)}>+</button>
-              </div>
-              <div className="ticket-total">
-                Total: ${(t.price * quantities[t.name]).toLocaleString()}
-              </div>
-              <button
-                className="buy-btn"
-                style={{ background: `linear-gradient(135deg, ${t.color}, #6f42c1)` }}
-                onClick={() => openPayModal(t.name)}
-              >
-                {`Buy ${quantities[t.name]} Ticket${quantities[t.name] > 1 ? "s" : ""}`}
-              </button>
-              <div className="payment-icons">
-                <span className="btc-badge">₿ Bitcoin</span><span className="btc-badge" style={{background:"rgba(245,169,184,0.15)",borderColor:"rgba(245,169,184,0.3)",color:"#f5a9b8"}}>🎁 Gift Card</span>
               </div>
             </div>
           ))}
