@@ -6,11 +6,11 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #0a0a0f;
-  color: #f0f0f0;
+  background: #080008;
+  color: #f0e8e8;
   min-height: 100vh;
-  background-image: radial-gradient(ellipse at top, rgba(91,206,250,0.05), transparent 60%),
-                    radial-gradient(ellipse at bottom, rgba(214,51,132,0.05), transparent 60%);
+  background-image: radial-gradient(ellipse at top, rgba(139,0,50,0.08), transparent 60%),
+                    radial-gradient(ellipse at bottom, rgba(180,130,60,0.05), transparent 60%);
 }
 
 .container {
@@ -89,7 +89,7 @@ body {
 .hero {
   text-align: center;
   padding: 5rem 1rem 3rem;
-  background: linear-gradient(180deg, rgba(214,51,132,0.1), rgba(30,0,20,0.3), transparent);
+  background: linear-gradient(180deg, rgba(139,0,50,0.12), rgba(10,0,5,0.4), transparent);
 }
 
 .hero-img-wrap {
@@ -98,8 +98,8 @@ body {
   margin: 0 auto 1.5rem;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid rgba(214,51,132,0.6);
-  box-shadow: 0 0 50px rgba(214,51,132,0.3), 0 0 100px rgba(111,66,193,0.2);
+  border: 3px solid rgba(201,164,76,0.6);
+  box-shadow: 0 0 50px rgba(139,0,50,0.4), 0 0 100px rgba(201,164,76,0.15);
 }
 
 .hero-img {
@@ -112,7 +112,7 @@ body {
   font-size: 4rem;
   font-weight: 900;
   letter-spacing: 6px;
-  background: linear-gradient(90deg, #5bcefa, #f5a9b8, #ffffff, #f5a9b8, #5bcefa);
+  background: linear-gradient(90deg, #c9a44c, #f5d78e, #c9a44c, #f5d78e);
   background-size: 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -156,7 +156,7 @@ body {
 .countdown-num {
   font-size: 2.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #5bcefa, #f5a9b8);
+  background: linear-gradient(135deg, #c9a44c, #8b0032);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
