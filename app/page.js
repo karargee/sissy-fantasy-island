@@ -109,7 +109,7 @@ const VENUE_AREAS = [
 ];
 
 const FAQS = [
-  { q: "Where is the event?", a: "The Clift Royal Sonesta, San Francisco, California. The exact room and floor details are private and only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
+  { q: "Where is the event?", a: "Charlotte, North Carolina. The exact venue address is private and only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
   { q: "Is this event 21+?", a: "Yes. Valid government ID required at the door. No exceptions." },
   { q: "What's the dress code?", a: "Leather, latex, harnesses, lingerie, or creative kink wear encouraged. No streetwear on the dungeon floor." },
   { q: "Is the venue accessible?", a: "Fully wheelchair accessible with gender-neutral restrooms and private changing areas." },
@@ -138,7 +138,7 @@ function AgeGate({ onConfirm }) {
 
 /* Countdown */
 function Countdown() {
-  const target = new Date("2026-05-29T19:00:00");
+  const target = new Date("2026-05-02T19:00:00");
   const [diff, setDiff] = useState(null);
 
   useEffect(() => {
@@ -406,8 +406,8 @@ export default function Home() {
         <h1>TRANS & SEX PARTY</h1>
         <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
-          <span>📅 May 29–30, 2026</span>
-          <span>📍 The Clift Royal Sonesta — San Francisco, CA</span>
+          <span>📅 May 2, 2026</span>
+          <span>📍 Charlotte, NC — Private Location</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
         <Countdown />
