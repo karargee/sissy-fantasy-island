@@ -85,27 +85,7 @@ const TICKETS = [
   },
 ];
 
-const LINEUP = [
-  { name: "Mistress Voltage", role: "Headliner — Domme Performance", time: "11:00 PM" },
-  { name: "The Velvet Collective", role: "Rope & Aerial Show", time: "8:30 PM" },
-  { name: "Mx. Prism", role: "Host & Dungeon Emcee", time: "All Night" },
-  { name: "DJ Obsidian", role: "Dark Techno & Industrial Set", time: "9:00 PM" },
-  { name: "Goddess Serena", role: "Live Wax & Sensation Demo", time: "10:00 PM" },
-  { name: "The Latex Dolls", role: "Fashion Show & Walkoff", time: "12:00 AM" },
-];
 
-const SCHEDULE = [
-  { time: "7:00 PM", event: "Doors Open — Check-in & Consent Workshop" },
-  { time: "7:30 PM", event: "Welcome Cocktails & Mixer" },
-  { time: "8:00 PM", event: "Dungeon Floor Opens" },
-  { time: "8:30 PM", event: "The Velvet Collective — Rope & Aerial Show" },
-  { time: "9:00 PM", event: "DJ Obsidian — Dark Techno Set Begins" },
-  { time: "10:00 PM", event: "Goddess Serena — Live Wax Demo" },
-  { time: "11:00 PM", event: "Mistress Voltage — Headliner Performance" },
-  { time: "12:00 AM", event: "The Latex Dolls — Fashion Show" },
-  { time: "1:00 AM", event: "After-Party Begins (Dungeon Master ticket holders)" },
-  { time: "4:00 AM", event: "Event Ends" },
-];
 
 const TESTIMONIALS = [
   { name: "Alexa V.", text: "Best night of my life. The energy, the people, the music — absolutely unmatched. Already bought my ticket for next year.", role: "Sub" },
@@ -467,18 +447,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Lineup & Schedule */}
-      <section className="section">
-        <h2>🎤 Lineup & Schedule</h2>
-        <div className="schedule-grid">
-          {SCHEDULE.map((s, i) => (
-            <div key={i} className="schedule-item">
-              <span className="schedule-time">{s.time}</span>
-              <span className="schedule-event">{s.event}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+
 
       {/* What To Expect */}
       <section className="section">
