@@ -10,7 +10,7 @@ const TICKETS = [
   {
     name: "Basic Entry",
     emoji: "🔗",
-    price: 300,
+    price: 200,
     color: "#5bcefa",
     initialSlots: 30,
     perks: [
@@ -89,6 +89,22 @@ const LINEUP = [
   { name: "Mistress Voltage", role: "Headliner — Domme Performance", time: "11:00 PM" },
   { name: "The Velvet Collective", role: "Rope & Aerial Show", time: "8:30 PM" },
   { name: "Mx. Prism", role: "Host & Dungeon Emcee", time: "All Night" },
+  { name: "DJ Obsidian", role: "Dark Techno & Industrial Set", time: "9:00 PM" },
+  { name: "Goddess Serena", role: "Live Wax & Sensation Demo", time: "10:00 PM" },
+  { name: "The Latex Dolls", role: "Fashion Show & Walkoff", time: "12:00 AM" },
+];
+
+const SCHEDULE = [
+  { time: "7:00 PM", event: "Doors Open — Check-in & Consent Workshop" },
+  { time: "7:30 PM", event: "Welcome Cocktails & Mixer" },
+  { time: "8:00 PM", event: "Dungeon Floor Opens" },
+  { time: "8:30 PM", event: "The Velvet Collective — Rope & Aerial Show" },
+  { time: "9:00 PM", event: "DJ Obsidian — Dark Techno Set Begins" },
+  { time: "10:00 PM", event: "Goddess Serena — Live Wax Demo" },
+  { time: "11:00 PM", event: "Mistress Voltage — Headliner Performance" },
+  { time: "12:00 AM", event: "The Latex Dolls — Fashion Show" },
+  { time: "1:00 AM", event: "After-Party Begins (Dungeon Master ticket holders)" },
+  { time: "4:00 AM", event: "Event Ends" },
 ];
 
 const TESTIMONIALS = [
@@ -96,6 +112,8 @@ const TESTIMONIALS = [
   { name: "Domme Kira", text: "Impeccable consent culture. I felt safe, powerful, and free. The VIP throne lounge was *chef's kiss*.", role: "Dom" },
   { name: "Jordan M.", text: "I came alone and left with a whole community. The dungeon monitors were amazing and the vibe was electric.", role: "Switch" },
   { name: "Mx. Raven", text: "The rope show literally made me cry. So beautiful. And the after-party? Legendary. 10/10 will return.", role: "Sub" },
+  { name: "Marcus T.", text: "Flew in from Miami just for this. The hotel setup was incredible — felt like a whole fantasy world. 100% worth it.", role: "Dom" },
+  { name: "Sasha L.", text: "The masked session was everything. Complete privacy, zero judgment, pure freedom. Can't wait for the next one.", role: "Sub" },
 ];
 
 const VENUE_AREAS = [
@@ -138,7 +156,7 @@ function AgeGate({ onConfirm }) {
 
 /* Countdown */
 function Countdown() {
-  const target = new Date("2026-06-13T19:00:00");
+  const target = new Date("2026-06-20T19:00:00");
   const [diff, setDiff] = useState(null);
 
   useEffect(() => {
@@ -206,7 +224,7 @@ function BtcConfirmForm() {
         onChange={(e) => setForm({ ...form, tier: e.target.value })}
         className="form-input form-select"
       >
-        <option value="Basic Entry">🔗 Basic Entry — $300</option>
+        <option value="Basic Entry">🔗 Basic Entry — $200</option>
         <option value="Costume Package">👗 Costume Package — $450</option>
         <option value="VIP Dom Pass">⛓️ VIP Dom Pass — $600</option>
         <option value="Dungeon Master">👑 Dungeon Master — $900</option>
@@ -406,7 +424,7 @@ export default function Home() {
         <h1>TRANS & SEX PARTY</h1>
         <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
-          <span>📅 June 13 & 20, 2026</span>
+          <span>📅 June 20, 2026</span>
           <span>📍 San Diego, CA — Private Hotel Venue</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
@@ -425,7 +443,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* What To Expect */}
+      {/* Lineup & Schedule */}
+      <section className="section">
+        <h2>🎤 Lineup & Schedule</h2>
+        <div className="schedule-grid">
+          {SCHEDULE.map((s, i) => (
+            <div key={i} className="schedule-item">
+              <span className="schedule-time">{s.time}</span>
+              <span className="schedule-event">{s.event}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* What To Expect */
       <section className="section">
         <h2>⛓️ What To Expect</h2>
         <div className="expect-grid">
@@ -651,10 +682,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Hotel Info */}
+      <section className="section">
+        <div className="hotel-info">
+          <h2>🏨 The Venue</h2>
+          <p>A luxury boutique hotel in San Diego's Gaslamp Quarter — fully privatized for the night. Every floor transformed into a different fantasy zone.</p>
+          <div className="hotel-features">
+            <div className="hotel-feature"><span>🛏️</span><strong>Discounted Room Blocks</strong><p>Special rates for attendees — stay where you play</p></div>
+            <div className="hotel-feature"><span>🅿️</span><strong>Valet Parking</strong><p>Complimentary valet for VIP & Dungeon Master tiers</p></div>
+            <div className="hotel-feature"><span>🍳</span><strong>Late Checkout & Brunch</strong><p>Sleep in — brunch available next morning for ticket holders</p></div>
+            <div className="hotel-feature"><span>🔒</span><strong>Total Privacy</strong><p>No outside guests, NDA-signed staff, blacked-out windows</p></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Safety & Trust */}
+      <section className="section">
+        <div className="trust-section">
+          <h2>🛡️ Your Safety Matters</h2>
+          <div className="trust-grid">
+            <div className="trust-item"><span>✅</span><p>All attendees background-checked</p></div>
+            <div className="trust-item"><span>🚑</span><p>On-site medic & first aid station</p></div>
+            <div className="trust-item"><span>📱</span><p>Anonymous incident reporting app</p></div>
+            <div className="trust-item"><span>🔐</span><p>Secure coat check & personal lockers</p></div>
+            <div className="trust-item"><span>🚕</span><p>Free safe-ride home program after 2 AM</p></div>
+            <div className="trust-item"><span>👥</span><p>1 dungeon monitor per 10 attendees</p></div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="footer">
         <p>🏳️⚧️ Trans & Sex Party 2026 — Your body, your rules 🏳️⚧️</p>
         <p>Secure payments by Stripe · All sales final · 21+ only</p>
+        <p style={{ opacity: 0.4, marginTop: "0.5rem", fontSize: "0.8rem" }}>San Diego, CA · Private Hotel Venue · June 20, 2026</p>
       </footer>
 
       {/* Sticky Buy Button (mobile) */}
