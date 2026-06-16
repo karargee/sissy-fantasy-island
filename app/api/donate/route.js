@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+export const dynamic = "force-dynamic";
 
 export async function POST(req) {
   try {
@@ -10,6 +9,9 @@ export async function POST(req) {
     if (!amount || amount < 5) {
       return NextResponse.json({ error: "Minimum donation is $5" }, { status: 400 });
     }
+
+    const Stripe = (await import("stripe")).default;
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
