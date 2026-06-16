@@ -127,7 +127,7 @@ const VENUE_AREAS = [
 ];
 
 const FAQS = [
-  { q: "Where is the event?", a: "San Diego, California. A private luxury hotel venue — the exact address is only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
+  { q: "Where is the event?", a: "San Francisco, California. A private luxury hotel venue — the exact address is only shared with confirmed ticket holders 24 hours after payment is verified. This is for the safety and privacy of all attendees." },
   { q: "Is this event 21+?", a: "Yes. Valid government ID required at the door. No exceptions." },
   { q: "What's the dress code?", a: "Leather, latex, harnesses, lingerie, or creative kink wear encouraged. No streetwear on the dungeon floor." },
   { q: "Is the venue accessible?", a: "Fully wheelchair accessible with gender-neutral restrooms and private changing areas." },
@@ -425,7 +425,7 @@ export default function Home() {
         <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
           <span>📅 June 20, 2026</span>
-          <span>📍 San Diego, CA — Private Hotel Venue</span>
+          <span>📍 San Francisco, CA — Private Hotel Venue</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
         <Countdown />
@@ -686,7 +686,7 @@ export default function Home() {
       <section className="section">
         <div className="hotel-info">
           <h2>🏨 The Venue</h2>
-          <p>A luxury boutique hotel in San Diego's Gaslamp Quarter — fully privatized for the night. Every floor transformed into a different fantasy zone.</p>
+          <p>A luxury boutique hotel in San Francisco — fully privatized for the night. Every floor transformed into a different fantasy zone.</p>
           <div className="hotel-features">
             <div className="hotel-feature"><span>🛏️</span><strong>Discounted Room Blocks</strong><p>Special rates for attendees — stay where you play</p></div>
             <div className="hotel-feature"><span>🅿️</span><strong>Valet Parking</strong><p>Complimentary valet for VIP & Dungeon Master tiers</p></div>
@@ -715,7 +715,7 @@ export default function Home() {
       <footer className="footer">
         <p>🏳️⚧️ Trans & Sex Party 2026 — Your body, your rules 🏳️⚧️</p>
         <p>Secure payments by Stripe · All sales final · 21+ only</p>
-        <p style={{ opacity: 0.4, marginTop: "0.5rem", fontSize: "0.8rem" }}>San Diego, CA · Private Hotel Venue · June 20, 2026</p>
+        <p style={{ opacity: 0.4, marginTop: "0.5rem", fontSize: "0.8rem" }}>San Francisco, CA · Private Hotel Venue · June 20, 2026</p>
       </footer>
 
       {/* Sticky Buy Button (mobile) */}
