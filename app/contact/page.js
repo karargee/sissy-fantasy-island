@@ -5,10 +5,22 @@ import Link from "next/link";
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setSent(true);
+    setLoading(true);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      setSent(true);
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
+    setLoading(false);
   }
 
   return (
@@ -30,11 +42,18 @@ export default function Contact() {
             <p>comeandsee@gmail.com</p>
           </div>
         </a>
-        <a href="https://wa.me/19853686907" target="_blank" rel="noopener" className="contact-card">
+        <a href="https://wa.me/14153053689" target="_blank" rel="noopener" className="contact-card">
           <span className="contact-icon">💬</span>
           <div>
             <strong>WhatsApp</strong>
             <p>Message us directly</p>
+          </div>
+        </a>
+        <a href="tel:+14153053689" className="contact-card">
+          <span className="contact-icon">📞</span>
+          <div>
+            <strong>Call Us</strong>
+            <p>+1 (415) 305-3689 — Enquiries & Bookings</p>
           </div>
         </a>
         <a href="https://t.me/tshungkathy10" target="_blank" rel="noopener" className="contact-card">
@@ -89,8 +108,8 @@ export default function Contact() {
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               className="form-input form-textarea"
             />
-            <button type="submit" className="buy-btn" style={{ background: "linear-gradient(135deg, #d63384, #6f42c1)", maxWidth: "300px" }}>
-              Send Message
+            <button type="submit" className="buy-btn" style={{ background: "linear-gradient(135deg, #d63384, #6f42c1)", maxWidth: "300px" }} disabled={loading}>
+              {loading ? "Sending..." : "Send Message"}
             </button>
           </form>
         )}

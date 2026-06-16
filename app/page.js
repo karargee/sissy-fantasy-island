@@ -155,14 +155,16 @@ function AgeGate({ onConfirm }) {
 }
 
 /* Countdown */
+const EVENT_DATE = new Date("2026-06-20T19:00:00").getTime();
+
 function Countdown() {
-  const target = new Date("2026-06-20T19:00:00");
-  const [diff, setDiff] = useState(null);
+  const [diff, setDiff] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     function calc() {
-      const now = new Date();
-      const ms = target - now;
+      const ms = EVENT_DATE - Date.now();
       if (ms <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
       return {
         days: Math.floor(ms / 86400000),
@@ -176,7 +178,7 @@ function Countdown() {
     return () => clearInterval(id);
   }, []);
 
-  if (!diff) return null;
+  if (!mounted) return null;
 
   return (
     <div className="countdown">
@@ -194,10 +196,22 @@ function Countdown() {
 function BtcConfirmForm() {
   const [form, setForm] = useState({ email: "", tier: "Basic Entry", txid: "" });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setSent(true);
+    setLoading(true);
+    try {
+      await fetch("/api/btc-confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      setSent(true);
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
+    setLoading(false);
   }
 
   if (sent) {
@@ -239,7 +253,7 @@ function BtcConfirmForm() {
         onChange={(e) => setForm({ ...form, txid: e.target.value })}
         className="form-input"
       />
-      <button type="submit" className="buy-btn donate-btn">Confirm BTC Payment</button>
+      <button type="submit" className="buy-btn donate-btn" disabled={loading}>{loading ? "Submitting..." : "Confirm BTC Payment"}</button>
       <p className="donate-note">We’ll verify on-chain and send your ticket within 1 hour</p>
     </form>
   );
@@ -391,9 +405,19 @@ export default function Home() {
     setGiftSubmitted(true);
   }
 
-  function handleEmail(e) {
+  async function handleEmail(e) {
     e.preventDefault();
-    if (email) setEmailSent(true);
+    if (!email) return;
+    try {
+      await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setEmailSent(true);
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
   }
 
   function scrollToTickets() {
@@ -424,7 +448,7 @@ export default function Home() {
         <h1>TRANS & SEX PARTY</h1>
         <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
-          <span>📅 June 20, 2026</span>
+          <span>📅 June 20</span>
           <span>📍 San Francisco, CA — Private Hotel Venue</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
@@ -456,7 +480,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* What To Expect */
+      {/* What To Expect */}
       <section className="section">
         <h2>⛓️ What To Expect</h2>
         <div className="expect-grid">
@@ -630,8 +654,11 @@ export default function Home() {
           <a href="mailto:comeandsee@gmail.com" className="social-link">
             <span>📧</span> comeandsee@gmail.com
           </a>
-          <a href="https://wa.me/19853686907" target="_blank" rel="noopener" className="social-link">
+          <a href="https://wa.me/14153053689" target="_blank" rel="noopener" className="social-link">
             <span>💬</span> WhatsApp
+          </a>
+          <a href="tel:+14153053689" className="social-link">
+            <span>📞</span> +1 (415) 305-3689 — Enquiries & Bookings
           </a>
           <a href="https://t.me/tshungkathy10" target="_blank" rel="noopener" className="social-link">
             <span>✈️</span> Telegram
@@ -715,7 +742,7 @@ export default function Home() {
       <footer className="footer">
         <p>🏳️⚧️ Trans & Sex Party 2026 — Your body, your rules 🏳️⚧️</p>
         <p>Secure payments by Stripe · All sales final · 21+ only</p>
-        <p style={{ opacity: 0.4, marginTop: "0.5rem", fontSize: "0.8rem" }}>San Francisco, CA · Private Hotel Venue · June 20, 2026</p>
+        <p style={{ opacity: 0.4, marginTop: "0.5rem", fontSize: "0.8rem" }}>San Francisco, CA · Private Hotel Venue · June 20</p>
       </footer>
 
       {/* Sticky Buy Button (mobile) */}

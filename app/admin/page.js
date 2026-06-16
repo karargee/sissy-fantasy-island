@@ -74,9 +74,9 @@ export default function Admin() {
   const [btcPayments, setBtcPayments] = useState(MOCK_BTC);
   const [messages, setMessages] = useState(MOCK_MESSAGES);
   const [settings, setSettings] = useState({
-    eventDate: "2026-03-30",
+    eventDate: "2026-06-20",
     eventTime: "19:00",
-    location: "San Francisco, CA — Private",
+    location: "San Francisco, CA — Private Hotel Venue",
     subPrice: 500,
     domPrice: 1000,
     dmPrice: 1500,
