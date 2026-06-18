@@ -428,7 +428,7 @@ export default function Home() {
         <h1>TRANS & SEX PARTY</h1>
         <p className="tagline">The ultimate party for men who love trans women. Subs. Doms. No limits. One unforgettable night of pleasure.</p>
         <div className="event-details">
-          <span>📅 June 20</span>
+          <span>📅 June 20 & 27</span>
           <span>📍 San Francisco, CA — Private Hotel Venue</span>
           <span>🕖 7 PM — 4 AM</span>
         </div>
@@ -711,7 +711,7 @@ export default function Home() {
       <footer className="footer">
         <p>🏳️⚧️ Trans & Sex Party 2026 — Your body, your rules 🏳️⚧️</p>
         <p>Secure payments by Stripe · All sales final · 21+ only</p>
-        <p style={{ opacity: 0.4, marginTop: "0.5rem", fontSize: "0.8rem" }}>San Francisco, CA · Private Hotel Venue · June 20</p>
+        <p style={{ opacity: 0.4, marginTop: "0.5rem", fontSize: "0.8rem" }}>San Francisco, CA · Private Hotel Venue · June 20 & 27</p>
       </footer>
 
       {/* Sticky Buy Button (mobile) */}
