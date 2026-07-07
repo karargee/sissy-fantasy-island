@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
 
+import Link from "next/link";
+
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const SISSY_CARDS = [
@@ -762,6 +764,7 @@ export default function Home() {
           </div>
           <p>💕 Sissy Fantasy Island 2026 — Be who you really are 💕</p>
           <p>Discreet billing · One-time payments · Worldwide · All sales final</p>
+          <Link href="/terms" className="terms-link">Terms of Service</Link>
         </footer>
       </div>
 
