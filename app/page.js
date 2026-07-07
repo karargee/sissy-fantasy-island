@@ -162,6 +162,15 @@ const EXTERNAL_SHOPS = [
   },
 ];
 
+const BLOG_POSTS = [
+  { title: "Beginner's Guide to Being a Sissy", emoji: "🎀", tag: "Beginner", desc: "Everything you need to know to start your sissy journey — mindset, wardrobe, and confidence.", content: "Starting your sissy journey is exciting and personal. Here's what you need to know:\n\n1. Mindset First: Being a sissy is about embracing femininity on your own terms. There's no right or wrong way.\n\n2. Start Small: Begin with underwear, stockings, or a simple accessory. You don't need a full wardrobe on day one.\n\n3. Privacy: Use a separate email, anonymous shopping, and discreet delivery options.\n\n4. Community: Join a safe space like ours where you can ask questions without judgment.\n\n5. Self-Care: Shaving, skincare, and grooming are great first steps that feel amazing.\n\n6. No Rush: Go at your own pace. This is YOUR journey." },
+  { title: "How to Build a Feminine Wardrobe", emoji: "👗", tag: "Fashion", desc: "From lingerie to everyday femme outfits — a complete shopping guide for sissies.", content: "Building your wardrobe doesn't have to be expensive or overwhelming:\n\n1. Essentials: Start with panties, a bra, stockings, and one outfit you love.\n\n2. Sizing: Measure yourself carefully. Most online stores have size guides. When in doubt, size up.\n\n3. Where to Shop: Amazon has great discreet options. Search for 'crossdresser' or 'sissy' for better results.\n\n4. Shoes: Start with a low heel (2-3 inches). Practice walking at home before going higher.\n\n5. Accessories: A wig, clip-on earrings, and a choker can transform your look instantly.\n\n6. Storage: Keep items in a locked box or bag if you need discretion at home.\n\n7. Budget: You can start with under $50. Quality over quantity." },
+  { title: "Staying Discreet: Privacy Tips", emoji: "🔒", tag: "Privacy", desc: "How to explore your sissy side while keeping your privacy intact. Tools, tips, and strategies.", content: "Privacy is everything. Here's how to stay safe:\n\n1. Separate Email: Create a new email just for your sissy life. Use ProtonMail for encryption.\n\n2. Shopping: Use Amazon lockers or PO boxes for deliveries. Always select 'gift' packaging.\n\n3. Payments: Use gift cards or Bitcoin to avoid bank statement traces.\n\n4. Phone: Use a separate browser (private mode) or a second phone.\n\n5. Photos: Strip metadata from photos before sharing. Never include your face and identifiable features in the same shot.\n\n6. Community: Use a sissy name, never your real one. Our platform supports full anonymity.\n\n7. Storage: Use a locked app or encrypted folder for photos and files." },
+  { title: "Feminization Training 101", emoji: "💄", tag: "Training", desc: "Voice training, posture, walking in heels, and daily exercises to embrace your feminine self.", content: "Feminization is a journey. Here are daily practices:\n\n1. Voice: Practice speaking from your head voice, not chest. YouTube has great tutorials. Start with 10 minutes daily.\n\n2. Posture: Shoulders back, chin slightly up, smaller steps. Practice in front of a mirror.\n\n3. Walking: Cross your feet slightly when walking for a feminine gait. Heels force this naturally.\n\n4. Skincare: Moisturize daily, exfoliate weekly. Smooth skin is feminine skin.\n\n5. Body Hair: Shave or wax regularly. Start with legs and arms — the feeling is incredible.\n\n6. Makeup: Start with foundation, mascara, and lip gloss. YouTube tutorials are your best friend.\n\n7. Consistency: 15 minutes of practice daily beats 2 hours once a week." },
+  { title: "Finding Your Sissy Community", emoji: "💬", tag: "Community", desc: "How to connect with like-minded people safely — online and in person.", content: "Community makes all the difference:\n\n1. Online First: Join verified communities like Sissy Fantasy Island where members are screened.\n\n2. Safety: Never share personal info until you trust someone. Use your sissy name.\n\n3. Events: Start with online meetups before in-person events. Our community hosts both.\n\n4. Mentors: Find someone experienced who can guide you. Our Inner Circle offers mentorship.\n\n5. Boundaries: It's okay to say no. A good community respects boundaries always.\n\n6. Give Back: Once you're comfortable, help newcomers. We all started somewhere.\n\n7. Red Flags: Avoid anyone who pressures you, asks for money, or doesn't respect your privacy." },
+  { title: "Event Etiquette: What to Expect", emoji: "🎉", tag: "Events", desc: "First time at a sissy event? Here's everything you need to know about dress code, consent, and having fun.", content: "Your first event can be nerve-wracking. Here's what to know:\n\n1. Dress Code: Most events have a theme. When in doubt, go with lingerie + heels or a cute outfit.\n\n2. Consent: Always ask before touching anyone. 'No' is a complete sentence.\n\n3. Arrive Early: Less crowded, easier to settle in and meet the hosts.\n\n4. Bring a Friend: If possible, go with someone you trust for the first time.\n\n5. Hydrate: Drink water. Events are long and exciting — take care of yourself.\n\n6. Safe Word: Know the event's safe word or signal. Usually it's 'RED'.\n\n7. Have Fun: Everyone is there for the same reason. You belong. Enjoy yourself." },
+];
+
 const FAQS = [
   { q: "What is a Sissy Card?", a: "Your official membership card for Sissy Fantasy Island. It includes your unique member ID, QR code, and grants you access to our private community and events. It's a one-time purchase — no subscriptions, no recurring charges." },
   { q: "How do I receive my card?", a: "You choose: (1) Email delivery — we send your digital card directly to your inbox. (2) Anonymous code — we give you a download code with no email required. You stay completely anonymous. (3) Physical card — shipped in a plain, unmarked envelope." },
@@ -377,6 +386,8 @@ export default function Home() {
   const [giftCode, setGiftCode] = useState("");
   const [giftImage, setGiftImage] = useState(null);
   const [giftSubmitted, setGiftSubmitted] = useState(false);
+  const [mobileNav, setMobileNav] = useState(false);
+  const [openBlog, setOpenBlog] = useState(null);
 
   function openPayModal(name, price) {
     setPayModal({ tier: name, price });
@@ -423,6 +434,20 @@ export default function Home() {
       </div>
 
       <div className="container">
+        {/* Navigation */}
+        <nav className="nav">
+          <div className="nav-logo">SFI 💕</div>
+          <div className={`nav-links ${mobileNav ? "nav-links-open" : ""}`}>
+            <a href="#cards" onClick={() => setMobileNav(false)}>Cards</a>
+            <a href="#dungeon" onClick={() => setMobileNav(false)}>Dungeon</a>
+            <a href="#events" onClick={() => setMobileNav(false)}>Events</a>
+            <a href="#shop" onClick={() => setMobileNav(false)}>Shop</a>
+            <a href="#guides" onClick={() => setMobileNav(false)}>Guides</a>
+            <a href="#contact" onClick={() => setMobileNav(false)}>Contact</a>
+          </div>
+          <button className="nav-toggle" onClick={() => setMobileNav(!mobileNav)}>{mobileNav ? "✕" : "☰"}</button>
+        </nav>
+
         {/* Hero */}
         <section className="hero">
           <h1>SISSY FANTASY ISLAND</h1>
@@ -573,8 +598,32 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Mobile Dungeon */}
+        <section className="section" id="dungeon">
+          <div className="dungeon-banner">
+            <div className="dungeon-emoji">🚚</div>
+            <h2>Mobile Dungeon — We Come To You</h2>
+            <p>A fully equipped, discreet mobile dungeon delivered and set up at your location. Hotel room, private residence, or event space — we bring the experience to you.</p>
+            <div className="dungeon-features">
+              <div className="dungeon-feature"><span>🔗</span><p>Full equipment setup (crosses, benches, restraints)</p></div>
+              <div className="dungeon-feature"><span>🔒</span><p>100% discreet — unmarked vehicle, plain packaging</p></div>
+              <div className="dungeon-feature"><span>📅</span><p>Book any day — available 7 days a week</p></div>
+              <div className="dungeon-feature"><span>🌍</span><p>Available nationwide — we travel to you</p></div>
+              <div className="dungeon-feature"><span>⏰</span><p>Setup in under 1 hour, teardown included</p></div>
+              <div className="dungeon-feature"><span>💰</span><p>Starting from $500 per session</p></div>
+            </div>
+            <div className="dungeon-cta">
+              <p>To book your Mobile Dungeon session:</p>
+              <div className="dungeon-contact">
+                <a href="mailto:comeandsee@gmail.com" className="buy-btn donate-btn" style={{ maxWidth: 300, display: "inline-block", textDecoration: "none", textAlign: "center" }}>📧 Email to Book</a>
+                <a href="tel:+14153053689" className="buy-btn" style={{ maxWidth: 300, display: "inline-block", background: "linear-gradient(135deg, #5bcefa, #6f42c1)", textDecoration: "none", textAlign: "center" }}>📞 (415) 305-3689</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Upcoming Events */}
-        <section className="section">
+        <section className="section" id="events">
           <h2>🎉 Upcoming Events</h2>
           <p className="section-subtitle">Exclusive parties and meetups for our community. Card holders get priority access.</p>
           <div className="events-grid">
@@ -596,7 +645,7 @@ export default function Home() {
         </section>
 
         {/* Shop — External Links */}
-        <section className="section">
+        <section className="section" id="shop">
           <h2>🛍️ Shop Costumes & Toys</h2>
           <p className="section-subtitle">We've curated the best products from trusted retailers. Click to shop directly.</p>
           <div className="shop-grid">
@@ -615,24 +664,21 @@ export default function Home() {
         </section>
 
         {/* Blog / Guides */}
-        <section className="section">
+        <section className="section" id="guides">
           <h2>📚 Guides & Tips</h2>
-          <p className="section-subtitle">Resources to help you on your journey.</p>
+          <p className="section-subtitle">Resources to help you on your journey. Click to read full article.</p>
           <div className="blog-grid">
-            {[
-              { title: "Beginner's Guide to Being a Sissy", emoji: "🎀", desc: "Everything you need to know to start your sissy journey — mindset, wardrobe, and confidence.", tag: "Beginner" },
-              { title: "How to Build a Feminine Wardrobe", emoji: "👗", desc: "From lingerie to everyday femme outfits — a complete shopping guide for sissies.", tag: "Fashion" },
-              { title: "Staying Discreet: Privacy Tips", emoji: "🔒", desc: "How to explore your sissy side while keeping your privacy intact. Tools, tips, and strategies.", tag: "Privacy" },
-              { title: "Feminization Training 101", emoji: "💄", desc: "Voice training, posture, walking in heels, and daily exercises to embrace your feminine self.", tag: "Training" },
-              { title: "Finding Your Sissy Community", emoji: "💬", desc: "How to connect with like-minded people safely — online and in person.", tag: "Community" },
-              { title: "Event Etiquette: What to Expect", emoji: "🎉", desc: "First time at a sissy event? Here's everything you need to know about dress code, consent, and having fun.", tag: "Events" },
-            ].map((post, i) => (
-              <div key={i} className="blog-card">
+            {BLOG_POSTS.map((post, i) => (
+              <div key={i} className={`blog-card ${openBlog === i ? "blog-card-open" : ""}`} onClick={() => setOpenBlog(openBlog === i ? null : i)}>
                 <div className="blog-emoji">{post.emoji}</div>
                 <div className="blog-tag">{post.tag}</div>
                 <h3>{post.title}</h3>
                 <p>{post.desc}</p>
-                <span className="blog-cta">Read More →</span>
+                {openBlog === i ? (
+                  <div className="blog-content">{post.content.split("\n\n").map((para, j) => <p key={j}>{para}</p>)}</div>
+                ) : (
+                  <span className="blog-cta">Read More →</span>
+                )}
               </div>
             ))}
           </div>
@@ -736,7 +782,7 @@ export default function Home() {
         </section>
 
         {/* Contact */}
-        <section className="section">
+        <section className="section" id="contact">
           <h2>📬 Contact</h2>
           <div className="social-bar">
             <a href="mailto:comeandsee@gmail.com" className="social-link">
