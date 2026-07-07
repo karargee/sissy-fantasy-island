@@ -8,7 +8,7 @@ const SISSY_CARDS = [
   {
     name: "Standard Sissy Card",
     emoji: "💳",
-    price: 150,
+    price: 300,
     color: "#f5a9b8",
     delivery: "Digital code via email or anonymous code",
     perks: [
@@ -23,7 +23,7 @@ const SISSY_CARDS = [
   {
     name: "Gold Sissy Card",
     emoji: "👑",
-    price: 350,
+    price: 500,
     color: "#d63384",
     popular: true,
     delivery: "Digital + optional physical card (discreet shipping)",
@@ -40,7 +40,7 @@ const SISSY_CARDS = [
   {
     name: "Diamond Sissy Card",
     emoji: "💎",
-    price: 600,
+    price: 800,
     color: "#6f42c1",
     delivery: "Digital + physical + exclusive perks",
     perks: [
@@ -59,7 +59,7 @@ const SISSY_CARDS = [
 const COMMUNITY_TIERS = [
   {
     name: "Community Access",
-    price: 75,
+    price: 150,
     emoji: "💬",
     color: "#5bcefa",
     perks: [
@@ -73,7 +73,7 @@ const COMMUNITY_TIERS = [
   },
   {
     name: "Inner Circle",
-    price: 200,
+    price: 350,
     emoji: "🔐",
     color: "#d63384",
     perks: [
@@ -91,7 +91,7 @@ const COMMUNITY_TIERS = [
 const UPCOMING_EVENTS = [
   {
     name: "Trans & Sex Party — Las Vegas",
-    date: "May 8–9, 2026",
+    date: "August 15–16, 2026",
     location: "The Venetian Resort, Las Vegas, NV",
     price: "From $300",
     status: "Tickets Available",
@@ -99,7 +99,7 @@ const UPCOMING_EVENTS = [
   },
   {
     name: "Sissy Brunch & Social — Miami",
-    date: "June 2026",
+    date: "October 2026",
     location: "TBA — Private Venue",
     price: "From $150",
     status: "Coming Soon",
@@ -107,7 +107,7 @@ const UPCOMING_EVENTS = [
   },
   {
     name: "Masked Gala — New York",
-    date: "August 2026",
+    date: "December 2026",
     location: "TBA — Private Venue",
     price: "From $400",
     status: "Coming Soon",
@@ -194,11 +194,11 @@ function BtcConfirmForm() {
     <form className="btc-confirm-card" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
       <h3>Confirm Your BTC Payment</h3>
       <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })} className="form-input form-select">
-        <option value="Standard Sissy Card">💳 Standard Sissy Card — $150</option>
-        <option value="Gold Sissy Card">👑 Gold Sissy Card — $350</option>
-        <option value="Diamond Sissy Card">💎 Diamond Sissy Card — $600</option>
-        <option value="Community Access">💬 Community Access — $75</option>
-        <option value="Inner Circle">🔐 Inner Circle — $200</option>
+        <option value="Standard Sissy Card">💳 Standard Sissy Card — $300</option>
+        <option value="Gold Sissy Card">👑 Gold Sissy Card — $500</option>
+        <option value="Diamond Sissy Card">💎 Diamond Sissy Card — $800</option>
+        <option value="Community Access">💬 Community Access — $150</option>
+        <option value="Inner Circle">🔐 Inner Circle — $350</option>
       </select>
       <select value={form.delivery} onChange={(e) => setForm({ ...form, delivery: e.target.value })} className="form-input form-select">
         <option value="email">📧 Deliver to my email</option>
@@ -472,8 +472,11 @@ export default function Home() {
             <a href="mailto:comeandsee@gmail.com" className="social-link">
               <span>📧</span> comeandsee@gmail.com
             </a>
-            <a href="https://wa.me/19853686907" target="_blank" rel="noopener" className="social-link">
+            <a href="https://wa.me/14153053689" target="_blank" rel="noopener" className="social-link">
               <span>💬</span> WhatsApp
+            </a>
+            <a href="tel:+14153053689" className="social-link">
+              <span>📞</span> (415) 305-3689
             </a>
             <a href="https://t.me/tshungkathy10" target="_blank" rel="noopener" className="social-link">
               <span>✈️</span> Telegram
