@@ -131,6 +131,44 @@ body {
   border-color: rgba(214,51,132,0.4);
 }
 
+/* Card Checker */
+.checker {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.checker-form {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.checker-form .form-input { flex: 1; min-width: 250px; }
+
+.checker-result {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  border-radius: 12px;
+}
+
+.checker-result span { font-size: 1.5rem; }
+.checker-result strong { display: block; margin-bottom: 0.2rem; }
+.checker-result p { font-size: 0.85rem; opacity: 0.7; }
+
+.checker-valid {
+  background: rgba(40,167,69,0.1);
+  border: 1px solid rgba(40,167,69,0.3);
+}
+
+.checker-invalid {
+  background: rgba(220,53,69,0.1);
+  border: 1px solid rgba(220,53,69,0.3);
+}
+
 /* Name Generator */
 .name-gen {
   text-align: center;

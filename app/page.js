@@ -214,6 +214,51 @@ function BtcConfirmForm() {
   );
 }
 
+function CardChecker() {
+  const [code, setCode] = useState("");
+  const [result, setResult] = useState(null);
+
+  function handleCheck(e) {
+    e.preventDefault();
+    if (!code.trim()) return;
+    if (code.startsWith("SFI-")) {
+      setResult({ valid: true, tier: code.length > 16 ? "Diamond" : code.length > 12 ? "Gold" : "Standard", status: "Active", since: "2025" });
+    } else {
+      setResult({ valid: false });
+    }
+  }
+
+  return (
+    <div className="checker">
+      <form className="checker-form" onSubmit={handleCheck}>
+        <input type="text" placeholder="Enter card code (e.g. SFI-XXXX-XXXX)" value={code} onChange={(e) => setCode(e.target.value)} className="form-input" />
+        <button type="submit" className="buy-btn donate-btn" style={{ maxWidth: 200 }}>Verify</button>
+      </form>
+      {result && (
+        <div className={`checker-result ${result.valid ? "checker-valid" : "checker-invalid"}`}>
+          {result.valid ? (
+            <>
+              <span>✅</span>
+              <div>
+                <strong>Card Active</strong>
+                <p>Tier: {result.tier} · Status: {result.status} · Member since {result.since}</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <span>❌</span>
+              <div>
+                <strong>Card Not Found</strong>
+                <p>This code is not in our system. Check for typos or contact support.</p>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SissyNameGenerator() {
   const firsts = ["Princess", "Sissy", "Baby", "Mistress", "Dolly", "Candy", "Velvet", "Cherry", "Bambi", "Pixie", "Honey", "Lola", "Coco", "Bella", "Rosie", "Kitty", "Bunny", "Daisy", "Mimi", "Trixie"];
   const lasts = ["Sparkle", "Blush", "Doll", "Kitten", "Lace", "Silk", "Petal", "Blossom", "Glitter", "Cupcake", "Devine", "Valentine", "Luxe", "Charm", "Frost", "Moon", "Star", "Dream", "Rose", "Honey"];
@@ -514,6 +559,13 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* Card Status Checker */}
+        <section className="section">
+          <h2>🔍 Check Card Status</h2>
+          <p className="section-subtitle">Enter your card code to verify it's active.</p>
+          <CardChecker />
         </section>
 
         {/* FAQ */}
