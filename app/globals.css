@@ -204,11 +204,17 @@ body {
 
 /* Hero */
 .hero {
-
-/* Hero */
   text-align: center;
   padding: 6rem 1rem 4rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  margin-bottom: 2rem;
 }
+
+.hero-bg-img { object-fit: cover; opacity: 0.3; z-index: 0; }
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,15,0.4), rgba(10,10,15,0.9)); z-index: 1; }
+.hero h1, .hero .tagline, .hero .hero-badges { position: relative; z-index: 2; }
 
 .hero h1 {
   font-size: 3.5rem;
@@ -446,7 +452,7 @@ body {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
-  padding: 1.8rem;
+  overflow: hidden;
   transition: transform 0.2s, border-color 0.2s;
   cursor: pointer;
 }
@@ -456,6 +462,8 @@ body {
   border-color: rgba(245,169,184,0.3);
 }
 
+.blog-card-img { position: relative; width: 100%; height: 140px; overflow: hidden; }
+.blog-card-body { padding: 1.5rem; }
 .blog-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
 
 .blog-tag {
@@ -812,8 +820,7 @@ body {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
+  overflow: hidden;
   transition: transform 0.2s, border-color 0.2s;
 }
 
@@ -822,7 +829,9 @@ body {
   border-color: rgba(214,51,132,0.3);
 }
 
-.event-emoji { font-size: 2.5rem; margin-bottom: 0.8rem; }
+.event-card-img { position: relative; width: 100%; height: 160px; overflow: hidden; }
+.event-card-body { padding: 1.5rem; text-align: center; }
+.event-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
 .event-card h3 { font-size: 1.2rem; margin-bottom: 1rem; }
 
 .event-details-list {
@@ -866,8 +875,7 @@ body {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
+  overflow: hidden;
   transition: transform 0.2s, border-color 0.2s;
   height: 100%;
 }
@@ -877,7 +885,8 @@ body {
   border-color: rgba(245,169,184,0.4);
 }
 
-.shop-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.shop-card-img { position: relative; width: 100%; height: 140px; overflow: hidden; }
+.shop-card-content { padding: 1.5rem; }
 
 .shop-category {
   font-size: 0.7rem;

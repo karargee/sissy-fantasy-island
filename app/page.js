@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
-
+import Image from "next/image";
 import Link from "next/link";
 
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
@@ -98,6 +98,7 @@ const UPCOMING_EVENTS = [
     price: "From $300",
     status: "Tickets Available",
     emoji: "🎉",
+    img: "https://images.unsplash.com/photo-1605723517503-3cadb5818a0c?w=600&q=80",
   },
   {
     name: "Sissy Brunch & Social — Miami",
@@ -106,6 +107,7 @@ const UPCOMING_EVENTS = [
     price: "From $150",
     status: "Coming Soon",
     emoji: "🥂",
+    img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80",
   },
   {
     name: "Masked Gala — New York",
@@ -114,6 +116,7 @@ const UPCOMING_EVENTS = [
     price: "From $400",
     status: "Coming Soon",
     emoji: "🎭",
+    img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80",
   },
 ];
 
@@ -124,6 +127,7 @@ const EXTERNAL_SHOPS = [
     desc: "Remote-controlled toys, vibrators, and interactive devices",
     url: "https://www.lovense.com",
     category: "Toys & Devices",
+    img: "https://images.unsplash.com/photo-1616627577385-5c0c4dab55a5?w=400&q=80",
   },
   {
     name: "Amazon — Sissy Costumes",
@@ -131,6 +135,7 @@ const EXTERNAL_SHOPS = [
     desc: "Maid outfits, lingerie, wigs, stockings, and accessories",
     url: "https://www.amazon.com/s?k=sissy+costume",
     category: "Costumes & Outfits",
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&q=80",
   },
   {
     name: "Amazon — Chastity",
@@ -138,6 +143,7 @@ const EXTERNAL_SHOPS = [
     desc: "Cages, locks, and chastity devices for beginners and advanced",
     url: "https://www.amazon.com/s?k=chastity+cage",
     category: "Chastity",
+    img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80",
   },
   {
     name: "Amazon — Wigs & Makeup",
@@ -145,6 +151,7 @@ const EXTERNAL_SHOPS = [
     desc: "Feminine wigs, makeup kits, and beauty essentials",
     url: "https://www.amazon.com/s?k=crossdresser+wig",
     category: "Beauty",
+    img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&q=80",
   },
   {
     name: "Amazon — Heels & Boots",
@@ -152,6 +159,7 @@ const EXTERNAL_SHOPS = [
     desc: "High heels, thigh-high boots, and platform shoes in all sizes",
     url: "https://www.amazon.com/s?k=crossdresser+heels",
     category: "Footwear",
+    img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&q=80",
   },
   {
     name: "Amazon — Corsets & Shapewear",
@@ -159,16 +167,17 @@ const EXTERNAL_SHOPS = [
     desc: "Waist trainers, corsets, hip pads, and body shaping",
     url: "https://www.amazon.com/s?k=crossdresser+shapewear",
     category: "Shapewear",
+    img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80",
   },
 ];
 
 const BLOG_POSTS = [
-  { title: "Beginner's Guide to Being a Sissy", emoji: "🎀", tag: "Beginner", desc: "Everything you need to know to start your sissy journey — mindset, wardrobe, and confidence.", content: "Starting your sissy journey is exciting and personal. Here's what you need to know:\n\n1. Mindset First: Being a sissy is about embracing femininity on your own terms. There's no right or wrong way.\n\n2. Start Small: Begin with underwear, stockings, or a simple accessory. You don't need a full wardrobe on day one.\n\n3. Privacy: Use a separate email, anonymous shopping, and discreet delivery options.\n\n4. Community: Join a safe space like ours where you can ask questions without judgment.\n\n5. Self-Care: Shaving, skincare, and grooming are great first steps that feel amazing.\n\n6. No Rush: Go at your own pace. This is YOUR journey." },
-  { title: "How to Build a Feminine Wardrobe", emoji: "👗", tag: "Fashion", desc: "From lingerie to everyday femme outfits — a complete shopping guide for sissies.", content: "Building your wardrobe doesn't have to be expensive or overwhelming:\n\n1. Essentials: Start with panties, a bra, stockings, and one outfit you love.\n\n2. Sizing: Measure yourself carefully. Most online stores have size guides. When in doubt, size up.\n\n3. Where to Shop: Amazon has great discreet options. Search for 'crossdresser' or 'sissy' for better results.\n\n4. Shoes: Start with a low heel (2-3 inches). Practice walking at home before going higher.\n\n5. Accessories: A wig, clip-on earrings, and a choker can transform your look instantly.\n\n6. Storage: Keep items in a locked box or bag if you need discretion at home.\n\n7. Budget: You can start with under $50. Quality over quantity." },
-  { title: "Staying Discreet: Privacy Tips", emoji: "🔒", tag: "Privacy", desc: "How to explore your sissy side while keeping your privacy intact. Tools, tips, and strategies.", content: "Privacy is everything. Here's how to stay safe:\n\n1. Separate Email: Create a new email just for your sissy life. Use ProtonMail for encryption.\n\n2. Shopping: Use Amazon lockers or PO boxes for deliveries. Always select 'gift' packaging.\n\n3. Payments: Use gift cards or Bitcoin to avoid bank statement traces.\n\n4. Phone: Use a separate browser (private mode) or a second phone.\n\n5. Photos: Strip metadata from photos before sharing. Never include your face and identifiable features in the same shot.\n\n6. Community: Use a sissy name, never your real one. Our platform supports full anonymity.\n\n7. Storage: Use a locked app or encrypted folder for photos and files." },
-  { title: "Feminization Training 101", emoji: "💄", tag: "Training", desc: "Voice training, posture, walking in heels, and daily exercises to embrace your feminine self.", content: "Feminization is a journey. Here are daily practices:\n\n1. Voice: Practice speaking from your head voice, not chest. YouTube has great tutorials. Start with 10 minutes daily.\n\n2. Posture: Shoulders back, chin slightly up, smaller steps. Practice in front of a mirror.\n\n3. Walking: Cross your feet slightly when walking for a feminine gait. Heels force this naturally.\n\n4. Skincare: Moisturize daily, exfoliate weekly. Smooth skin is feminine skin.\n\n5. Body Hair: Shave or wax regularly. Start with legs and arms — the feeling is incredible.\n\n6. Makeup: Start with foundation, mascara, and lip gloss. YouTube tutorials are your best friend.\n\n7. Consistency: 15 minutes of practice daily beats 2 hours once a week." },
-  { title: "Finding Your Sissy Community", emoji: "💬", tag: "Community", desc: "How to connect with like-minded people safely — online and in person.", content: "Community makes all the difference:\n\n1. Online First: Join verified communities like Sissy Fantasy Island where members are screened.\n\n2. Safety: Never share personal info until you trust someone. Use your sissy name.\n\n3. Events: Start with online meetups before in-person events. Our community hosts both.\n\n4. Mentors: Find someone experienced who can guide you. Our Inner Circle offers mentorship.\n\n5. Boundaries: It's okay to say no. A good community respects boundaries always.\n\n6. Give Back: Once you're comfortable, help newcomers. We all started somewhere.\n\n7. Red Flags: Avoid anyone who pressures you, asks for money, or doesn't respect your privacy." },
-  { title: "Event Etiquette: What to Expect", emoji: "🎉", tag: "Events", desc: "First time at a sissy event? Here's everything you need to know about dress code, consent, and having fun.", content: "Your first event can be nerve-wracking. Here's what to know:\n\n1. Dress Code: Most events have a theme. When in doubt, go with lingerie + heels or a cute outfit.\n\n2. Consent: Always ask before touching anyone. 'No' is a complete sentence.\n\n3. Arrive Early: Less crowded, easier to settle in and meet the hosts.\n\n4. Bring a Friend: If possible, go with someone you trust for the first time.\n\n5. Hydrate: Drink water. Events are long and exciting — take care of yourself.\n\n6. Safe Word: Know the event's safe word or signal. Usually it's 'RED'.\n\n7. Have Fun: Everyone is there for the same reason. You belong. Enjoy yourself." },
+  { title: "Beginner's Guide to Being a Sissy", emoji: "🎀", tag: "Beginner", img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80", desc: "Everything you need to know to start your sissy journey — mindset, wardrobe, and confidence.", content: "Starting your sissy journey is exciting and personal. Here's what you need to know:\n\n1. Mindset First: Being a sissy is about embracing femininity on your own terms. There's no right or wrong way.\n\n2. Start Small: Begin with underwear, stockings, or a simple accessory. You don't need a full wardrobe on day one.\n\n3. Privacy: Use a separate email, anonymous shopping, and discreet delivery options.\n\n4. Community: Join a safe space like ours where you can ask questions without judgment.\n\n5. Self-Care: Shaving, skincare, and grooming are great first steps that feel amazing.\n\n6. No Rush: Go at your own pace. This is YOUR journey." },
+  { title: "How to Build a Feminine Wardrobe", emoji: "👗", tag: "Fashion", img: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&q=80", desc: "From lingerie to everyday femme outfits — a complete shopping guide for sissies.", content: "Building your wardrobe doesn't have to be expensive or overwhelming:\n\n1. Essentials: Start with panties, a bra, stockings, and one outfit you love.\n\n2. Sizing: Measure yourself carefully. Most online stores have size guides. When in doubt, size up.\n\n3. Where to Shop: Amazon has great discreet options. Search for 'crossdresser' or 'sissy' for better results.\n\n4. Shoes: Start with a low heel (2-3 inches). Practice walking at home before going higher.\n\n5. Accessories: A wig, clip-on earrings, and a choker can transform your look instantly.\n\n6. Storage: Keep items in a locked box or bag if you need discretion at home.\n\n7. Budget: You can start with under $50. Quality over quantity." },
+  { title: "Staying Discreet: Privacy Tips", emoji: "🔒", tag: "Privacy", img: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80", desc: "How to explore your sissy side while keeping your privacy intact. Tools, tips, and strategies.", content: "Privacy is everything. Here's how to stay safe:\n\n1. Separate Email: Create a new email just for your sissy life. Use ProtonMail for encryption.\n\n2. Shopping: Use Amazon lockers or PO boxes for deliveries. Always select 'gift' packaging.\n\n3. Payments: Use gift cards or Bitcoin to avoid bank statement traces.\n\n4. Phone: Use a separate browser (private mode) or a second phone.\n\n5. Photos: Strip metadata from photos before sharing. Never include your face and identifiable features in the same shot.\n\n6. Community: Use a sissy name, never your real one. Our platform supports full anonymity.\n\n7. Storage: Use a locked app or encrypted folder for photos and files." },
+  { title: "Feminization Training 101", emoji: "💄", tag: "Training", img: "https://images.unsplash.com/photo-1487412912498-0447578fcca8?w=400&q=80", desc: "Voice training, posture, walking in heels, and daily exercises to embrace your feminine self.", content: "Feminization is a journey. Here are daily practices:\n\n1. Voice: Practice speaking from your head voice, not chest. YouTube has great tutorials. Start with 10 minutes daily.\n\n2. Posture: Shoulders back, chin slightly up, smaller steps. Practice in front of a mirror.\n\n3. Walking: Cross your feet slightly when walking for a feminine gait. Heels force this naturally.\n\n4. Skincare: Moisturize daily, exfoliate weekly. Smooth skin is feminine skin.\n\n5. Body Hair: Shave or wax regularly. Start with legs and arms — the feeling is incredible.\n\n6. Makeup: Start with foundation, mascara, and lip gloss. YouTube tutorials are your best friend.\n\n7. Consistency: 15 minutes of practice daily beats 2 hours once a week." },
+  { title: "Finding Your Sissy Community", emoji: "💬", tag: "Community", img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80", desc: "How to connect with like-minded people safely — online and in person.", content: "Community makes all the difference:\n\n1. Online First: Join verified communities like Sissy Fantasy Island where members are screened.\n\n2. Safety: Never share personal info until you trust someone. Use your sissy name.\n\n3. Events: Start with online meetups before in-person events. Our community hosts both.\n\n4. Mentors: Find someone experienced who can guide you. Our Inner Circle offers mentorship.\n\n5. Boundaries: It's okay to say no. A good community respects boundaries always.\n\n6. Give Back: Once you're comfortable, help newcomers. We all started somewhere.\n\n7. Red Flags: Avoid anyone who pressures you, asks for money, or doesn't respect your privacy." },
+  { title: "Event Etiquette: What to Expect", emoji: "🎉", tag: "Events", img: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&q=80", desc: "First time at a sissy event? Here's everything you need to know about dress code, consent, and having fun.", content: "Your first event can be nerve-wracking. Here's what to know:\n\n1. Dress Code: Most events have a theme. When in doubt, go with lingerie + heels or a cute outfit.\n\n2. Consent: Always ask before touching anyone. 'No' is a complete sentence.\n\n3. Arrive Early: Less crowded, easier to settle in and meet the hosts.\n\n4. Bring a Friend: If possible, go with someone you trust for the first time.\n\n5. Hydrate: Drink water. Events are long and exciting — take care of yourself.\n\n6. Safe Word: Know the event's safe word or signal. Usually it's 'RED'.\n\n7. Have Fun: Everyone is there for the same reason. You belong. Enjoy yourself." },
 ];
 
 const FAQS = [
@@ -450,6 +459,8 @@ export default function Home() {
 
         {/* Hero */}
         <section className="hero">
+          <Image src="/hero.jpg" alt="" fill className="hero-bg-img" priority />
+          <div className="hero-overlay"></div>
           <h1>SISSY FANTASY ISLAND</h1>
           <p className="tagline">The official membership platform for the trans & sissy community. Get your card. Join the community. Live your truth.</p>
           <div className="hero-badges">
@@ -629,15 +640,20 @@ export default function Home() {
           <div className="events-grid">
             {UPCOMING_EVENTS.map((ev) => (
               <div key={ev.name} className="event-card">
-                <div className="event-emoji">{ev.emoji}</div>
-                <h3>{ev.name}</h3>
-                <div className="event-details-list">
-                  <span>📅 {ev.date}</span>
-                  <span>📍 {ev.location}</span>
-                  <span>💰 {ev.price}</span>
+                <div className="event-card-img">
+                  <Image src={ev.img} alt={ev.name} fill style={{ objectFit: "cover" }} />
                 </div>
-                <div className={`event-status ${ev.status === "Tickets Available" ? "event-status-live" : ""}`}>
-                  {ev.status}
+                <div className="event-card-body">
+                  <div className="event-emoji">{ev.emoji}</div>
+                  <h3>{ev.name}</h3>
+                  <div className="event-details-list">
+                    <span>📅 {ev.date}</span>
+                    <span>📍 {ev.location}</span>
+                    <span>💰 {ev.price}</span>
+                  </div>
+                  <div className={`event-status ${ev.status === "Tickets Available" ? "event-status-live" : ""}`}>
+                    {ev.status}
+                  </div>
                 </div>
               </div>
             ))}
@@ -652,11 +668,15 @@ export default function Home() {
             {EXTERNAL_SHOPS.map((item) => (
               <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer" className="shop-card-link">
                 <div className="shop-card">
-                  <div className="shop-emoji">{item.emoji}</div>
-                  <div className="shop-category">{item.category}</div>
-                  <h3>{item.name}</h3>
-                  <p>{item.desc}</p>
-                  <div className="shop-cta">Shop Now →</div>
+                  <div className="shop-card-img">
+                    <Image src={item.img} alt={item.name} fill style={{ objectFit: "cover" }} />
+                  </div>
+                  <div className="shop-card-content">
+                    <div className="shop-category">{item.category}</div>
+                    <h3>{item.name}</h3>
+                    <p>{item.desc}</p>
+                    <div className="shop-cta">Shop Now →</div>
+                  </div>
                 </div>
               </a>
             ))}
@@ -670,15 +690,19 @@ export default function Home() {
           <div className="blog-grid">
             {BLOG_POSTS.map((post, i) => (
               <div key={i} className={`blog-card ${openBlog === i ? "blog-card-open" : ""}`} onClick={() => setOpenBlog(openBlog === i ? null : i)}>
-                <div className="blog-emoji">{post.emoji}</div>
-                <div className="blog-tag">{post.tag}</div>
-                <h3>{post.title}</h3>
-                <p>{post.desc}</p>
-                {openBlog === i ? (
-                  <div className="blog-content">{post.content.split("\n\n").map((para, j) => <p key={j}>{para}</p>)}</div>
-                ) : (
-                  <span className="blog-cta">Read More →</span>
-                )}
+                <div className="blog-card-img">
+                  <Image src={post.img} alt={post.title} fill style={{ objectFit: "cover" }} />
+                </div>
+                <div className="blog-card-body">
+                  <div className="blog-tag">{post.tag}</div>
+                  <h3>{post.title}</h3>
+                  <p>{post.desc}</p>
+                  {openBlog === i ? (
+                    <div className="blog-content">{post.content.split("\n\n").map((para, j) => <p key={j}>{para}</p>)}</div>
+                  ) : (
+                    <span className="blog-cta">Read More →</span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
