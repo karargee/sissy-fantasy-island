@@ -6,11 +6,11 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #080008;
-  color: #f0e8e8;
+  background: #0a0a0f;
+  color: #f0f0f0;
   min-height: 100vh;
-  background-image: radial-gradient(ellipse at top, rgba(139,0,50,0.08), transparent 60%),
-                    radial-gradient(ellipse at bottom, rgba(180,130,60,0.05), transparent 60%);
+  background-image: radial-gradient(ellipse at top, rgba(214,51,132,0.05), transparent 60%),
+                    radial-gradient(ellipse at bottom, rgba(111,66,193,0.05), transparent 60%);
 }
 
 .container {
@@ -89,7 +89,7 @@ body {
 .hero {
   text-align: center;
   padding: 5rem 1rem 3rem;
-  background: linear-gradient(180deg, rgba(139,0,50,0.12), rgba(10,0,5,0.4), transparent);
+  background: linear-gradient(180deg, rgba(214,51,132,0.1), rgba(30,0,20,0.3), transparent);
 }
 
 .hero-img-wrap {
@@ -113,7 +113,7 @@ body {
   font-size: 4rem;
   font-weight: 900;
   letter-spacing: 6px;
-  background: linear-gradient(90deg, #c9a44c, #f5d78e, #c9a44c, #f5d78e);
+  background: linear-gradient(90deg, #f5a9b8, #d63384, #6f42c1, #d63384, #f5a9b8);
   background-size: 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -486,7 +486,7 @@ body {
 }
 
 .perks li { padding: 0.4rem 0; font-size: 0.95rem; opacity: 0.85; }
-.perks li::before { content: "⛓️ "; }
+.perks li::before { content: "💕 "; }
 
 /* Quantity Selector */
 .qty-selector {
@@ -1167,6 +1167,61 @@ body {
 }
 
 .chat-send:hover { color: #f5a9b8; }
+
+/* Hero Badges */
+.hero-badges {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.hero-badge {
+  padding: 0.5rem 1.2rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Price Period */
+.price-period {
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+/* Shop */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.shop-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.shop-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(245,169,184,0.3);
+}
+
+.shop-emoji { font-size: 2.5rem; margin-bottom: 0.8rem; }
+.shop-card h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+.shop-card p { font-size: 0.9rem; opacity: 0.6; line-height: 1.4; margin-bottom: 1rem; }
+.shop-price { font-size: 1.5rem; font-weight: 800; color: #f5a9b8; margin-bottom: 1rem; }
+
+.shop-btn {
+  background: linear-gradient(135deg, #d63384, #6f42c1) !important;
+}
 
 /* Footer */
 .footer {
