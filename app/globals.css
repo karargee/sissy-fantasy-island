@@ -310,6 +310,45 @@ body {
   letter-spacing: 1px;
 }
 
+/* Blog */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.2rem;
+}
+
+.blog-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 1.8rem;
+  transition: transform 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(245,169,184,0.3);
+}
+
+.blog-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+
+.blog-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.2rem 0.7rem;
+  background: rgba(214,51,132,0.15);
+  border-radius: 20px;
+  color: #f5a9b8;
+  margin-bottom: 0.8rem;
+}
+
+.blog-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.blog-card p { font-size: 0.85rem; opacity: 0.6; line-height: 1.5; margin-bottom: 1rem; }
+.blog-cta { color: #f5a9b8; font-weight: 600; font-size: 0.85rem; }
+
 /* Testimonials */
 .testimonials-grid {
   display: grid;

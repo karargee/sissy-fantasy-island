@@ -612,6 +612,30 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Blog / Guides */}
+        <section className="section">
+          <h2>📚 Guides & Tips</h2>
+          <p className="section-subtitle">Resources to help you on your journey.</p>
+          <div className="blog-grid">
+            {[
+              { title: "Beginner's Guide to Being a Sissy", emoji: "🎀", desc: "Everything you need to know to start your sissy journey — mindset, wardrobe, and confidence.", tag: "Beginner" },
+              { title: "How to Build a Feminine Wardrobe", emoji: "👗", desc: "From lingerie to everyday femme outfits — a complete shopping guide for sissies.", tag: "Fashion" },
+              { title: "Staying Discreet: Privacy Tips", emoji: "🔒", desc: "How to explore your sissy side while keeping your privacy intact. Tools, tips, and strategies.", tag: "Privacy" },
+              { title: "Feminization Training 101", emoji: "💄", desc: "Voice training, posture, walking in heels, and daily exercises to embrace your feminine self.", tag: "Training" },
+              { title: "Finding Your Sissy Community", emoji: "💬", desc: "How to connect with like-minded people safely — online and in person.", tag: "Community" },
+              { title: "Event Etiquette: What to Expect", emoji: "🎉", desc: "First time at a sissy event? Here's everything you need to know about dress code, consent, and having fun.", tag: "Events" },
+            ].map((post, i) => (
+              <div key={i} className="blog-card">
+                <div className="blog-emoji">{post.emoji}</div>
+                <div className="blog-tag">{post.tag}</div>
+                <h3>{post.title}</h3>
+                <p>{post.desc}</p>
+                <span className="blog-cta">Read More →</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Testimonials */}
         <section className="section">
           <h2>💬 Member Reviews</h2>
