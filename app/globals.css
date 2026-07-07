@@ -131,6 +131,23 @@ body {
   border-color: rgba(214,51,132,0.4);
 }
 
+/* Name Generator */
+.name-gen {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.name-gen-result {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f5a9b8, #d63384);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+  min-height: 2.5rem;
+}
+
 /* Stats Bar */
 .stats-bar {
   display: flex;

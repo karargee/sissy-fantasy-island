@@ -214,6 +214,25 @@ function BtcConfirmForm() {
   );
 }
 
+function SissyNameGenerator() {
+  const firsts = ["Princess", "Sissy", "Baby", "Mistress", "Dolly", "Candy", "Velvet", "Cherry", "Bambi", "Pixie", "Honey", "Lola", "Coco", "Bella", "Rosie", "Kitty", "Bunny", "Daisy", "Mimi", "Trixie"];
+  const lasts = ["Sparkle", "Blush", "Doll", "Kitten", "Lace", "Silk", "Petal", "Blossom", "Glitter", "Cupcake", "Devine", "Valentine", "Luxe", "Charm", "Frost", "Moon", "Star", "Dream", "Rose", "Honey"];
+  const [name, setName] = useState("");
+
+  function generate() {
+    const f = firsts[Math.floor(Math.random() * firsts.length)];
+    const l = lasts[Math.floor(Math.random() * lasts.length)];
+    setName(`${f} ${l}`);
+  }
+
+  return (
+    <div className="name-gen">
+      <div className="name-gen-result">{name || "Click generate to find your name"}</div>
+      <button className="buy-btn donate-btn" onClick={generate} style={{ maxWidth: 300, margin: "0 auto" }}>Generate My Sissy Name</button>
+    </div>
+  );
+}
+
 export default function Home() {
   const [verified, setVerified] = useState(false);
   const [payModal, setPayModal] = useState(null);
@@ -290,6 +309,13 @@ export default function Home() {
             <div className="stat-item"><span className="stat-num">3,200+</span><span className="stat-label">Cards Issued</span></div>
             <div className="stat-item"><span className="stat-num">12</span><span className="stat-label">Events Hosted</span></div>
           </div>
+        </section>
+
+        {/* Sissy Name Generator */}
+        <section className="section">
+          <h2>✨ Sissy Name Generator</h2>
+          <p className="section-subtitle">Find your perfect sissy name. Click generate until you find the one.</p>
+          <SissyNameGenerator />
         </section>
 
         {/* Sissy Card Preview */}
