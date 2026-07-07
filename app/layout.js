@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Sissy Fantasy Island 💕",
-  description: "Your official sissy membership site. Get your Sissy Card, shop outfits, and join the community.",
+  title: "Sissy Fantasy Island — Official Membership & Community",
+  description: "The official sissy & trans community platform. Get your Sissy Card, join the community, and access exclusive events.",
 };
 
 export default function RootLayout({ children }) {

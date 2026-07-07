@@ -4,80 +4,188 @@ import { QRCodeSVG } from "qrcode.react";
 
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
-const MEMBERSHIPS = [
+const SISSY_CARDS = [
   {
-    name: "Sissy Basic",
-    emoji: "💕",
-    price: 29,
+    name: "Standard Sissy Card",
+    emoji: "💳",
+    price: 150,
     color: "#f5a9b8",
-    period: "/month",
+    delivery: "Digital code via email or anonymous code",
     perks: [
-      "Official digital Sissy Card",
-      "Access to the community chat",
-      "Monthly sissy tips & guides",
-      "Member badge on profile",
+      "Official Sissy Fantasy Island membership card",
+      "Unique member ID & QR code",
+      "Access to private community group",
+      "Lifetime validity — never expires",
+      "Delivered via email or anonymous download code",
     ],
+    why: "Covers identity verification, card generation, secure delivery, and lifetime community access.",
   },
   {
-    name: "Sissy Premium",
+    name: "Gold Sissy Card",
     emoji: "👑",
-    price: 59,
+    price: 350,
     color: "#d63384",
     popular: true,
-    period: "/month",
+    delivery: "Digital + optional physical card (discreet shipping)",
     perks: [
-      "Everything in Basic",
-      "Exclusive training content",
-      "Private group access",
-      "Custom sissy name on your card",
-      "Priority support & mentorship",
-      "Monthly surprise gift box",
+      "Everything in Standard",
+      "Custom sissy name printed on card",
+      "Priority access to all events",
+      "VIP community status & badge",
+      "Physical holographic card option (discreet plain envelope)",
+      "1-on-1 welcome session with community host",
     ],
+    why: "Includes custom design, holographic printing, discreet international shipping, and VIP onboarding.",
   },
   {
-    name: "Sissy VIP",
+    name: "Diamond Sissy Card",
     emoji: "💎",
-    price: 99,
+    price: 600,
     color: "#6f42c1",
-    period: "/month",
+    delivery: "Digital + physical + exclusive perks",
     perks: [
-      "Everything in Premium",
-      "Holographic digital Sissy Card",
-      "1-on-1 coaching sessions",
-      "VIP-only events & meetups",
-      "Exclusive merch drops",
-      "Lifetime member archive access",
-      "Featured on the community wall",
+      "Everything in Gold",
+      "Diamond-tier community status",
+      "Free entry to all upcoming events",
+      "Exclusive Diamond-only group chat",
+      "Personal concierge for event bookings",
+      "Featured on the community wall (optional)",
+      "Lifetime access to all future perks & drops",
     ],
+    why: "Premium tier includes lifetime event access, personal concierge service, and all future community benefits at no extra cost.",
   },
 ];
 
-const SHOP_ITEMS = [
-  { name: "Sissy Starter Kit", emoji: "🎀", price: 49, desc: "Panties, lip gloss, and a beginner guide" },
-  { name: "Maid Outfit Set", emoji: "🖤", price: 79, desc: "Full maid costume with accessories" },
-  { name: "Sissy Card (Physical)", emoji: "💳", price: 19, desc: "Printed holographic membership card shipped to you" },
-  { name: "Training Journal", emoji: "📓", price: 25, desc: "Guided sissy journal with daily prompts" },
-  { name: "Chastity Starter", emoji: "🔒", price: 45, desc: "Beginner-friendly cage with guide" },
-  { name: "Femme Fragrance", emoji: "🌸", price: 35, desc: "Signature sissy perfume — floral & sweet" },
+const COMMUNITY_TIERS = [
+  {
+    name: "Community Access",
+    price: 75,
+    emoji: "💬",
+    color: "#5bcefa",
+    perks: [
+      "Join the private trans & sissy community",
+      "Group chat access (Telegram/Discord)",
+      "Event announcements & early access",
+      "Connect with sissies worldwide",
+      "Safe, moderated, and discreet space",
+    ],
+    why: "One-time fee covers verification, moderation, and maintaining a safe private community.",
+  },
+  {
+    name: "Inner Circle",
+    price: 200,
+    emoji: "🔐",
+    color: "#d63384",
+    perks: [
+      "Everything in Community Access",
+      "Inner Circle private group (limited to 50 members)",
+      "Direct access to event organizers",
+      "First priority for event tickets",
+      "Exclusive meetup invitations",
+      "Mentorship from experienced community members",
+    ],
+    why: "Limited spots ensure quality connections. Includes priority booking and direct organizer access.",
+  },
+];
+
+const UPCOMING_EVENTS = [
+  {
+    name: "Trans & Sex Party — Las Vegas",
+    date: "May 8–9, 2026",
+    location: "The Venetian Resort, Las Vegas, NV",
+    price: "From $300",
+    status: "Tickets Available",
+    emoji: "🎉",
+  },
+  {
+    name: "Sissy Brunch & Social — Miami",
+    date: "June 2026",
+    location: "TBA — Private Venue",
+    price: "From $150",
+    status: "Coming Soon",
+    emoji: "🥂",
+  },
+  {
+    name: "Masked Gala — New York",
+    date: "August 2026",
+    location: "TBA — Private Venue",
+    price: "From $400",
+    status: "Coming Soon",
+    emoji: "🎭",
+  },
+];
+
+const EXTERNAL_SHOPS = [
+  {
+    name: "Lovense",
+    emoji: "💜",
+    desc: "Remote-controlled toys, vibrators, and interactive devices",
+    url: "https://www.lovense.com",
+    category: "Toys & Devices",
+  },
+  {
+    name: "Amazon — Sissy Costumes",
+    emoji: "👗",
+    desc: "Maid outfits, lingerie, wigs, stockings, and accessories",
+    url: "https://www.amazon.com/s?k=sissy+costume",
+    category: "Costumes & Outfits",
+  },
+  {
+    name: "Amazon — Chastity",
+    emoji: "🔒",
+    desc: "Cages, locks, and chastity devices for beginners and advanced",
+    url: "https://www.amazon.com/s?k=chastity+cage",
+    category: "Chastity",
+  },
+  {
+    name: "Amazon — Wigs & Makeup",
+    emoji: "💄",
+    desc: "Feminine wigs, makeup kits, and beauty essentials",
+    url: "https://www.amazon.com/s?k=crossdresser+wig",
+    category: "Beauty",
+  },
+  {
+    name: "Amazon — Heels & Boots",
+    emoji: "👠",
+    desc: "High heels, thigh-high boots, and platform shoes in all sizes",
+    url: "https://www.amazon.com/s?k=crossdresser+heels",
+    category: "Footwear",
+  },
+  {
+    name: "Amazon — Corsets & Shapewear",
+    emoji: "🩱",
+    desc: "Waist trainers, corsets, hip pads, and body shaping",
+    url: "https://www.amazon.com/s?k=crossdresser+shapewear",
+    category: "Shapewear",
+  },
 ];
 
 const FAQS = [
-  { q: "What is a Sissy Card?", a: "Your official digital membership card that proves you're part of the Sissy Fantasy Island community. It includes your sissy name, tier, and unique member ID." },
-  { q: "Is this discreet?", a: "100%. All billing shows as 'SFI Digital'. No explicit descriptions on any statements. Your privacy is our priority." },
-  { q: "Can I upgrade my membership?", a: "Yes! You can upgrade anytime and only pay the difference for the current billing period." },
-  { q: "Do you ship internationally?", a: "Yes, we ship physical cards and shop items worldwide. Discreet packaging guaranteed." },
-  { q: "How do I pay with Bitcoin?", a: "Select BTC at checkout, send to our wallet address, and confirm with your email. Card is activated within 1 hour." },
-  { q: "Is there a community?", a: "Yes! All members get access to our private community chat. Premium and VIP members get access to exclusive groups." },
+  { q: "What is a Sissy Card?", a: "Your official membership card for Sissy Fantasy Island. It includes your unique member ID, QR code, and grants you access to our private community and events. It's a one-time purchase — no subscriptions, no recurring charges." },
+  { q: "How do I receive my card?", a: "You choose: (1) Email delivery — we send your digital card directly to your inbox. (2) Anonymous code — we give you a download code with no email required. You stay completely anonymous. (3) Physical card — shipped in a plain, unmarked envelope." },
+  { q: "Is this 100% discreet?", a: "Yes. Billing shows as 'SFI Digital Services'. No explicit descriptions on any bank statements. Anonymous code option requires zero personal info. Physical cards ship in plain packaging with no branding." },
+  { q: "Why are the prices what they are?", a: "Each card is individually generated with unique security features. Pricing covers: identity verification, secure card generation, encrypted delivery, lifetime community access, event priority, and ongoing platform maintenance. There are no hidden fees or recurring charges." },
+  { q: "Can I attend events without a card?", a: "Yes, events have separate tickets. However, card holders get priority access and discounted rates on all events." },
+  { q: "Is the community safe?", a: "Absolutely. All members are verified. We have active moderation, zero tolerance for harassment, and strict privacy rules. What happens in the community stays in the community." },
+  { q: "Do you ship internationally?", a: "Yes. Physical cards ship worldwide in discreet, plain packaging. Delivery takes 5-14 business days depending on location." },
+  { q: "Can I upgrade my card later?", a: "Yes. You only pay the difference between your current tier and the new one." },
+];
+
+const POLICIES = [
+  { title: "Privacy Policy", icon: "🔒", desc: "We never share, sell, or expose member data. All communications are encrypted. Anonymous options available for every purchase." },
+  { title: "Refund Policy", icon: "💰", desc: "Digital cards are non-refundable once the code is generated. Physical cards can be refunded if returned unopened within 14 days." },
+  { title: "Delivery Policy", icon: "📦", desc: "Digital: Instant to 1 hour. Physical: 5-14 business days. All physical items ship in plain, unmarked packaging." },
+  { title: "Community Rules", icon: "📜", desc: "Zero tolerance for harassment, doxxing, or sharing member info. Violations result in permanent ban with no refund." },
 ];
 
 function BtcConfirmForm() {
-  const [form, setForm] = useState({ email: "", tier: "Sissy Basic", txid: "" });
+  const [form, setForm] = useState({ email: "", tier: "Standard Sissy Card", txid: "", delivery: "email" });
   const [sent, setSent] = useState(false);
 
   if (sent) {
     return (
       <div className="btc-confirm-card">
-        <div className="email-success">✅ Payment received! Your Sissy Card will be activated within 1 hour.</div>
+        <div className="email-success">✅ Payment received! Your card will be delivered within 1 hour.</div>
       </div>
     );
   }
@@ -85,15 +193,23 @@ function BtcConfirmForm() {
   return (
     <form className="btc-confirm-card" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
       <h3>Confirm Your BTC Payment</h3>
-      <input type="email" placeholder="Your email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="form-input" />
       <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })} className="form-input form-select">
-        <option value="Sissy Basic">💕 Sissy Basic — $29/mo</option>
-        <option value="Sissy Premium">👑 Sissy Premium — $59/mo</option>
-        <option value="Sissy VIP">💎 Sissy VIP — $99/mo</option>
+        <option value="Standard Sissy Card">💳 Standard Sissy Card — $150</option>
+        <option value="Gold Sissy Card">👑 Gold Sissy Card — $350</option>
+        <option value="Diamond Sissy Card">💎 Diamond Sissy Card — $600</option>
+        <option value="Community Access">💬 Community Access — $75</option>
+        <option value="Inner Circle">🔐 Inner Circle — $200</option>
       </select>
+      <select value={form.delivery} onChange={(e) => setForm({ ...form, delivery: e.target.value })} className="form-input form-select">
+        <option value="email">📧 Deliver to my email</option>
+        <option value="anonymous">🔒 Anonymous code (no email needed)</option>
+      </select>
+      {form.delivery === "email" && (
+        <input type="email" placeholder="Your email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="form-input" />
+      )}
       <input type="text" placeholder="BTC Transaction ID (optional)" value={form.txid} onChange={(e) => setForm({ ...form, txid: e.target.value })} className="form-input" />
       <button type="submit" className="buy-btn donate-btn">Confirm Payment</button>
-      <p className="donate-note">We'll verify on-chain and activate your card within 1 hour</p>
+      <p className="donate-note">We'll verify on-chain and deliver within 1 hour</p>
     </form>
   );
 }
@@ -108,9 +224,8 @@ export default function Home() {
   const [giftImage, setGiftImage] = useState(null);
   const [giftSubmitted, setGiftSubmitted] = useState(false);
 
-  function openPayModal(tier) {
-    const t = MEMBERSHIPS.find((x) => x.name === tier);
-    setPayModal({ tier, price: t.price, period: t.period });
+  function openPayModal(name, price) {
+    setPayModal({ tier: name, price });
     setPayMethod(null);
   }
 
@@ -121,144 +236,257 @@ export default function Home() {
   }
 
   return (
-    <div className="container">
-      {/* Hero */}
-      <section className="hero">
-        <h1>SISSY FANTASY ISLAND</h1>
-        <p className="tagline">Your official home for all things sissy. Get your card. Join the community. Embrace who you are.</p>
-        <div className="hero-badges">
-          <span className="hero-badge">💳 Official Sissy Cards</span>
-          <span className="hero-badge">👗 Sissy Shop</span>
-          <span className="hero-badge">💬 Private Community</span>
-        </div>
-      </section>
+    <div className="page-wrap">
+      {/* Animated Background */}
+      <div className="bg-animation">
+        <div className="bg-orb bg-orb-1"></div>
+        <div className="bg-orb bg-orb-2"></div>
+        <div className="bg-orb bg-orb-3"></div>
+      </div>
 
-      {/* What You Get */}
-      <section className="section">
-        <h2>✨ What Is Sissy Fantasy Island?</h2>
-        <div className="expect-grid">
-          {[
-            ["💳", "Official Sissy Card", "Your digital (or physical) membership card with your sissy name, tier, and unique ID"],
-            ["👗", "Sissy Shop", "Outfits, accessories, training tools, and everything you need for your journey"],
-            ["💬", "Private Community", "Connect with other sissies in our safe, discreet, and supportive space"],
-            ["📚", "Training & Guides", "Step-by-step feminization guides, tips, and daily challenges"],
-            ["🔒", "100% Discreet", "Anonymous billing, private profiles, and encrypted communications"],
-            ["🌍", "Worldwide", "Members from every corner of the globe. Ship anywhere, connect everywhere"],
-          ].map(([emoji, title, desc]) => (
-            <div key={title} className="expect-card">
-              <div className="expect-emoji">{emoji}</div>
-              <h3>{title}</h3>
-              <p>{desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="container">
+        {/* Hero */}
+        <section className="hero">
+          <h1>SISSY FANTASY ISLAND</h1>
+          <p className="tagline">The official membership platform for the trans & sissy community. Get your card. Join the community. Live your truth.</p>
+          <div className="hero-badges">
+            <span className="hero-badge">💳 Official Sissy Cards</span>
+            <span className="hero-badge">💬 Private Community</span>
+            <span className="hero-badge">🎉 Exclusive Events</span>
+            <span className="hero-badge">🔒 100% Discreet</span>
+          </div>
+        </section>
 
-      {/* Membership Cards */}
-      <section className="section" id="cards">
-        <h2>💳 Get Your Sissy Card</h2>
-        <p style={{ textAlign: "center", opacity: 0.6, marginBottom: "2rem" }}>Choose your tier. Get your card. Join the community.</p>
-        <div className="tickets-grid">
-          {MEMBERSHIPS.map((t) => (
-            <div key={t.name} className="ticket-card" style={{ borderTop: `4px solid ${t.color}` }}>
-              {t.popular && <div className="popular-badge">🔥 MOST POPULAR</div>}
-              <div className="ticket-emoji">{t.emoji}</div>
-              <h3>{t.name}</h3>
-              <div className="price" style={{ color: t.color }}>
-                ${t.price}<span className="price-period">{t.period}</span>
-              </div>
-              <ul className="perks">
-                {t.perks.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
-              <button
-                className="buy-btn"
-                style={{ background: `linear-gradient(135deg, ${t.color}, #6f42c1)` }}
-                onClick={() => openPayModal(t.name)}
-              >
-                Get {t.name} Card
-              </button>
-              <div className="payment-icons">
-                <span className="btc-badge">₿ Bitcoin</span>
-                <span className="btc-badge" style={{ background: "rgba(245,169,184,0.15)", borderColor: "rgba(245,169,184,0.3)", color: "#f5a9b8" }}>🎁 Gift Card</span>
+        {/* Sissy Card Preview */}
+        <section className="section">
+          <h2>💳 The Official Sissy Card</h2>
+          <p className="section-subtitle">Your identity. Your community. One card.</p>
+          <div className="card-preview">
+            <div className="card-mockup">
+              <div className="card-mockup-inner">
+                <div className="card-logo">SISSY FANTASY ISLAND</div>
+                <div className="card-chip">💎</div>
+                <div className="card-number">SFI-XXXX-XXXX-XXXX</div>
+                <div className="card-details">
+                  <div><span>MEMBER</span><strong>Your Sissy Name</strong></div>
+                  <div><span>TIER</span><strong>Gold</strong></div>
+                  <div><span>VALID</span><strong>Lifetime</strong></div>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Shop */}
-      <section className="section">
-        <h2>🛍️ Sissy Shop</h2>
-        <div className="shop-grid">
-          {SHOP_ITEMS.map((item) => (
-            <div key={item.name} className="shop-card">
-              <div className="shop-emoji">{item.emoji}</div>
-              <h3>{item.name}</h3>
-              <p>{item.desc}</p>
-              <div className="shop-price">${item.price}</div>
-              <button className="buy-btn shop-btn" onClick={() => { setPayModal({ tier: item.name, price: item.price, period: "" }); setPayMethod(null); }}>
-                Buy Now
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="section">
-        <h2>❓ FAQ</h2>
-        <div className="faq-list">
-          {FAQS.map((f, i) => (
-            <div key={i} className="faq-item" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-              <div className="faq-q">
-                {f.q}
-                <span>{openFaq === i ? "−" : "+"}</span>
+            <div className="card-delivery-info">
+              <h3>How You Receive Your Card</h3>
+              <div className="delivery-options">
+                <div className="delivery-option">
+                  <span>📧</span>
+                  <div>
+                    <strong>Email Delivery</strong>
+                    <p>Digital card sent directly to your inbox within 1 hour</p>
+                  </div>
+                </div>
+                <div className="delivery-option">
+                  <span>🔒</span>
+                  <div>
+                    <strong>Anonymous Code</strong>
+                    <p>Get a download code — no email, no name, total anonymity</p>
+                  </div>
+                </div>
+                <div className="delivery-option">
+                  <span>📦</span>
+                  <div>
+                    <strong>Physical Card (Gold & Diamond)</strong>
+                    <p>Holographic card shipped in plain, unmarked envelope</p>
+                  </div>
+                </div>
               </div>
-              {openFaq === i && <div className="faq-a">{f.a}</div>}
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* Email Signup */}
-      <section className="section">
-        <div className="email-section">
-          <h2>📧 Join The List</h2>
-          <p>Get notified about new drops, exclusive content, and community updates.</p>
-          {emailSent ? (
-            <div className="email-success">✅ You're in! Check your inbox.</div>
-          ) : (
-            <form className="email-form" onSubmit={(e) => { e.preventDefault(); if (email) setEmailSent(true); }}>
-              <input type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="email-input" />
-              <button type="submit" className="email-btn">Join</button>
-            </form>
-          )}
-        </div>
-      </section>
+        {/* Sissy Card Tiers */}
+        <section className="section" id="cards">
+          <h2>Choose Your Card</h2>
+          <p className="section-subtitle">One-time payment. Lifetime access. No subscriptions.</p>
+          <div className="tickets-grid">
+            {SISSY_CARDS.map((t) => (
+              <div key={t.name} className="ticket-card" style={{ borderTop: `4px solid ${t.color}` }}>
+                {t.popular && <div className="popular-badge">🔥 MOST POPULAR</div>}
+                <div className="ticket-emoji">{t.emoji}</div>
+                <h3>{t.name}</h3>
+                <div className="price" style={{ color: t.color }}>
+                  ${t.price}<span className="price-period"> one-time</span>
+                </div>
+                <ul className="perks">
+                  {t.perks.map((p) => (
+                    <li key={p}>{p}</li>
+                  ))}
+                </ul>
+                <div className="why-price">
+                  <strong>Why this price?</strong>
+                  <p>{t.why}</p>
+                </div>
+                <button
+                  className="buy-btn"
+                  style={{ background: `linear-gradient(135deg, ${t.color}, #6f42c1)` }}
+                  onClick={() => openPayModal(t.name, t.price)}
+                >
+                  Get Card — ${t.price}
+                </button>
+                <div className="payment-icons">
+                  <span className="btc-badge">₿ Bitcoin</span>
+                  <span className="btc-badge" style={{ background: "rgba(245,169,184,0.15)", borderColor: "rgba(245,169,184,0.3)", color: "#f5a9b8" }}>🎁 Gift Card</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      {/* Contact */}
-      <section className="section">
-        <h2>📬 Contact</h2>
-        <div className="social-bar">
-          <a href="mailto:comeandsee@gmail.com" className="social-link">
-            <span>📧</span> comeandsee@gmail.com
-          </a>
-          <a href="https://wa.me/19853686907" target="_blank" rel="noopener" className="social-link">
-            <span>💬</span> WhatsApp
-          </a>
-          <a href="https://t.me/tshungkathy10" target="_blank" rel="noopener" className="social-link">
-            <span>✈️</span> Telegram
-          </a>
-        </div>
-      </section>
+        {/* Community */}
+        <section className="section">
+          <h2>💬 Join The Community</h2>
+          <p className="section-subtitle">Connect with trans women, sissies, and admirers in a safe, private space.</p>
+          <div className="community-grid">
+            {COMMUNITY_TIERS.map((t) => (
+              <div key={t.name} className="community-card" style={{ borderTop: `4px solid ${t.color}` }}>
+                <div className="ticket-emoji">{t.emoji}</div>
+                <h3>{t.name}</h3>
+                <div className="price" style={{ color: t.color }}>
+                  ${t.price}<span className="price-period"> one-time</span>
+                </div>
+                <ul className="perks">
+                  {t.perks.map((p) => (
+                    <li key={p}>{p}</li>
+                  ))}
+                </ul>
+                <div className="why-price">
+                  <strong>Why this price?</strong>
+                  <p>{t.why}</p>
+                </div>
+                <button
+                  className="buy-btn"
+                  style={{ background: `linear-gradient(135deg, ${t.color}, #6f42c1)` }}
+                  onClick={() => openPayModal(t.name, t.price)}
+                >
+                  Join — ${t.price}
+                </button>
+                <div className="payment-icons">
+                  <span className="btc-badge">₿ Bitcoin</span>
+                  <span className="btc-badge" style={{ background: "rgba(245,169,184,0.15)", borderColor: "rgba(245,169,184,0.3)", color: "#f5a9b8" }}>🎁 Gift Card</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      {/* Footer */}
-      <footer className="footer">
-        <p>💕 Sissy Fantasy Island 2026 — Be who you really are 💕</p>
-        <p>Discreet billing · Worldwide shipping · All sales final</p>
-      </footer>
+        {/* Upcoming Events */}
+        <section className="section">
+          <h2>🎉 Upcoming Events</h2>
+          <p className="section-subtitle">Exclusive parties and meetups for our community. Card holders get priority access.</p>
+          <div className="events-grid">
+            {UPCOMING_EVENTS.map((ev) => (
+              <div key={ev.name} className="event-card">
+                <div className="event-emoji">{ev.emoji}</div>
+                <h3>{ev.name}</h3>
+                <div className="event-details-list">
+                  <span>📅 {ev.date}</span>
+                  <span>📍 {ev.location}</span>
+                  <span>💰 {ev.price}</span>
+                </div>
+                <div className={`event-status ${ev.status === "Tickets Available" ? "event-status-live" : ""}`}>
+                  {ev.status}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Shop — External Links */}
+        <section className="section">
+          <h2>🛍️ Shop Costumes & Toys</h2>
+          <p className="section-subtitle">We've curated the best products from trusted retailers. Click to shop directly.</p>
+          <div className="shop-grid">
+            {EXTERNAL_SHOPS.map((item) => (
+              <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer" className="shop-card-link">
+                <div className="shop-card">
+                  <div className="shop-emoji">{item.emoji}</div>
+                  <div className="shop-category">{item.category}</div>
+                  <h3>{item.name}</h3>
+                  <p>{item.desc}</p>
+                  <div className="shop-cta">Shop Now →</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* Policies */}
+        <section className="section">
+          <h2>📋 Our Policies</h2>
+          <div className="policies-grid">
+            {POLICIES.map((p) => (
+              <div key={p.title} className="policy-card">
+                <span className="policy-icon">{p.icon}</span>
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="section">
+          <h2>❓ FAQ</h2>
+          <div className="faq-list">
+            {FAQS.map((f, i) => (
+              <div key={i} className="faq-item" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                <div className="faq-q">
+                  {f.q}
+                  <span>{openFaq === i ? "−" : "+"}</span>
+                </div>
+                {openFaq === i && <div className="faq-a">{f.a}</div>}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Email Signup */}
+        <section className="section">
+          <div className="email-section">
+            <h2>📧 Stay Updated</h2>
+            <p>Get notified about new events, community updates, and exclusive drops.</p>
+            {emailSent ? (
+              <div className="email-success">✅ You're in! Check your inbox.</div>
+            ) : (
+              <form className="email-form" onSubmit={(e) => { e.preventDefault(); if (email) setEmailSent(true); }}>
+                <input type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="email-input" />
+                <button type="submit" className="email-btn">Join</button>
+              </form>
+            )}
+          </div>
+        </section>
+
+        {/* Contact */}
+        <section className="section">
+          <h2>📬 Contact</h2>
+          <div className="social-bar">
+            <a href="mailto:comeandsee@gmail.com" className="social-link">
+              <span>📧</span> comeandsee@gmail.com
+            </a>
+            <a href="https://wa.me/19853686907" target="_blank" rel="noopener" className="social-link">
+              <span>💬</span> WhatsApp
+            </a>
+            <a href="https://t.me/tshungkathy10" target="_blank" rel="noopener" className="social-link">
+              <span>✈️</span> Telegram
+            </a>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="footer">
+          <p>💕 Sissy Fantasy Island 2026 — Be who you really are 💕</p>
+          <p>Discreet billing · One-time payments · Worldwide · All sales final</p>
+        </footer>
+      </div>
 
       {/* Payment Modal */}
       {payModal && (
@@ -266,7 +494,7 @@ export default function Home() {
           <div className="pay-modal" onClick={(e) => e.stopPropagation()}>
             <button className="pay-modal-close" onClick={() => setPayModal(null)}>✕</button>
             <h2>{payModal.tier}</h2>
-            <div className="pay-modal-total">${payModal.price}{payModal.period}</div>
+            <div className="pay-modal-total">${payModal.price} — one-time payment</div>
 
             {!payMethod && (
               <div className="pay-options">
@@ -283,7 +511,7 @@ export default function Home() {
               <div className="pay-btc-content">
                 {giftSubmitted ? (
                   <div className="email-success" style={{ textAlign: "center", padding: "1.5rem 0" }}>
-                    ✅ Gift card submitted! We'll verify and activate your card within 1 hour.
+                    ✅ Gift card submitted! We'll verify and deliver your card within 1 hour.
                   </div>
                 ) : (
                   <form onSubmit={handleGiftSubmit} className="gift-form">
@@ -297,7 +525,7 @@ export default function Home() {
                       </label>
                     </div>
                     <button type="submit" className="buy-btn donate-btn">Submit for Verification</button>
-                    <p className="donate-note">We'll verify your gift card and confirm within 1 hour</p>
+                    <p className="donate-note">We'll verify and deliver within 1 hour</p>
                   </form>
                 )}
                 <button className="pay-back" onClick={() => { setPayMethod(null); setGiftSubmitted(false); setGiftCode(""); setGiftImage(null); }}>← Back</button>
