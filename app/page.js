@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
 
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
@@ -215,6 +215,7 @@ function BtcConfirmForm() {
 }
 
 export default function Home() {
+  const [verified, setVerified] = useState(false);
   const [payModal, setPayModal] = useState(null);
   const [payMethod, setPayMethod] = useState(null);
   const [openFaq, setOpenFaq] = useState(null);
@@ -233,6 +234,30 @@ export default function Home() {
     e.preventDefault();
     if (!giftCode && !giftImage) return alert("Please enter a gift card code or upload an image.");
     setGiftSubmitted(true);
+  }
+
+  useEffect(() => {
+    if (sessionStorage.getItem("age_verified") === "true") setVerified(true);
+  }, []);
+
+  function handleAgeConfirm(yes) {
+    if (yes) { setVerified(true); sessionStorage.setItem("age_verified", "true"); }
+  }
+
+  if (!verified) {
+    return (
+      <div className="age-gate-overlay">
+        <div className="age-gate-box">
+          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔞</div>
+          <h2>Are you 18 or older?</h2>
+          <p>This site contains adult content. You must be 18+ to enter.</p>
+          <div className="age-gate-buttons">
+            <button className="age-btn age-btn-yes" onClick={() => handleAgeConfirm(true)}>Yes, I&apos;m 18+</button>
+            <button className="age-btn age-btn-no" onClick={() => window.location.href = "https://google.com"}>No</button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -643,8 +643,48 @@ body {
 
 .footer p + p { margin-top: 0.3rem; }
 
-/* Payment Modal */
+/* Age Gate */
 .age-gate-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.97);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.age-gate-box {
+  background: #151520;
+  border: 1px solid rgba(214,51,132,0.3);
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+}
+
+.age-gate-box h2 { font-size: 1.5rem; margin-bottom: 0.8rem; }
+.age-gate-box p { opacity: 0.6; line-height: 1.6; margin-bottom: 1.5rem; }
+
+.age-gate-buttons { display: flex; gap: 1rem; justify-content: center; }
+
+.age-btn {
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.age-btn:hover { transform: scale(1.05); }
+.age-btn-yes { background: linear-gradient(135deg, #d63384, #6f42c1); color: white; }
+.age-btn-no { background: rgba(255,255,255,0.1); color: #f0f0f0; }
+
+/* Payment Modal */
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.9);
