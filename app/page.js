@@ -214,6 +214,47 @@ function BtcConfirmForm() {
   );
 }
 
+function ShippingTracker() {
+  const [orderId, setOrderId] = useState("");
+  const [result, setResult] = useState(null);
+
+  function handleTrack(e) {
+    e.preventDefault();
+    if (!orderId.trim()) return;
+    setResult({
+      id: orderId,
+      status: "In Transit",
+      shipped: "2 days ago",
+      eta: "3-5 business days",
+      carrier: "Discreet Express",
+    });
+  }
+
+  return (
+    <div className="checker">
+      <form className="checker-form" onSubmit={handleTrack}>
+        <input type="text" placeholder="Enter order ID (e.g. ORD-XXXXX)" value={orderId} onChange={(e) => setOrderId(e.target.value)} className="form-input" />
+        <button type="submit" className="buy-btn donate-btn" style={{ maxWidth: 200 }}>Track</button>
+      </form>
+      {result && (
+        <div className="tracker-result">
+          <div className="tracker-header">
+            <span>📦</span>
+            <strong>{result.status}</strong>
+          </div>
+          <div className="tracker-details">
+            <div><span>Order:</span><strong>{result.id}</strong></div>
+            <div><span>Shipped:</span><strong>{result.shipped}</strong></div>
+            <div><span>ETA:</span><strong>{result.eta}</strong></div>
+            <div><span>Carrier:</span><strong>{result.carrier}</strong></div>
+          </div>
+          <div className="tracker-bar"><div className="tracker-progress"></div></div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CardChecker() {
   const [code, setCode] = useState("");
   const [result, setResult] = useState(null);
@@ -558,6 +599,28 @@ export default function Home() {
                 <p>{p.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Shipping Tracker */}
+        <section className="section">
+          <h2>📦 Track Your Order</h2>
+          <p className="section-subtitle">Enter your order ID to check shipping status.</p>
+          <ShippingTracker />
+        </section>
+
+        {/* Referral Program */}
+        <section className="section">
+          <div className="referral-banner">
+            <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🎁</div>
+            <h2>Refer a Sissy, Get $50 Off</h2>
+            <p>Share your referral code with a friend. When they purchase any card, you both get $50 off your next purchase.</p>
+            <div className="referral-steps">
+              <div className="referral-step"><span>1</span><p>Share your unique referral code</p></div>
+              <div className="referral-step"><span>2</span><p>Your friend buys any Sissy Card</p></div>
+              <div className="referral-step"><span>3</span><p>You both get $50 off</p></div>
+            </div>
+            <p className="referral-note">Get your referral code after purchasing any card. Contact us to claim your discount.</p>
           </div>
         </section>
 

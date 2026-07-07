@@ -131,6 +131,100 @@ body {
   border-color: rgba(214,51,132,0.4);
 }
 
+/* Shipping Tracker */
+.tracker-result {
+  margin-top: 1.5rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+
+.tracker-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.tracker-header span { font-size: 1.5rem; }
+.tracker-header strong { font-size: 1.1rem; color: #5bcefa; }
+
+.tracker-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.tracker-details div span { font-size: 0.75rem; opacity: 0.5; display: block; }
+.tracker-details div strong { font-size: 0.9rem; }
+
+.tracker-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tracker-progress {
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, #5bcefa, #d63384);
+  border-radius: 3px;
+  animation: progressPulse 2s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Referral */
+.referral-banner {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(214,51,132,0.08), rgba(111,66,193,0.08));
+  border: 1px solid rgba(214,51,132,0.15);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+}
+
+.referral-banner h2 { margin-bottom: 0.8rem; }
+.referral-banner > p { opacity: 0.7; max-width: 500px; margin: 0 auto; line-height: 1.6; }
+
+.referral-steps {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.referral-step {
+  text-align: center;
+  max-width: 150px;
+}
+
+.referral-step span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d63384, #6f42c1);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.referral-step p { font-size: 0.85rem; opacity: 0.7; }
+
+.referral-note {
+  font-size: 0.8rem;
+  opacity: 0.4;
+  margin-top: 1rem;
+}
+
 /* Card Checker */
 .checker {
   max-width: 500px;
