@@ -605,8 +605,7 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem", textAlign: "center" }}>
             {[
               { step: "1", icon: "💳", title: "Choose Your Card", desc: "Pick the tier that fits you — from $50 to $200" },
-              { step: "2", icon: "₿", title: "Pay Securely", desc: "Bitcoin or gift card — 100% discreet, no trace" },
-              { step: "3", icon: "✅", title: "Get Access", desc: "Card + community access delivered within 1 hour" },
+              { step: "2", icon: "✅", title: "Get Access", desc: "Card + community access delivered within 1 hour" },
             ].map((s) => (
               <div key={s.step} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "2rem 1.5rem" }}>
                 <div style={{ width: 50, height: 50, borderRadius: "50%", background: "linear-gradient(135deg, #d63384, #6f42c1)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "1.2rem", marginBottom: "1rem" }}>{s.step}</div>
