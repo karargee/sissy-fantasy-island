@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
 import Link from "next/link";
@@ -180,7 +180,6 @@ const EXTERNAL_SHOPS = [
     desc: "Remote-controlled toys, vibrators, and interactive devices",
     url: "https://www.lovense.com",
     category: "Toys & Devices",
-    img: "https://images.unsplash.com/photo-1600956054428-80c61d38b9c9?w=400&q=80",
   },
   {
     name: "Amazon — Sissy Costumes",
@@ -188,7 +187,6 @@ const EXTERNAL_SHOPS = [
     desc: "Maid outfits, lingerie, wigs, stockings, and accessories",
     url: "https://www.amazon.com/s?k=sissy+costume",
     category: "Costumes & Outfits",
-    img: "https://images.unsplash.com/photo-1617331721458-bd3bd3f9c7f8?w=400&q=80",
   },
   {
     name: "Amazon — Chastity",
@@ -196,7 +194,6 @@ const EXTERNAL_SHOPS = [
     desc: "Cages, locks, and chastity devices for beginners and advanced",
     url: "https://www.amazon.com/s?k=chastity+cage",
     category: "Chastity",
-    img: "https://images.unsplash.com/photo-1558618047-3c8c76bb987d?w=400&q=80",
   },
   {
     name: "Amazon — Wigs & Makeup",
@@ -204,7 +201,6 @@ const EXTERNAL_SHOPS = [
     desc: "Feminine wigs, makeup kits, and beauty essentials",
     url: "https://www.amazon.com/s?k=crossdresser+wig",
     category: "Beauty",
-    img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80",
   },
   {
     name: "Amazon — Heels & Boots",
@@ -212,7 +208,6 @@ const EXTERNAL_SHOPS = [
     desc: "High heels, thigh-high boots, and platform shoes in all sizes",
     url: "https://www.amazon.com/s?k=crossdresser+heels",
     category: "Footwear",
-    img: "https://images.unsplash.com/photo-1515347619252-60a4bf4fff4f?w=400&q=80",
   },
   {
     name: "Amazon — Corsets & Shapewear",
@@ -220,17 +215,22 @@ const EXTERNAL_SHOPS = [
     desc: "Waist trainers, corsets, hip pads, and body shaping",
     url: "https://www.amazon.com/s?k=crossdresser+shapewear",
     category: "Shapewear",
-    img: "https://images.unsplash.com/photo-1616627577385-5c0c4dab55a5?w=400&q=80",
   },
 ];
 
 const BLOG_POSTS = [
-  { title: "Beginner's Guide to Being a Sissy", emoji: "🎀", tag: "Beginner", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&q=80", desc: "Everything you need to know to start your sissy journey — mindset, wardrobe, and confidence.", content: "Starting your sissy journey is exciting and personal. Here's what you need to know:\n\n1. Mindset First: Being a sissy is about embracing femininity on your own terms. There's no right or wrong way.\n\n2. Start Small: Begin with underwear, stockings, or a simple accessory. You don't need a full wardrobe on day one.\n\n3. Privacy: Use a separate email, anonymous shopping, and discreet delivery options.\n\n4. Community: Join a safe space like ours where you can ask questions without judgment.\n\n5. Self-Care: Shaving, skincare, and grooming are great first steps that feel amazing.\n\n6. No Rush: Go at your own pace. This is YOUR journey." },
-  { title: "How to Build a Feminine Wardrobe", emoji: "👗", tag: "Fashion", img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&q=80", desc: "From lingerie to everyday femme outfits — a complete shopping guide for sissies.", content: "Building your wardrobe doesn't have to be expensive or overwhelming:\n\n1. Essentials: Start with panties, a bra, stockings, and one outfit you love.\n\n2. Sizing: Measure yourself carefully. Most online stores have size guides. When in doubt, size up.\n\n3. Where to Shop: Amazon has great discreet options. Search for 'crossdresser' or 'sissy' for better results.\n\n4. Shoes: Start with a low heel (2-3 inches). Practice walking at home before going higher.\n\n5. Accessories: A wig, clip-on earrings, and a choker can transform your look instantly.\n\n6. Storage: Keep items in a locked box or bag if you need discretion at home.\n\n7. Budget: You can start with under $50. Quality over quantity." },
-  { title: "Staying Discreet: Privacy Tips", emoji: "🔒", tag: "Privacy", img: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&q=80", desc: "How to explore your sissy side while keeping your privacy intact. Tools, tips, and strategies.", content: "Privacy is everything. Here's how to stay safe:\n\n1. Separate Email: Create a new email just for your sissy life. Use ProtonMail for encryption.\n\n2. Shopping: Use Amazon lockers or PO boxes for deliveries. Always select 'gift' packaging.\n\n3. Payments: Use gift cards or Bitcoin to avoid bank statement traces.\n\n4. Phone: Use a separate browser (private mode) or a second phone.\n\n5. Photos: Strip metadata from photos before sharing. Never include your face and identifiable features in the same shot.\n\n6. Community: Use a sissy name, never your real one. Our platform supports full anonymity.\n\n7. Storage: Use a locked app or encrypted folder for photos and files." },
-  { title: "Feminization Training 101", emoji: "💄", tag: "Training", img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400&q=80", desc: "Voice training, posture, walking in heels, and daily exercises to embrace your feminine self.", content: "Feminization is a journey. Here are daily practices:\n\n1. Voice: Practice speaking from your head voice, not chest. YouTube has great tutorials. Start with 10 minutes daily.\n\n2. Posture: Shoulders back, chin slightly up, smaller steps. Practice in front of a mirror.\n\n3. Walking: Cross your feet slightly when walking for a feminine gait. Heels force this naturally.\n\n4. Skincare: Moisturize daily, exfoliate weekly. Smooth skin is feminine skin.\n\n5. Body Hair: Shave or wax regularly. Start with legs and arms — the feeling is incredible.\n\n6. Makeup: Start with foundation, mascara, and lip gloss. YouTube tutorials are your best friend.\n\n7. Consistency: 15 minutes of practice daily beats 2 hours once a week." },
-  { title: "Finding Your Sissy Community", emoji: "💬", tag: "Community", img: "https://images.unsplash.com/photo-1543807535-eceef0bc6599?w=400&q=80", desc: "How to connect with like-minded people safely — online and in person.", content: "Community makes all the difference:\n\n1. Online First: Join verified communities like Sissy Fantasy Island where members are screened.\n\n2. Safety: Never share personal info until you trust someone. Use your sissy name.\n\n3. Events: Start with online meetups before in-person events. Our community hosts both.\n\n4. Mentors: Find someone experienced who can guide you. Our Inner Circle offers mentorship.\n\n5. Boundaries: It's okay to say no. A good community respects boundaries always.\n\n6. Give Back: Once you're comfortable, help newcomers. We all started somewhere.\n\n7. Red Flags: Avoid anyone who pressures you, asks for money, or doesn't respect your privacy." },
-  { title: "Event Etiquette: What to Expect", emoji: "🎉", tag: "Events", img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&q=80", desc: "First time at a sissy event? Here's everything you need to know about dress code, consent, and having fun.", content: "Your first event can be nerve-wracking. Here's what to know:\n\n1. Dress Code: Most events have a theme. When in doubt, go with lingerie + heels or a cute outfit.\n\n2. Consent: Always ask before touching anyone. 'No' is a complete sentence.\n\n3. Arrive Early: Less crowded, easier to settle in and meet the hosts.\n\n4. Bring a Friend: If possible, go with someone you trust for the first time.\n\n5. Hydrate: Drink water. Events are long and exciting — take care of yourself.\n\n6. Safe Word: Know the event's safe word or signal. Usually it's 'RED'.\n\n7. Have Fun: Everyone is there for the same reason. You belong. Enjoy yourself." },
+  { title: "Beginner's Guide to Being a Sissy", emoji: "🎀", tag: "Beginner", desc: "Everything you need to know to start your sissy journey — mindset, wardrobe, and confidence.", content: "Starting your sissy journey is exciting and personal. Here's what you need to know:\n\n1. Mindset First: Being a sissy is about embracing femininity on your own terms. There's no right or wrong way.\n\n2. Start Small: Begin with underwear, stockings, or a simple accessory. You don't need a full wardrobe on day one.\n\n3. Privacy: Use a separate email, anonymous shopping, and discreet delivery options.\n\n4. Community: Join a safe space like ours where you can ask questions without judgment.\n\n5. Self-Care: Shaving, skincare, and grooming are great first steps that feel amazing.\n\n6. No Rush: Go at your own pace. This is YOUR journey." },
+  { title: "How to Build a Feminine Wardrobe", emoji: "👗", tag: "Fashion", desc: "From lingerie to everyday femme outfits — a complete shopping guide for sissies.", content: "Building your wardrobe doesn't have to be expensive or overwhelming:\n\n1. Essentials: Start with panties, a bra, stockings, and one outfit you love.\n\n2. Sizing: Measure yourself carefully. Most online stores have size guides. When in doubt, size up.\n\n3. Where to Shop: Amazon has great discreet options. Search for 'crossdresser' or 'sissy' for better results.\n\n4. Shoes: Start with a low heel (2-3 inches). Practice walking at home before going higher.\n\n5. Accessories: A wig, clip-on earrings, and a choker can transform your look instantly.\n\n6. Storage: Keep items in a locked box or bag if you need discretion at home.\n\n7. Budget: You can start with under $50. Quality over quantity." },
+  { title: "Staying Discreet: Privacy Tips", emoji: "🔒", tag: "Privacy", desc: "How to explore your sissy side while keeping your privacy intact. Tools, tips, and strategies.", content: "Privacy is everything. Here's how to stay safe:\n\n1. Separate Email: Create a new email just for your sissy life. Use ProtonMail for encryption.\n\n2. Shopping: Use Amazon lockers or PO boxes for deliveries. Always select 'gift' packaging.\n\n3. Payments: Use gift cards or Bitcoin to avoid bank statement traces.\n\n4. Phone: Use a separate browser (private mode) or a second phone.\n\n5. Photos: Strip metadata from photos before sharing. Never include your face and identifiable features in the same shot.\n\n6. Community: Use a sissy name, never your real one. Our platform supports full anonymity.\n\n7. Storage: Use a locked app or encrypted folder for photos and files." },
+  { title: "Feminization Training 101", emoji: "💄", tag: "Training", desc: "Voice training, posture, walking in heels, and daily exercises to embrace your feminine self.", content: "Feminization is a journey. Here are daily practices:\n\n1. Voice: Practice speaking from your head voice, not chest. YouTube has great tutorials. Start with 10 minutes daily.\n\n2. Posture: Shoulders back, chin slightly up, smaller steps. Practice in front of a mirror.\n\n3. Walking: Cross your feet slightly when walking for a feminine gait. Heels force this naturally.\n\n4. Skincare: Moisturize daily, exfoliate weekly. Smooth skin is feminine skin.\n\n5. Body Hair: Shave or wax regularly. Start with legs and arms — the feeling is incredible.\n\n6. Makeup: Start with foundation, mascara, and lip gloss. YouTube tutorials are your best friend.\n\n7. Consistency: 15 minutes of practice daily beats 2 hours once a week." },
+  { title: "Finding Your Sissy Community", emoji: "💬", tag: "Community", desc: "How to connect with like-minded people safely — online and in person.", content: "Community makes all the difference:\n\n1. Online First: Join verified communities like Sissy Fantasy Island where members are screened.\n\n2. Safety: Never share personal info until you trust someone. Use your sissy name.\n\n3. Events: Start with online meetups before in-person events. Our community hosts both.\n\n4. Mentors: Find someone experienced who can guide you. Our Inner Circle offers mentorship.\n\n5. Boundaries: It's okay to say no. A good community respects boundaries always.\n\n6. Give Back: Once you're comfortable, help newcomers. We all started somewhere.\n\n7. Red Flags: Avoid anyone who pressures you, asks for money, or doesn't respect your privacy." },
+  { title: "Event Etiquette: What to Expect", emoji: "🎉", tag: "Events", desc: "First time at a sissy event? Here's everything you need to know about dress code, consent, and having fun.", content: "Your first event can be nerve-wracking. Here's what to know:\n\n1. Dress Code: Most events have a theme. When in doubt, go with lingerie + heels or a cute outfit.\n\n2. Consent: Always ask before touching anyone. 'No' is a complete sentence.\n\n3. Arrive Early: Less crowded, easier to settle in and meet the hosts.\n\n4. Bring a Friend: If possible, go with someone you trust for the first time.\n\n5. Hydrate: Drink water. Events are long and exciting — take care of yourself.\n\n6. Safe Word: Know the event's safe word or signal. Usually it's 'RED'.\n\n7. Have Fun: Everyone is there for the same reason. You belong. Enjoy yourself." },
+];
+
+const BUNDLES = [
+  { name: "Starter Bundle", items: "Starter Card + Community Access", price: 65, save: 10, color: "#5bcefa" },
+  { name: "Gold Bundle", items: "Gold Card + Inner Circle", price: 150, save: 25, color: "#d63384" },
+  { name: "Ultimate Bundle", items: "Diamond Card + Inner Circle + Mobile Dungeon Session", price: 650, save: 125, color: "#6f42c1" },
 ];
 
 const FAQS = [
@@ -250,6 +250,60 @@ const POLICIES = [
   { title: "Delivery Policy", icon: "📦", desc: "Digital: Instant to 1 hour. Physical: 5-14 business days. All physical items ship in plain, unmarked packaging." },
   { title: "Community Rules", icon: "📜", desc: "Zero tolerance for harassment, doxxing, or sharing member info. Violations result in permanent ban with no refund." },
 ];
+
+function CountdownTimer({ targetDate }) {
+  const [time, setTime] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
+  useEffect(() => {
+    const tick = () => {
+      const diff = new Date(targetDate) - new Date();
+      if (diff <= 0) return;
+      setTime({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        mins: Math.floor((diff % 3600000) / 60000),
+        secs: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [targetDate]);
+  return (
+    <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+      {[[time.days, "Days"], [time.hours, "Hours"], [time.mins, "Mins"], [time.secs, "Secs"]].map(([v, l]) => (
+        <div key={l} style={{ textAlign: "center", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "1rem 1.5rem", minWidth: 70 }}>
+          <div style={{ fontSize: "2rem", fontWeight: 800, background: "linear-gradient(135deg, #f5a9b8, #d63384)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{v}</div>
+          <div style={{ fontSize: "0.7rem", opacity: 0.5, textTransform: "uppercase", letterSpacing: 1 }}>{l}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AnimatedCounter({ target, suffix = "" }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true;
+        const num = parseInt(target.replace(/[^0-9]/g, ""));
+        const duration = 2000;
+        const step = Math.ceil(num / (duration / 16));
+        let current = 0;
+        const id = setInterval(() => {
+          current += step;
+          if (current >= num) { current = num; clearInterval(id); }
+          setCount(current);
+        }, 16);
+      }
+    }, { threshold: 0.5 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [target]);
+  return <span ref={ref} className="stat-num">{count.toLocaleString()}{suffix}</span>;
+}
 
 function BtcConfirmForm() {
   const [form, setForm] = useState({ email: "", tier: "Standard Sissy Card", txid: "", delivery: "email" });
@@ -452,6 +506,7 @@ export default function Home() {
   const [giftSubmitted, setGiftSubmitted] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
   const [openBlog, setOpenBlog] = useState(null);
+  const [splash, setSplash] = useState(true);
 
   function openPayModal(name, price) {
     setPayModal({ tier: name, price });
@@ -466,10 +521,22 @@ export default function Home() {
 
   useEffect(() => {
     if (sessionStorage.getItem("age_verified") === "true") setVerified(true);
+    const t = setTimeout(() => setSplash(false), 2000);
+    return () => clearTimeout(t);
   }, []);
 
   function handleAgeConfirm(yes) {
     if (yes) { setVerified(true); sessionStorage.setItem("age_verified", "true"); }
+  }
+
+  if (splash) {
+    return (
+      <div style={{ position: "fixed", inset: 0, background: "#0a0a0f", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 99999, flexDirection: "column", gap: "1rem" }}>
+        <div style={{ fontSize: "3rem", animation: "pulse 1.5s ease-in-out infinite" }}>💕</div>
+        <div style={{ fontSize: "1.5rem", fontWeight: 800, letterSpacing: 3, background: "linear-gradient(90deg, #f5a9b8, #d63384, #6f42c1)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>SISSY FANTASY ISLAND</div>
+        <div style={{ width: 40, height: 4, borderRadius: 2, background: "linear-gradient(90deg, #d63384, #6f42c1)", animation: "loading 1.5s ease-in-out infinite" }}></div>
+      </div>
+    );
   }
 
   if (!verified) {
@@ -498,6 +565,11 @@ export default function Home() {
       </div>
 
       <div className="container">
+        {/* Flash Sale Banner */}
+        <div style={{ background: "linear-gradient(90deg, #d63384, #6f42c1)", padding: "0.8rem 1.5rem", borderRadius: 10, textAlign: "center", marginBottom: "1.5rem", animation: "pulse 2s ease-in-out infinite" }}>
+          <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>🔥 LIMITED TIME: Get 20% off all cards — Use code <strong>SISSY20</strong> at checkout</span>
+        </div>
+
         {/* Navigation */}
         <nav className="nav">
           <div className="nav-logo">SFI 💕</div>
@@ -526,13 +598,33 @@ export default function Home() {
           </div>
         </section>
 
+        {/* How It Works */}
+        <section className="section">
+          <h2>🚀 How It Works</h2>
+          <p className="section-subtitle">Three simple steps to join the community.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem", textAlign: "center" }}>
+            {[
+              { step: "1", icon: "💳", title: "Choose Your Card", desc: "Pick the tier that fits you — from $50 to $200" },
+              { step: "2", icon: "₿", title: "Pay Securely", desc: "Bitcoin or gift card — 100% discreet, no trace" },
+              { step: "3", icon: "✅", title: "Get Access", desc: "Card + community access delivered within 1 hour" },
+            ].map((s) => (
+              <div key={s.step} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "2rem 1.5rem" }}>
+                <div style={{ width: 50, height: 50, borderRadius: "50%", background: "linear-gradient(135deg, #d63384, #6f42c1)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "1.2rem", marginBottom: "1rem" }}>{s.step}</div>
+                <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{s.icon}</div>
+                <h3 style={{ fontSize: "1.1rem", marginBottom: "0.4rem" }}>{s.title}</h3>
+                <p style={{ fontSize: "0.85rem", opacity: 0.6, lineHeight: 1.5 }}>{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Live Stats */}
         <section className="section">
           <div className="stats-bar">
-            <div className="stat-item"><span className="stat-num">2,847</span><span className="stat-label">Active Members</span></div>
-            <div className="stat-item"><span className="stat-num">47</span><span className="stat-label">Countries</span></div>
-            <div className="stat-item"><span className="stat-num">3,200+</span><span className="stat-label">Cards Issued</span></div>
-            <div className="stat-item"><span className="stat-num">12</span><span className="stat-label">Events Hosted</span></div>
+            <div className="stat-item"><AnimatedCounter target="2847" /><span className="stat-label">Active Members</span></div>
+            <div className="stat-item"><AnimatedCounter target="47" /><span className="stat-label">Countries</span></div>
+            <div className="stat-item"><AnimatedCounter target="3200" suffix="+" /><span className="stat-label">Cards Issued</span></div>
+            <div className="stat-item"><AnimatedCounter target="12" /><span className="stat-label">Events Hosted</span></div>
           </div>
         </section>
 
@@ -692,6 +784,10 @@ export default function Home() {
         <section className="section" id="events">
           <h2>🎉 Upcoming Events</h2>
           <p className="section-subtitle">Exclusive parties and meetups for our community. Card holders get priority access.</p>
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <p style={{ opacity: 0.6, marginBottom: "1rem" }}>🎰 Trans & Sex Party Las Vegas — Countdown:</p>
+            <CountdownTimer targetDate="2026-08-15T20:00:00" />
+          </div>
           <div className="events-grid">
             {UPCOMING_EVENTS.map((ev) => (
               <div key={ev.name} className="event-card">
@@ -723,15 +819,11 @@ export default function Home() {
             {EXTERNAL_SHOPS.map((item) => (
               <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer" className="shop-card-link">
                 <div className="shop-card">
-                  <div className="shop-card-img">
-                    <Image src={item.img} alt={item.name} fill style={{ objectFit: "cover" }} />
-                  </div>
-                  <div className="shop-card-content">
-                    <div className="shop-category">{item.category}</div>
-                    <h3>{item.name}</h3>
-                    <p>{item.desc}</p>
-                    <div className="shop-cta">Shop Now →</div>
-                  </div>
+                  <div className="shop-emoji">{item.emoji}</div>
+                  <div className="shop-category">{item.category}</div>
+                  <h3>{item.name}</h3>
+                  <p>{item.desc}</p>
+                  <div className="shop-cta">Shop Now →</div>
                 </div>
               </a>
             ))}
@@ -745,21 +837,60 @@ export default function Home() {
           <div className="blog-grid">
             {BLOG_POSTS.map((post, i) => (
               <div key={i} className={`blog-card ${openBlog === i ? "blog-card-open" : ""}`} onClick={() => setOpenBlog(openBlog === i ? null : i)}>
-                <div className="blog-card-img">
-                  <Image src={post.img} alt={post.title} fill style={{ objectFit: "cover" }} />
-                </div>
-                <div className="blog-card-body">
-                  <div className="blog-tag">{post.tag}</div>
-                  <h3>{post.title}</h3>
-                  <p>{post.desc}</p>
-                  {openBlog === i ? (
-                    <div className="blog-content">{post.content.split("\n\n").map((para, j) => <p key={j}>{para}</p>)}</div>
-                  ) : (
-                    <span className="blog-cta">Read More →</span>
-                  )}
-                </div>
+                <div className="blog-emoji">{post.emoji}</div>
+                <div className="blog-tag">{post.tag}</div>
+                <h3>{post.title}</h3>
+                <p>{post.desc}</p>
+                {openBlog === i ? (
+                  <div className="blog-content">{post.content.split("\n\n").map((para, j) => <p key={j}>{para}</p>)}</div>
+                ) : (
+                  <span className="blog-cta">Read More →</span>
+                )}
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Bundle Deals */}
+        <section className="section">
+          <h2>🎁 Bundle Deals — Save More</h2>
+          <p className="section-subtitle">Combine card + community for the best value.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+            {BUNDLES.map((b) => (
+              <div key={b.name} style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${b.color}33`, borderRadius: 16, padding: "2rem", textAlign: "center", position: "relative" }}>
+                <div style={{ position: "absolute", top: -12, right: 16, background: "linear-gradient(135deg, #28a745, #20c997)", padding: "0.3rem 0.8rem", borderRadius: 20, fontSize: "0.75rem", fontWeight: 700 }}>SAVE ${b.save}</div>
+                <h3 style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>{b.name}</h3>
+                <p style={{ fontSize: "0.85rem", opacity: 0.6, marginBottom: "1rem", lineHeight: 1.5 }}>{b.items}</p>
+                <div style={{ fontSize: "2rem", fontWeight: 800, color: b.color, marginBottom: "1rem" }}>${b.price}</div>
+                <button className="buy-btn" style={{ background: `linear-gradient(135deg, ${b.color}, #6f42c1)` }} onClick={() => openPayModal(b.name, b.price)}>Get Bundle — ${b.price}</button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* About Us */}
+        <section className="section">
+          <h2>💜 About Sissy Fantasy Island</h2>
+          <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+            <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: "1.5rem", fontSize: "1rem" }}>
+              Sissy Fantasy Island was created by and for the trans & sissy community. We saw a need for a safe, discreet, and professional platform where people could explore their identity without fear of judgment or exposure.
+            </p>
+            <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: "1.5rem", fontSize: "1rem" }}>
+              Our team includes community organizers, event planners, and tech professionals who understand the importance of privacy and discretion. Every feature on this platform was designed with your safety in mind.
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "1rem", marginTop: "2rem" }}>
+              {[
+                { icon: "🔒", label: "Privacy First" },
+                { icon: "🌍", label: "Global Community" },
+                { icon: "🤝", label: "Verified Members" },
+                { icon: "📦", label: "Discreet Always" },
+              ].map((v) => (
+                <div key={v.label} style={{ textAlign: "center", padding: "1rem", background: "rgba(255,255,255,0.03)", borderRadius: 12 }}>
+                  <div style={{ fontSize: "1.5rem", marginBottom: "0.3rem" }}>{v.icon}</div>
+                  <div style={{ fontSize: "0.8rem", opacity: 0.6 }}>{v.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
