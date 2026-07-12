@@ -8,8 +8,8 @@ const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const SISSY_CARDS = [
   {
-    name: "Standard Sissy Card",
-    emoji: "💳",
+    name: "Starter Sissy Card",
+    emoji: "🌸",
     price: 50,
     color: "#f5a9b8",
     delivery: "Digital code via email or anonymous code",
@@ -19,11 +19,28 @@ const SISSY_CARDS = [
       "Access to private community group (Telegram + Discord)",
       "Lifetime validity — never expires",
       "Delivered via email or anonymous download code",
-      "Member-only discounts on events & merch",
+      "Member-only discounts on events",
       "Access to beginner guides & resources library",
-      "Monthly community newsletter",
     ],
-    why: "Covers secure card generation, encrypted delivery, community verification, and lifetime access to all basic member benefits.",
+    why: "Covers secure card generation, encrypted delivery, and lifetime access to community basics.",
+  },
+  {
+    name: "Standard Sissy Card",
+    emoji: "💳",
+    price: 75,
+    color: "#ff6b9d",
+    delivery: "Digital code + bonus perks",
+    perks: [
+      "Everything in Starter",
+      "Custom sissy name on your digital card",
+      "Priority event announcements & early bird pricing",
+      "Monthly community newsletter with exclusive content",
+      "Access to video tutorials & training library",
+      "Voting rights on community decisions",
+      "Birthday surprise from the community",
+      "Priority customer support (48hr response)",
+    ],
+    why: "Includes custom card design, training library access, and priority community features.",
   },
   {
     name: "Gold Sissy Card",
@@ -34,17 +51,37 @@ const SISSY_CARDS = [
     delivery: "Digital + physical holographic card (discreet shipping)",
     perks: [
       "Everything in Standard",
-      "Custom sissy name engraved on card",
       "Physical holographic card with NFC chip",
-      "Priority access & early bird pricing on all events",
+      "Priority access & VIP seating at all events",
       "VIP community status & gold badge",
       "1-on-1 welcome session with community host",
-      "Access to exclusive video tutorials & training",
+      "Access to exclusive masterclass recordings",
       "Priority customer support (24hr response)",
       "Discreet worldwide shipping in plain envelope",
       "Free entry to online meetups & virtual events",
+      "Quarterly community gift drops",
     ],
-    why: "Includes holographic NFC card printing, custom engraving, discreet international shipping, VIP onboarding, and priority access to all community features.",
+    why: "Includes holographic NFC card, custom engraving, discreet shipping, VIP onboarding, and full access to premium content.",
+  },
+  {
+    name: "Platinum Sissy Card",
+    emoji: "✨",
+    price: 150,
+    color: "#8b5cf6",
+    delivery: "Digital + premium physical card + exclusive access",
+    perks: [
+      "Everything in Gold",
+      "Premium matte black card with gold foil lettering",
+      "Platinum-tier badge & community status",
+      "Free entry to 2 events per year",
+      "Private Platinum-only group chat",
+      "Monthly 1-on-1 check-in with mentor",
+      "Early access to new products & collabs",
+      "Personalized feminization roadmap",
+      "Complimentary sissy starter kit (shipped discreetly)",
+      "Direct message access to event organizers",
+    ],
+    why: "Premium card with gold foil, mentor access, starter kit, and 2 free event entries per year included.",
   },
   {
     name: "Diamond Sissy Card",
@@ -53,20 +90,20 @@ const SISSY_CARDS = [
     color: "#6f42c1",
     delivery: "Digital + premium metal card + all-access pass",
     perks: [
-      "Everything in Gold",
+      "Everything in Platinum",
       "Premium metal card with laser engraving",
-      "Diamond-tier community status & exclusive badge",
-      "Free entry to ALL upcoming events (lifetime)",
-      "Exclusive Diamond-only group chat (limited members)",
+      "Diamond-tier status & exclusive badge",
+      "Free entry to ALL events (lifetime)",
+      "Exclusive Diamond-only group chat (max 25 members)",
       "Personal concierge for event bookings & travel",
       "Featured on the community wall (optional)",
-      "Lifetime access to all future perks, drops & features",
-      "Early access to new products & collabs",
-      "Complimentary sissy starter kit shipped discreetly",
-      "Direct line to event organizers & hosts",
+      "Lifetime access to all future perks & features",
       "Annual surprise gift package",
+      "Direct line to founders & organizers",
+      "First access to limited edition merch drops",
+      "Complimentary Mobile Dungeon session ($500 value)",
     ],
-    why: "Premium metal card with laser engraving, lifetime all-access event pass, personal concierge, starter kit, and every future benefit we ever release — included forever.",
+    why: "Metal card with laser engraving, lifetime all-access pass, personal concierge, free dungeon session, and every future benefit — forever.",
   },
 ];
 
@@ -230,8 +267,10 @@ function BtcConfirmForm() {
     <form className="btc-confirm-card" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
       <h3>Confirm Your BTC Payment</h3>
       <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })} className="form-input form-select">
-        <option value="Standard Sissy Card">💳 Standard Sissy Card — $50</option>
+        <option value="Starter Sissy Card">🌸 Starter Sissy Card — $50</option>
+        <option value="Standard Sissy Card">💳 Standard Sissy Card — $75</option>
         <option value="Gold Sissy Card">👑 Gold Sissy Card — $100</option>
+        <option value="Platinum Sissy Card">✨ Platinum Sissy Card — $150</option>
         <option value="Diamond Sissy Card">💎 Diamond Sissy Card — $200</option>
         <option value="Community Access">💬 Community Access — $25</option>
         <option value="Inner Circle">🔐 Inner Circle — $75</option>
@@ -265,7 +304,7 @@ function ChatWidget() {
     setInput("");
     setTimeout(() => {
       let reply = "Thanks for your message! For faster support, reach us at comeandsee@gmail.com or WhatsApp (415) 305-3689.";
-      if (q.includes("card")) reply = "Our Sissy Cards start at $50 (Standard), $100 (Gold), and $200 (Diamond). All one-time payments with lifetime access. Want me to help you choose?";
+      if (q.includes("card")) reply = "Our Sissy Cards start at just $50! We have Starter ($50), Standard ($75), Gold ($100), Platinum ($150), and Diamond ($200). All one-time payments with lifetime access. Want me to help you choose?";
       else if (q.includes("ship") || q.includes("deliver")) reply = "Digital cards are delivered within 1 hour. Physical cards ship in 5-14 business days in plain, unmarked packaging.";
       else if (q.includes("anon") || q.includes("discreet") || q.includes("private")) reply = "We offer anonymous codes — no email needed. Billing shows as 'SFI Digital Services'. Total privacy guaranteed.";
       else if (q.includes("event") || q.includes("party")) reply = "Our next event is the Trans & Sex Party in Las Vegas, August 15-16, 2026. Card holders get priority access!";
