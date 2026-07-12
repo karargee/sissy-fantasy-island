@@ -10,83 +10,99 @@ const SISSY_CARDS = [
   {
     name: "Standard Sissy Card",
     emoji: "💳",
-    price: 300,
+    price: 50,
     color: "#f5a9b8",
     delivery: "Digital code via email or anonymous code",
     perks: [
       "Official Sissy Fantasy Island membership card",
-      "Unique member ID & QR code",
-      "Access to private community group",
+      "Unique member ID & scannable QR code",
+      "Access to private community group (Telegram + Discord)",
       "Lifetime validity — never expires",
       "Delivered via email or anonymous download code",
+      "Member-only discounts on events & merch",
+      "Access to beginner guides & resources library",
+      "Monthly community newsletter",
     ],
-    why: "Covers identity verification, card generation, secure delivery, and lifetime community access.",
+    why: "Covers secure card generation, encrypted delivery, community verification, and lifetime access to all basic member benefits.",
   },
   {
     name: "Gold Sissy Card",
     emoji: "👑",
-    price: 500,
+    price: 100,
     color: "#d63384",
     popular: true,
-    delivery: "Digital + optional physical card (discreet shipping)",
+    delivery: "Digital + physical holographic card (discreet shipping)",
     perks: [
       "Everything in Standard",
-      "Custom sissy name printed on card",
-      "Priority access to all events",
-      "VIP community status & badge",
-      "Physical holographic card option (discreet plain envelope)",
+      "Custom sissy name engraved on card",
+      "Physical holographic card with NFC chip",
+      "Priority access & early bird pricing on all events",
+      "VIP community status & gold badge",
       "1-on-1 welcome session with community host",
+      "Access to exclusive video tutorials & training",
+      "Priority customer support (24hr response)",
+      "Discreet worldwide shipping in plain envelope",
+      "Free entry to online meetups & virtual events",
     ],
-    why: "Includes custom design, holographic printing, discreet international shipping, and VIP onboarding.",
+    why: "Includes holographic NFC card printing, custom engraving, discreet international shipping, VIP onboarding, and priority access to all community features.",
   },
   {
     name: "Diamond Sissy Card",
     emoji: "💎",
-    price: 800,
+    price: 200,
     color: "#6f42c1",
-    delivery: "Digital + physical + exclusive perks",
+    delivery: "Digital + premium metal card + all-access pass",
     perks: [
       "Everything in Gold",
-      "Diamond-tier community status",
-      "Free entry to all upcoming events",
-      "Exclusive Diamond-only group chat",
-      "Personal concierge for event bookings",
+      "Premium metal card with laser engraving",
+      "Diamond-tier community status & exclusive badge",
+      "Free entry to ALL upcoming events (lifetime)",
+      "Exclusive Diamond-only group chat (limited members)",
+      "Personal concierge for event bookings & travel",
       "Featured on the community wall (optional)",
-      "Lifetime access to all future perks & drops",
+      "Lifetime access to all future perks, drops & features",
+      "Early access to new products & collabs",
+      "Complimentary sissy starter kit shipped discreetly",
+      "Direct line to event organizers & hosts",
+      "Annual surprise gift package",
     ],
-    why: "Premium tier includes lifetime event access, personal concierge service, and all future community benefits at no extra cost.",
+    why: "Premium metal card with laser engraving, lifetime all-access event pass, personal concierge, starter kit, and every future benefit we ever release — included forever.",
   },
 ];
 
 const COMMUNITY_TIERS = [
   {
     name: "Community Access",
-    price: 150,
+    price: 25,
     emoji: "💬",
     color: "#5bcefa",
     perks: [
       "Join the private trans & sissy community",
-      "Group chat access (Telegram/Discord)",
-      "Event announcements & early access",
+      "Group chat access (Telegram + Discord)",
+      "Event announcements & early bird access",
       "Connect with sissies worldwide",
       "Safe, moderated, and discreet space",
+      "Access to resource library & guides",
+      "Weekly community check-ins",
     ],
-    why: "One-time fee covers verification, moderation, and maintaining a safe private community.",
+    why: "One-time fee covers identity verification, moderation, and maintaining a safe private community space.",
   },
   {
     name: "Inner Circle",
-    price: 350,
+    price: 75,
     emoji: "🔐",
     color: "#d63384",
     perks: [
       "Everything in Community Access",
       "Inner Circle private group (limited to 50 members)",
-      "Direct access to event organizers",
-      "First priority for event tickets",
-      "Exclusive meetup invitations",
+      "Direct access to event organizers & hosts",
+      "First priority for event tickets & seating",
+      "Exclusive meetup invitations (online & IRL)",
       "Mentorship from experienced community members",
+      "Monthly private Q&A sessions",
+      "Voting rights on future events & features",
     ],
-    why: "Limited spots ensure quality connections. Includes priority booking and direct organizer access.",
+    why: "Limited spots ensure quality connections. Includes priority booking, direct organizer access, and influence over community direction.",
   },
 ];
 
@@ -184,7 +200,7 @@ const FAQS = [
   { q: "What is a Sissy Card?", a: "Your official membership card for Sissy Fantasy Island. It includes your unique member ID, QR code, and grants you access to our private community and events. It's a one-time purchase — no subscriptions, no recurring charges." },
   { q: "How do I receive my card?", a: "You choose: (1) Email delivery — we send your digital card directly to your inbox. (2) Anonymous code — we give you a download code with no email required. You stay completely anonymous. (3) Physical card — shipped in a plain, unmarked envelope." },
   { q: "Is this 100% discreet?", a: "Yes. Billing shows as 'SFI Digital Services'. No explicit descriptions on any bank statements. Anonymous code option requires zero personal info. Physical cards ship in plain packaging with no branding." },
-  { q: "Why are the prices what they are?", a: "Each card is individually generated with unique security features. Pricing covers: identity verification, secure card generation, encrypted delivery, lifetime community access, event priority, and ongoing platform maintenance. There are no hidden fees or recurring charges." },
+  { q: "Why are the prices what they are?", a: "We keep prices accessible so everyone can join. Each card is individually generated with unique security features. Pricing covers: identity verification, secure card generation, encrypted delivery, lifetime community access, and ongoing platform maintenance. No hidden fees, no recurring charges, no upsells." },
   { q: "Can I attend events without a card?", a: "Yes, events have separate tickets. However, card holders get priority access and discounted rates on all events." },
   { q: "Is the community safe?", a: "Absolutely. All members are verified. We have active moderation, zero tolerance for harassment, and strict privacy rules. What happens in the community stays in the community." },
   { q: "Do you ship internationally?", a: "Yes. Physical cards ship worldwide in discreet, plain packaging. Delivery takes 5-14 business days depending on location." },
@@ -214,11 +230,11 @@ function BtcConfirmForm() {
     <form className="btc-confirm-card" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
       <h3>Confirm Your BTC Payment</h3>
       <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })} className="form-input form-select">
-        <option value="Standard Sissy Card">💳 Standard Sissy Card — $300</option>
-        <option value="Gold Sissy Card">👑 Gold Sissy Card — $500</option>
-        <option value="Diamond Sissy Card">💎 Diamond Sissy Card — $800</option>
-        <option value="Community Access">💬 Community Access — $150</option>
-        <option value="Inner Circle">🔐 Inner Circle — $350</option>
+        <option value="Standard Sissy Card">💳 Standard Sissy Card — $50</option>
+        <option value="Gold Sissy Card">👑 Gold Sissy Card — $100</option>
+        <option value="Diamond Sissy Card">💎 Diamond Sissy Card — $200</option>
+        <option value="Community Access">💬 Community Access — $25</option>
+        <option value="Inner Circle">🔐 Inner Circle — $75</option>
       </select>
       <select value={form.delivery} onChange={(e) => setForm({ ...form, delivery: e.target.value })} className="form-input form-select">
         <option value="email">📧 Deliver to my email</option>
@@ -249,12 +265,12 @@ function ChatWidget() {
     setInput("");
     setTimeout(() => {
       let reply = "Thanks for your message! For faster support, reach us at comeandsee@gmail.com or WhatsApp (415) 305-3689.";
-      if (q.includes("card")) reply = "Our Sissy Cards start at $300 (Standard), $500 (Gold), and $800 (Diamond). All one-time payments with lifetime access. Want me to help you choose?";
+      if (q.includes("card")) reply = "Our Sissy Cards start at $50 (Standard), $100 (Gold), and $200 (Diamond). All one-time payments with lifetime access. Want me to help you choose?";
       else if (q.includes("ship") || q.includes("deliver")) reply = "Digital cards are delivered within 1 hour. Physical cards ship in 5-14 business days in plain, unmarked packaging.";
       else if (q.includes("anon") || q.includes("discreet") || q.includes("private")) reply = "We offer anonymous codes — no email needed. Billing shows as 'SFI Digital Services'. Total privacy guaranteed.";
       else if (q.includes("event") || q.includes("party")) reply = "Our next event is the Trans & Sex Party in Las Vegas, August 15-16, 2026. Card holders get priority access!";
       else if (q.includes("refund")) reply = "Digital cards are non-refundable once generated. Physical cards can be returned unopened within 14 days.";
-      else if (q.includes("community") || q.includes("join")) reply = "Community Access is $150 (one-time). Inner Circle is $350 for the exclusive group. Both include lifetime access.";
+      else if (q.includes("community") || q.includes("join")) reply = "Community Access is $25 (one-time). Inner Circle is $75 for the exclusive group. Both include lifetime access.";
       setMessages((m) => [...m, { from: "bot", text: reply }]);
     }, 800);
   }
