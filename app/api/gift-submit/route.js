@@ -1,7 +1,5 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
   try {
@@ -20,9 +18,17 @@ export async function POST(req) {
       });
     }
 
-    await resend.emails.send({
-      from: "SFI System <onboarding@resend.dev>",
-      to: "comeandsee@gmail.com",
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: process.env.GMAIL_USER,
       subject: `🎁 New Gift Card Submission — ${tier} ($${price})`,
       html: `
         <h2>New Gift Card Payment</h2>
