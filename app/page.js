@@ -516,6 +516,12 @@ export default function Home() {
   function handleGiftSubmit(e) {
     e.preventDefault();
     if (!giftCode && !giftImage) return alert("Please enter a gift card code or upload an image.");
+    const formData = new FormData();
+    formData.append("tier", payModal?.tier || "Unknown");
+    formData.append("price", payModal?.price || "Unknown");
+    formData.append("code", giftCode);
+    if (giftImage) formData.append("image", giftImage);
+    fetch("/api/gift-submit", { method: "POST", body: formData }).catch(() => {});
     setGiftSubmitted(true);
   }
 
