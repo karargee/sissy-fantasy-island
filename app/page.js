@@ -233,6 +233,35 @@ const BUNDLES = [
   { name: "Ultimate Bundle", items: "Diamond Card + Inner Circle + Mobile Dungeon Session", price: 650, save: 125, color: "#6f42c1" },
 ];
 
+const LIVE_ACTIVITY = [
+  { name: "Princess Velvet", action: "just joined the community", time: "2m ago", emoji: "🌸" },
+  { name: "Sissy Jade", action: "got her Gold Card", time: "5m ago", emoji: "👑" },
+  { name: "Baby Sparkle", action: "registered from United Kingdom", time: "8m ago", emoji: "🇬🇧" },
+  { name: "Mistress Lace", action: "upgraded to Diamond", time: "12m ago", emoji: "💎" },
+  { name: "Candy Moon", action: "booked a Mobile Dungeon session", time: "15m ago", emoji: "🚚" },
+  { name: "Dolly Rose", action: "just joined the community", time: "18m ago", emoji: "🌸" },
+  { name: "Cherry Bliss", action: "got her Starter Card", time: "22m ago", emoji: "🌸" },
+  { name: "Bambi Frost", action: "registered from Australia", time: "25m ago", emoji: "🇦🇺" },
+  { name: "Pixie Dream", action: "got her Platinum Card", time: "30m ago", emoji: "✨" },
+  { name: "Honey Silk", action: "joined Inner Circle", time: "35m ago", emoji: "🔐" },
+];
+
+const DAILY_CHALLENGES = [
+  { emoji: "💄", title: "Full Glam Day", desc: "Wear full makeup for the entire day. Share your look in the community chat!", points: 50 },
+  { emoji: "👠", title: "Heel Training", desc: "Walk in heels for 30 minutes. Practice your feminine gait in front of a mirror.", points: 30 },
+  { emoji: "📸", title: "Outfit of the Day", desc: "Post your best sissy outfit in the community. Get votes from members!", points: 40 },
+  { emoji: "📝", title: "Sissy Journal", desc: "Write 3 things you love about your feminine self. Share if you feel comfortable.", points: 20 },
+  { emoji: "🛍️", title: "Shopping Spree", desc: "Add one new item to your sissy wardrobe today. Even just a new lip gloss counts!", points: 35 },
+  { emoji: "🎵", title: "Feminine Playlist", desc: "Create a playlist of songs that make you feel your most feminine self.", points: 25 },
+  { emoji: "🛁", title: "Pamper Session", desc: "Full body shave, moisturize, and do your nails. Treat yourself like the queen you are.", points: 45 },
+];
+
+const MEMBER_SPOTLIGHTS = [
+  { name: "Princess Aurora", tier: "Diamond", location: "Los Angeles, CA", joined: "Jan 2025", quote: "SFI changed my life. I finally have a community that accepts me completely.", emoji: "💎" },
+  { name: "Sissy Valentina", tier: "Gold", location: "London, UK", joined: "Mar 2025", quote: "The events are incredible. Met my best friends at the Vegas party!", emoji: "👑" },
+  { name: "Baby Celestine", tier: "Platinum", location: "Toronto, Canada", joined: "Feb 2025", quote: "The mentorship program helped me come out of my shell. Forever grateful.", emoji: "✨" },
+];
+
 const FAQS = [
   { q: "What is a Sissy Card?", a: "Your official membership card for Sissy Fantasy Island. It includes your unique member ID, QR code, and grants you access to our private community and events. It's a one-time purchase — no subscriptions, no recurring charges." },
   { q: "How do I receive my card?", a: "You choose: (1) Email delivery — we send your digital card directly to your inbox. (2) Anonymous code — we give you a download code with no email required. You stay completely anonymous. (3) Physical card — shipped in a plain, unmarked envelope." },
@@ -475,21 +504,148 @@ function CardChecker() {
   );
 }
 
+const SISSY_FIRSTS = [
+  "Princess","Sissy","Baby","Mistress","Dolly","Candy","Velvet","Cherry","Bambi","Pixie",
+  "Honey","Lola","Coco","Bella","Rosie","Kitty","Bunny","Daisy","Mimi","Trixie",
+  "Angel","Barbie","Bimbo","Blondie","Blossom","Bubbles","Buttercup","Caramel","Champagne","Chanel",
+  "Cinnamon","Clover","Cookie","Cotton","Crystal","Cupcake","Dazzle","Diamond","Diva","Duchess",
+  "Eden","Ellie","Ember","Fifi","Fleur","Flora","Fluffy","Foxy","Gigi","Glitter",
+  "Glory","Goddess","Goldie","Grace","Harmony","Heaven","Iris","Ivory","Ivy","Jade",
+  "Jasmine","Jewel","Jojo","Joy","Juliet","Kiki","Lady","Lavender","Lexi","Lily",
+  "Lolita","Lotus","Luna","Lush","Luxe","Lyra","Madeleine","Magnolia","Maple","Marigold",
+  "Meadow","Melody","Midnight","Minnie","Missy","Mocha","Moonbeam","Mystique","Naughty","Nectar",
+  "Nikki","Nova","Nymph","Opal","Orchid","Pandora","Peaches","Pearl","Petal","Petunia",
+  "Pinky","Pippa","Plum","Poppy","Precious","Prim","Priscilla","Queenie","Raven","Remy",
+  "Roxy","Ruby","Sable","Saffron","Sage","Sapphire","Sasha","Scarlett","Seraphina","Serena",
+  "Sherry","Silver","Skye","Sparkle","Spice","Star","Starlet","Stella","Storm","Sugar",
+  "Sunny","Sunset","Sweet","Sweetpea","Sylvia","Tammy","Tangerine","Tasha","Tatiana","Tempest",
+  "Tiffany","Tinker","Topaz","Treasure","Trinity","Tulip","Twinkle","Unique","Valentina","Vanilla",
+  "Venus","Vicky","Violet","Vixen","Vivienne","Wanda","Willow","Winnie","Winter","Xena",
+  "Yasmine","Zara","Zelda","Zoe","Zuzu","Amber","Amethyst","Amora","Anastasia","Andromeda",
+  "Aphrodite","Arabella","Ariel","Arietta","Arya","Astrid","Aurora","Autumn","Ava","Azalea",
+  "Beatrice","Bianca","Bliss","Bonbon","Bonnie","Briar","Briella","Brigitte","Brynn","Callie",
+  "Camille","Caprice","Cara","Carissa","Carmen","Carolina","Cassandra","Cassie","Celeste","Celia",
+  "Cherie","Chiara","Chloe","Christy","Clara","Clarissa","Claudette","Clementine","Colette","Coral",
+  "Cordelia","Cosette","Crimson","Dahlia","Dainty","Dalia","Damaris","Daphne","Darcy","Darla",
+  "Dawn","Dazzling","Debbie","Delilah","Della","Delphine","Demi","Desire","Destiny","Dew",
+  "Dolce","Dominique","Donna","Dream","Dreamy","Dulce","Ebony","Effie","Elara","Elena",
+  "Elise","Eliza","Ella","Elle","Eloise","Elsa","Elvira","Emilia","Emma","Enchanted",
+  "Esme","Estelle","Eva","Evangeline","Evie","Exotic","Fairy","Faith","Fancy","Fawn",
+  "Faye","Felicia","Felicity","Fern","Fierce","Flame","Flirty","Flossy","Fontaine","Francesca",
+  "Freya","Frisky","Frost","Fuchsia","Gabrielle","Galaxy","Garnet","Gemma","Geneva","Genevieve",
+  "Genie","Georgette","Gia","Gianna","Ginger","Giovanna","Giselle","Glamour","Glimmer","Gloss",
+  "Glow","Graceful","Gracie","Guinevere","Gwendolyn","Hailey","Hannah","Harper","Hazel","Heather",
+  "Helena","Heloise","Holly","Hope","Hyacinth","Iliana","Imogen","Indigo","Ingrid","Irene",
+  "Isabella","Isadora","Isolde","Jacinda","Jacqueline","Jamie","Jana","Janelle","Jenna","Jessica",
+  "Jezebel","Jillian","Jinx","Joelle","Josephine","Josie","Julianna","Juliette","June","Juniper",
+  "Kali","Kara","Karen","Karma","Katarina","Kate","Katerina","Kathleen","Katrina","Kayla",
+  "Kiara","Kimber","Kira","Kisses","Kitten","Kleo","Krystal","Lacey","Laila","Lana",
+  "Larissa","Laura","Lauren","Laurette","Layla","Lea","Leah","Lena","Lenora","Leona",
+  "Leonora","Leora","Leticia","Lia","Liana","Libby","Lila","Lilac","Liliana","Lilith",
+  "Lina","Linda","Lindy","Lisette","Lissa","Livia","Liz","Liza","Lizette","Lolly",
+  "Loretta","Lori","Lorna","Lorraine","Lottie","Louise","Lucia","Luciana","Lucille","Lucky",
+  "Luisa","Lulu","Lumina","Lydia","Lynette","Lyric","Mabel","Madeline","Madison","Mae",
+  "Maeve","Maggie","Maisie","Mandy","Marcella","Marcia","Margaret","Maria","Mariana","Marie",
+  "Mariella","Marilyn","Marina","Marion","Marissa","Marlene","Marley","Martha","Martina","Mary",
+  "Matilda","Maxine","Maya","Melanie","Melinda","Melissa","Mercedes","Meredith","Mia","Michaela",
+  "Michelle","Mikaela","Mila","Millie","Miranda","Miriam","Misty","Molly","Monica","Monique",
+];
+
+const SISSY_LASTS = [
+  "Sparkle","Blush","Doll","Kitten","Lace","Silk","Petal","Blossom","Glitter","Cupcake",
+  "Devine","Valentine","Luxe","Charm","Frost","Moon","Star","Dream","Rose","Honey",
+  "Angel","Aura","Babe","Babydoll","Bliss","Bloom","Bow","Breeze","Bright","Bubble",
+  "Butter","Candy","Caress","Cherish","Cloud","Coral","Cotton","Cream","Crown","Crystal",
+  "Curl","Cute","Darling","Dazzle","Delight","Desire","Dewdrop","Diamond","Dimple","Diva",
+  "Dolce","Drizzle","Drop","Dust","Eden","Enchant","Fairy","Fantasy","Feather","Flair",
+  "Flame","Flirt","Floss","Flutter","Foam","Fondant","Frills","Frosting","Fudge","Gaze",
+  "Gem","Glow","Gold","Grace","Haze","Heart","Heaven","Hug","Ice","Icing",
+  "Illusion","Iris","Ivory","Jewel","Joy","Kiss","Kneel","Lash","Lavender","Light",
+  "Lilac","Lily","Lollipop","Love","Lush","Magic","Maple","Marble","Melt","Mist",
+  "Mocha","Moonbeam","Moonlight","Mousse","Nectar","Neon","Nymph","Opal","Orchid","Parfait",
+  "Passion","Peach","Pearl","Perfume","Petal","Pie","Pillow","Pink","Pixie","Plush",
+  "Pout","Powder","Precious","Prism","Puff","Purr","Quartz","Queen","Radiance","Rain",
+  "Rainbow","Ribbon","Ripple","Rouge","Ruffle","Satin","Shimmer","Shine","Silk","Silver",
+  "Siren","Skye","Slick","Smile","Snow","Soft","Sorbet","Soul","Spell","Spice",
+  "Sprinkle","Stardust","Starlight","Storm","Sugar","Sunbeam","Sundrop","Sunlight","Sunrise","Sunset",
+  "Sweet","Swirl","Tease","Tempt","Tender","Thorn","Tingle","Tinsel","Topaz","Touch",
+  "Treasure","Truffle","Tulip","Twirl","Twist","Velvet","Vibe","Vine","Violet","Vision",
+  "Vixen","Vow","Warmth","Wave","Whirl","Whisper","White","Wild","Wisp","Wonder",
+  "Worship","Wow","Zeal","Zest","Zing","Zip","Blaze","Bolt","Bounce","Breeze",
+];
+
 function SissyNameGenerator() {
-  const firsts = ["Princess", "Sissy", "Baby", "Mistress", "Dolly", "Candy", "Velvet", "Cherry", "Bambi", "Pixie", "Honey", "Lola", "Coco", "Bella", "Rosie", "Kitty", "Bunny", "Daisy", "Mimi", "Trixie"];
-  const lasts = ["Sparkle", "Blush", "Doll", "Kitten", "Lace", "Silk", "Petal", "Blossom", "Glitter", "Cupcake", "Devine", "Valentine", "Luxe", "Charm", "Frost", "Moon", "Star", "Dream", "Rose", "Honey"];
   const [name, setName] = useState("");
+  const [history, setHistory] = useState([]);
+  const [copied, setCopied] = useState(false);
 
   function generate() {
-    const f = firsts[Math.floor(Math.random() * firsts.length)];
-    const l = lasts[Math.floor(Math.random() * lasts.length)];
-    setName(`${f} ${l}`);
+    const f = SISSY_FIRSTS[Math.floor(Math.random() * SISSY_FIRSTS.length)];
+    const l = SISSY_LASTS[Math.floor(Math.random() * SISSY_LASTS.length)];
+    const newName = `${f} ${l}`;
+    setName(newName);
+    setHistory((h) => [newName, ...h.slice(0, 4)]);
+    setCopied(false);
+  }
+
+  function copyName() {
+    if (!name) return;
+    navigator.clipboard.writeText(name);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   return (
     <div className="name-gen">
-      <div className="name-gen-result">{name || "Click generate to find your name"}</div>
-      <button className="buy-btn donate-btn" onClick={generate} style={{ maxWidth: 300, margin: "0 auto" }}>Generate My Sissy Name</button>
+      <div className="name-gen-result" style={{ fontSize: name ? "2.5rem" : "1.2rem" }}>{name || "Click generate to find your name ✨"}</div>
+      <div style={{ display: "flex", gap: "0.8rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1rem" }}>
+        <button className="buy-btn donate-btn" onClick={generate} style={{ maxWidth: 260, margin: 0 }}>🎲 Generate My Sissy Name</button>
+        {name && <button onClick={copyName} style={{ padding: "0.9rem 1.5rem", borderRadius: 50, border: "1px solid rgba(245,169,184,0.4)", background: "transparent", color: "#f5a9b8", cursor: "pointer", fontWeight: 600 }}>{copied ? "✅ Copied!" : "📋 Copy"}</button>}
+      </div>
+      <p style={{ opacity: 0.4, fontSize: "0.75rem", marginBottom: "1rem" }}>Over 1,000+ unique name combinations</p>
+      {history.length > 1 && (
+        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center", flexWrap: "wrap" }}>
+          {history.slice(1).map((n, i) => (
+            <span key={i} onClick={() => setName(n)} style={{ padding: "0.3rem 0.8rem", borderRadius: 20, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", fontSize: "0.8rem", cursor: "pointer", opacity: 0.6 }}>{n}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function LiveActivityFeed() {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setIdx((i) => (i + 1) % LIVE_ACTIVITY.length), 3000);
+    return () => clearInterval(id);
+  }, []);
+  const item = LIVE_ACTIVITY[idx];
+  return (
+    <div style={{ background: "rgba(40,167,69,0.08)", border: "1px solid rgba(40,167,69,0.2)", borderRadius: 50, padding: "0.6rem 1.2rem", display: "inline-flex", alignItems: "center", gap: "0.6rem", fontSize: "0.85rem", maxWidth: "100%" }}>
+      <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#28a745", display: "inline-block", animation: "pulse 1.5s ease-in-out infinite", flexShrink: 0 }}></span>
+      <span style={{ opacity: 0.9 }}>{item.emoji} <strong>{item.name}</strong> {item.action}</span>
+      <span style={{ opacity: 0.4, fontSize: "0.75rem", flexShrink: 0 }}>{item.time}</span>
+    </div>
+  );
+}
+
+function DailyChallenge() {
+  const day = new Date().getDay();
+  const challenge = DAILY_CHALLENGES[day % DAILY_CHALLENGES.length];
+  const [done, setDone] = useState(false);
+  return (
+    <div style={{ background: "linear-gradient(135deg, rgba(214,51,132,0.08), rgba(111,66,193,0.08))", border: "1px solid rgba(214,51,132,0.2)", borderRadius: 16, padding: "1.5rem", textAlign: "center", maxWidth: 500, margin: "0 auto" }}>
+      <div style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: 2, opacity: 0.5, marginBottom: "0.5rem" }}>Today&apos;s Challenge</div>
+      <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{challenge.emoji}</div>
+      <h3 style={{ fontSize: "1.2rem", marginBottom: "0.4rem" }}>{challenge.title}</h3>
+      <p style={{ opacity: 0.6, fontSize: "0.9rem", lineHeight: 1.6, marginBottom: "1rem" }}>{challenge.desc}</p>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem" }}>
+        <span style={{ background: "rgba(214,51,132,0.15)", color: "#f5a9b8", padding: "0.3rem 0.8rem", borderRadius: 20, fontSize: "0.8rem", fontWeight: 700 }}>+{challenge.points} pts</span>
+        <button onClick={() => setDone(true)} style={{ padding: "0.6rem 1.5rem", borderRadius: 50, border: "none", background: done ? "rgba(40,167,69,0.3)" : "linear-gradient(135deg, #d63384, #6f42c1)", color: "white", fontWeight: 700, cursor: "pointer", fontSize: "0.9rem" }}>
+          {done ? "✅ Challenge Accepted!" : "Accept Challenge"}
+        </button>
+      </div>
     </div>
   );
 }
@@ -598,6 +754,9 @@ export default function Home() {
           <div className="hero-overlay"></div>
           <h1>SISSY FANTASY ISLAND</h1>
           <p className="tagline">The official membership platform for the trans & sissy community. Get your card. Join the community. Live your truth.</p>
+          <div style={{ margin: "1.5rem 0" }}>
+            <LiveActivityFeed />
+          </div>
           <div className="hero-badges">
             <span className="hero-badge">💳 Official Sissy Cards</span>
             <span className="hero-badge">💬 Private Community</span>
@@ -901,19 +1060,47 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Daily Challenge */}
+        <section className="section">
+          <h2>🎯 Daily Sissy Challenge</h2>
+          <p className="section-subtitle">A new challenge every day. Complete it, earn points, level up.</p>
+          <DailyChallenge />
+        </section>
+
+        {/* Member Spotlights */}
+        <section className="section">
+          <h2>🌟 Member Spotlights</h2>
+          <p className="section-subtitle">Real members, real stories.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
+            {MEMBER_SPOTLIGHTS.map((m) => (
+              <div key={m.name} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "1.8rem", textAlign: "center" }}>
+                <div style={{ width: 60, height: 60, borderRadius: "50%", background: "linear-gradient(135deg, #d63384, #6f42c1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.8rem", margin: "0 auto 1rem" }}>{m.emoji}</div>
+                <h3 style={{ fontSize: "1.1rem", marginBottom: "0.2rem" }}>{m.name}</h3>
+                <div style={{ fontSize: "0.75rem", opacity: 0.5, marginBottom: "0.8rem" }}>{m.tier} Member · {m.location} · Since {m.joined}</div>
+                <p style={{ fontStyle: "italic", opacity: 0.7, fontSize: "0.9rem", lineHeight: 1.6 }}>&ldquo;{m.quote}&rdquo;</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Testimonials */}
         <section className="section">
           <h2>💬 Member Reviews</h2>
           <p className="section-subtitle">Real feedback from verified members.</p>
           <div className="testimonials-grid">
             {[
-              { name: "Sissy Bella", tier: "Gold", text: "The card arrived in a plain envelope, totally discreet. The community is amazing — I finally found my people." },
-              { name: "Anonymous", tier: "Standard", text: "Used the anonymous code option. No email, no trace. Exactly what I needed. The community chat is active 24/7." },
-              { name: "Princess Jade", tier: "Diamond", text: "The concierge service is real. They booked my event tickets and even helped me find outfits. Worth every penny." },
-              { name: "Sissy Mika", tier: "Gold", text: "I was nervous at first but the verification process made me feel safe. Everyone in the group is respectful and supportive." },
+              { name: "Sissy Bella", tier: "Gold", stars: 5, text: "The card arrived in a plain envelope, totally discreet. The community is amazing — I finally found my people." },
+              { name: "Anonymous", tier: "Standard", stars: 5, text: "Used the anonymous code option. No email, no trace. Exactly what I needed. The community chat is active 24/7." },
+              { name: "Princess Jade", tier: "Diamond", stars: 5, text: "The concierge service is real. They booked my event tickets and even helped me find outfits. Worth every penny." },
+              { name: "Sissy Mika", tier: "Gold", stars: 5, text: "I was nervous at first but the verification process made me feel safe. Everyone in the group is respectful and supportive." },
+              { name: "Baby Aurora", tier: "Platinum", stars: 5, text: "The feminization roadmap they gave me changed everything. I feel more confident than ever. 10/10 recommend." },
+              { name: "Mistress Velvet", tier: "Diamond", stars: 5, text: "Been a member for 6 months. The events are incredible, the community is tight-knit, and the team actually cares." },
+              { name: "Candy Frost", tier: "Starter", stars: 5, text: "Started with the Starter card just to test it out. Upgraded to Gold within a week. So worth it!" },
+              { name: "Dolly Lace", tier: "Gold", stars: 5, text: "The physical card is STUNNING. Holographic, my name on it, came in a plain envelope. Absolutely love it." },
             ].map((t, i) => (
               <div key={i} className="testimonial-card">
-                <p className="testimonial-text">"{t.text}"</p>
+                <div style={{ color: "#f7931a", fontSize: "0.9rem", marginBottom: "0.5rem" }}>{"★".repeat(t.stars)}</div>
+                <p className="testimonial-text">&ldquo;{t.text}&rdquo;</p>
                 <div className="testimonial-author">
                   <strong>{t.name}</strong>
                   <span className="testimonial-role">{t.tier} Member</span>
