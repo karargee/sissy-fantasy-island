@@ -5,5 +5,8 @@ const nextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: ["bcryptjs"],
+  },
 };
 export default nextConfig;
