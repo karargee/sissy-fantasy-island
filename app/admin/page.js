@@ -40,9 +40,9 @@ const MOCK_SUBSCRIBERS = [
 
 const TABS = [
   { key: "overview", label: "📊 Overview" },
+  { key: "members", label: "👥 Members" },
   { key: "livechat", label: "💬 Live Chat" },
   { key: "tickets", label: "🎟️ Tickets" },
-  { key: "attendees", label: "👥 Attendees" },
   { key: "giftcards", label: "🎁 Gift Cards" },
   { key: "btc", label: "₿ BTC Payments" },
   { key: "messages", label: "📬 Messages" },
@@ -73,6 +73,9 @@ export default function Admin() {
   const [giftCards, setGiftCards] = useState(MOCK_GIFT_CARDS);
   const [btcPayments, setBtcPayments] = useState(MOCK_BTC);
   const [messages, setMessages] = useState(MOCK_MESSAGES);
+  const [members, setMembers] = useState([]);
+  const [membersLoading, setMembersLoading] = useState(false);
+  const [upgradeMsg, setUpgradeMsg] = useState("");
   const [settings, setSettings] = useState({
     eventDate: "2026-06-20",
     eventTime: "19:00",
@@ -93,6 +96,30 @@ export default function Admin() {
   const [adminReply, setAdminReply] = useState("");
   const chatBottomRef = useRef(null);
   const chatPollRef = useRef(null);
+
+  // Load members when tab is active
+  useEffect(() => {
+    if (!authed || tab !== "members") return;
+    setMembersLoading(true);
+    fetch("/api/admin/members", { headers: { "x-admin-pass": ADMIN_PASSWORD } })
+      .then((r) => r.json())
+      .then((data) => { setMembers(data.users || []); setMembersLoading(false); })
+      .catch(() => setMembersLoading(false));
+  }, [authed, tab]);
+
+  async function upgradeMember(userId, tier) {
+    const res = await fetch("/api/admin/members", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD },
+      body: JSON.stringify({ userId, tier }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setMembers((m) => m.map((u) => u.id === userId ? { ...u, tier } : u));
+      setUpgradeMsg(`✅ ${tier} assigned!`);
+      setTimeout(() => setUpgradeMsg(""), 3000);
+    }
+  }
 
   // Poll all chats when on livechat tab
   useEffect(() => {
@@ -249,6 +276,56 @@ export default function Admin() {
                 );
               })}
             </div>
+          </div>
+        )}
+
+        {/* Members */}
+        {tab === "members" && (
+          <div>
+            <h1 className="admin-title">Members ({members.length})</h1>
+            {upgradeMsg && <div style={{ background: "rgba(40,167,69,0.15)", border: "1px solid rgba(40,167,69,0.3)", borderRadius: 8, padding: "0.7rem 1rem", marginBottom: "1rem", color: "#28a745", fontWeight: 600 }}>{upgradeMsg}</div>}
+            {membersLoading ? (
+              <p style={{ opacity: 0.5 }}>Loading members...</p>
+            ) : members.length === 0 ? (
+              <p style={{ opacity: 0.5 }}>No registered members yet.</p>
+            ) : (
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr><th>Sissy Name</th><th>Email</th><th>Current Tier</th><th>Member Since</th><th>Upgrade Tier</th></tr>
+                  </thead>
+                  <tbody>
+                    {members.map((u) => (
+                      <tr key={u.id}>
+                        <td><strong>{u.sissyName}</strong></td>
+                        <td>{u.email}</td>
+                        <td>
+                          <span style={{ padding: "0.2rem 0.7rem", borderRadius: 20, fontSize: "0.8rem", fontWeight: 600, background: "rgba(214,51,132,0.15)", color: "#f5a9b8" }}>
+                            {u.tier}
+                          </span>
+                        </td>
+                        <td style={{ fontSize: "0.85rem", opacity: 0.6 }}>{new Date(u.memberSince).toLocaleDateString()}</td>
+                        <td>
+                          <select
+                            defaultValue=""
+                            onChange={(e) => { if (e.target.value) upgradeMember(u.id, e.target.value); }}
+                            style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "white", padding: "0.4rem 0.6rem", borderRadius: 8, cursor: "pointer", fontSize: "0.85rem" }}
+                          >
+                            <option value="" disabled>Assign tier...</option>
+                            <option value="Free">🆓 Free</option>
+                            <option value="Starter Sissy Card">🌸 Starter — $50</option>
+                            <option value="Standard Sissy Card">💳 Standard — $75</option>
+                            <option value="Gold Sissy Card">👑 Gold — $100</option>
+                            <option value="Platinum Sissy Card">✨ Platinum — $150</option>
+                            <option value="Diamond Sissy Card">💎 Diamond — $200</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
