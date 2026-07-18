@@ -1,14 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { createClient } from "@supabase/supabase-js";
+import { neon } from "@neondatabase/serverless";
 import { signToken } from "@/lib/auth";
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
-}
 
 export async function POST(req) {
   try {
@@ -20,33 +13,33 @@ export async function POST(req) {
     if (password.length < 8)
       return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
 
-    const supabase = getSupabase();
+    const sql = neon(process.env.DATABASE_URL);
+
+    // Create table if not exists
+    await sql`
+      CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        sissy_name TEXT,
+        tier TEXT DEFAULT 'Free',
+        member_since TIMESTAMPTZ DEFAULT NOW(),
+        bio TEXT DEFAULT ''
+      )
+    `;
 
     // Check if email exists
-    const { data: existing } = await supabase
-      .from("users")
-      .select("id")
-      .eq("email", email.toLowerCase())
-      .single();
-
-    if (existing)
+    const existing = await sql`SELECT id FROM users WHERE email = ${email.toLowerCase()}`;
+    if (existing.length > 0)
       return NextResponse.json({ error: "Email already registered" }, { status: 400 });
 
     const hashed = await bcrypt.hash(password, 10);
     const id = `SFI-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
-    const { error: insertError } = await supabase.from("users").insert({
-      id,
-      email: email.toLowerCase(),
-      password: hashed,
-      sissy_name: sissyName,
-      tier: "Free",
-      member_since: new Date().toISOString(),
-      bio: "",
-    });
-
-    if (insertError)
-      return NextResponse.json({ error: "Could not create account: " + insertError.message }, { status: 500 });
+    await sql`
+      INSERT INTO users (id, email, password, sissy_name, tier, member_since, bio)
+      VALUES (${id}, ${email.toLowerCase()}, ${hashed}, ${sissyName}, 'Free', NOW(), '')
+    `;
 
     const token = await signToken({ id, email: email.toLowerCase(), sissyName, tier: "Free" });
     const res = NextResponse.json({ success: true, user: { id, email: email.toLowerCase(), sissyName, tier: "Free" } });
