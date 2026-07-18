@@ -13,9 +13,12 @@ export async function POST(req) {
     if (password.length < 8)
       return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
 
-    const sql = neon(process.env.DATABASE_URL);
+    const connStr = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED;
+    if (!connStr)
+      return NextResponse.json({ error: "Database not configured" }, { status: 500 });
 
-    // Create table if not exists
+    const sql = neon(connStr);
+
     await sql`
       CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY,
@@ -28,7 +31,6 @@ export async function POST(req) {
       )
     `;
 
-    // Check if email exists
     const existing = await sql`SELECT id FROM users WHERE email = ${email.toLowerCase()}`;
     if (existing.length > 0)
       return NextResponse.json({ error: "Email already registered" }, { status: 400 });

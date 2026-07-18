@@ -10,7 +10,10 @@ export async function POST(req) {
     if (!email || !password)
       return NextResponse.json({ error: "Email and password required" }, { status: 400 });
 
-    const sql = neon(process.env.DATABASE_URL);
+    const connStr = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL_UNPOOLED;
+    if (!connStr)
+      return NextResponse.json({ error: "Database not configured" }, { status: 500 });
+    const sql = neon(connStr);
     const rows = await sql`SELECT * FROM users WHERE email = ${email.toLowerCase()}`;
 
     if (rows.length === 0)
