@@ -1,110 +1,124 @@
 import Link from "next/link";
 
-export default function Terms() {
+export const metadata = {
+  title: "Terms of Service — Sissy Fantasy Island",
+  description: "Terms of Service, Privacy Policy, and Community Rules for Sissy Fantasy Island.",
+};
+
+export default function TermsPage() {
   return (
     <div className="terms-page">
-      <div className="container" style={{ paddingTop: "3rem", paddingBottom: "3rem" }}>
+      <div className="container" style={{ maxWidth: 800, padding: "3rem 1.5rem" }}>
         <Link href="/" className="back-link">← Back to Home</Link>
         <h1>Terms of Service</h1>
-        <p className="terms-updated">Last updated: April 2026</p>
+        <p className="terms-updated">Last updated: January 1, 2026</p>
 
-        <section className="terms-section">
+        <div className="terms-section">
           <h2>1. Acceptance of Terms</h2>
-          <p>By accessing or using Sissy Fantasy Island ("SFI", "we", "us"), you agree to be bound by these Terms of Service. If you do not agree, do not use our services. You must be at least 18 years of age to use this platform.</p>
-        </section>
+          <p>By accessing or using Sissy Fantasy Island ("SFI", "we", "us", "our"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not use this platform. You must be 18 years of age or older to access this site.</p>
+        </div>
 
-        <section className="terms-section">
-          <h2>2. Services Provided</h2>
-          <p>SFI provides digital and physical membership cards, community access, event ticketing, and curated product recommendations. All purchases are one-time payments unless otherwise stated.</p>
-        </section>
-
-        <section className="terms-section">
-          <h2>3. Membership Cards</h2>
+        <div className="terms-section">
+          <h2>2. Membership Cards</h2>
+          <p>Sissy Fantasy Island membership cards are digital and/or physical products that grant access to our private community, events, and resources. All card purchases are:</p>
           <ul>
-            <li>All Sissy Cards are issued with a unique member ID and are non-transferable.</li>
-            <li>Cards grant lifetime access to the tier purchased at the time of sale.</li>
-            <li>Digital cards are delivered within 1 hour of payment verification.</li>
-            <li>Physical cards are shipped within 3 business days and arrive in 5-14 business days.</li>
-            <li>Lost or damaged physical cards can be replaced for a $25 fee.</li>
+            <li>One-time payments — no recurring subscriptions or hidden fees</li>
+            <li>Non-transferable — cards are issued to the purchasing member only</li>
+            <li>Lifetime validity — cards do not expire</li>
+            <li>Subject to community rules — violations may result in revocation without refund</li>
           </ul>
-        </section>
+        </div>
 
-        <section className="terms-section">
-          <h2>4. Payment & Billing</h2>
+        <div className="terms-section">
+          <h2>3. Payments & Refunds</h2>
+          <p>We accept Bitcoin (BTC) and gift cards as payment methods. All sales are final with the following exceptions:</p>
           <ul>
-            <li>We accept Bitcoin (BTC) and gift cards as payment methods.</li>
-            <li>All billing appears as "SFI Digital Services" on statements.</li>
-            <li>Payments are processed securely and we do not store payment information.</li>
-            <li>All prices are in USD and are subject to change without notice.</li>
+            <li>Digital cards: Non-refundable once the code has been generated and delivered</li>
+            <li>Physical cards: Eligible for refund if returned unopened within 14 days of delivery</li>
+            <li>Bundles: Non-refundable once any component has been accessed or delivered</li>
+            <li>Events: Ticket refund policies are stated at time of purchase</li>
           </ul>
-        </section>
+        </div>
 
-        <section className="terms-section">
-          <h2>5. Refund Policy</h2>
+        <div className="terms-section">
+          <h2>4. Privacy & Discretion</h2>
+          <p>We take your privacy extremely seriously. Our commitments to you:</p>
           <ul>
-            <li>Digital cards and codes are non-refundable once generated or delivered.</li>
-            <li>Physical cards may be returned unopened within 14 days for a full refund.</li>
-            <li>Community access fees are non-refundable.</li>
-            <li>Event tickets are non-refundable but may be transferred to another person.</li>
+            <li>We never sell, share, or expose member data to third parties</li>
+            <li>All communications are encrypted using industry-standard SSL/TLS</li>
+            <li>Billing appears as "SFI Digital Services" on all statements</li>
+            <li>Anonymous purchase options are available — no email or personal info required</li>
+            <li>Physical cards ship in plain, unmarked packaging with no external branding</li>
+            <li>Member data is stored securely and never used for advertising</li>
           </ul>
-        </section>
+        </div>
 
-        <section className="terms-section">
-          <h2>6. Privacy & Anonymity</h2>
+        <div className="terms-section">
+          <h2>5. Community Rules</h2>
+          <p>All members must adhere to our community standards. The following are strictly prohibited:</p>
           <ul>
-            <li>We offer anonymous purchase options requiring no personal information.</li>
-            <li>We never share, sell, or expose member data to third parties.</li>
-            <li>All communications are encrypted end-to-end.</li>
-            <li>Members may use pseudonyms and sissy names on all platforms.</li>
-            <li>Physical shipments use plain, unmarked packaging with no branding.</li>
+            <li>Harassment, bullying, or threatening behavior toward any member</li>
+            <li>Sharing, doxxing, or exposing any member's personal information</li>
+            <li>Distributing another member's photos or content without explicit consent</li>
+            <li>Soliciting money, services, or personal information from other members</li>
+            <li>Impersonating other members, staff, or public figures</li>
+            <li>Sharing illegal content of any kind</li>
+            <li>Minors are strictly prohibited — any suspected underage activity will be reported</li>
           </ul>
-        </section>
+          <p style={{ marginTop: "1rem" }}>Violations result in immediate permanent ban with no refund. We reserve the right to remove any member at our discretion.</p>
+        </div>
 
-        <section className="terms-section">
-          <h2>7. Community Guidelines</h2>
+        <div className="terms-section">
+          <h2>6. Events</h2>
+          <p>SFI events are private, adults-only gatherings. By attending any SFI event, you agree to:</p>
           <ul>
-            <li>All members must treat others with respect and dignity.</li>
-            <li>Harassment, doxxing, or sharing member information is strictly prohibited.</li>
-            <li>Discrimination of any kind results in immediate permanent ban.</li>
-            <li>All interactions must be consensual.</li>
-            <li>Violations result in permanent removal with no refund.</li>
+            <li>Respect all attendees' boundaries and consent at all times</li>
+            <li>Not photograph or record other attendees without explicit consent</li>
+            <li>Follow all venue rules and event-specific guidelines</li>
+            <li>Not share event details, locations, or attendee information publicly</li>
+            <li>Understand that event tickets are non-refundable unless the event is cancelled by SFI</li>
           </ul>
-        </section>
+        </div>
 
-        <section className="terms-section">
-          <h2>8. Events</h2>
+        <div className="terms-section">
+          <h2>7. Mobile Dungeon Services</h2>
+          <p>Mobile Dungeon sessions are professional adult entertainment services. All sessions require:</p>
           <ul>
-            <li>Event locations are shared only with verified ticket holders.</li>
-            <li>All attendees must be 18+ with valid ID at the door.</li>
-            <li>Photography is prohibited unless in designated areas.</li>
-            <li>SFI reserves the right to refuse entry or remove attendees at any time.</li>
+            <li>Proof of age (18+) before any session is confirmed</li>
+            <li>Full payment in advance via Bitcoin or gift card</li>
+            <li>Agreement to session-specific terms provided at booking</li>
+            <li>Sessions are non-refundable once confirmed and scheduled</li>
           </ul>
-        </section>
+        </div>
 
-        <section className="terms-section">
-          <h2>9. Intellectual Property</h2>
-          <p>All content, branding, card designs, and materials on this platform are the property of Sissy Fantasy Island. Reproduction, distribution, or unauthorized use is prohibited.</p>
-        </section>
+        <div className="terms-section">
+          <h2>8. Intellectual Property</h2>
+          <p>All content on Sissy Fantasy Island — including logos, card designs, text, and graphics — is the property of SFI and may not be reproduced, distributed, or used without written permission.</p>
+        </div>
 
-        <section className="terms-section">
-          <h2>10. Limitation of Liability</h2>
-          <p>SFI is not liable for any indirect, incidental, or consequential damages arising from the use of our services. Our total liability shall not exceed the amount paid by you for the specific service in question.</p>
-        </section>
+        <div className="terms-section">
+          <h2>9. Limitation of Liability</h2>
+          <p>Sissy Fantasy Island is provided "as is" without warranties of any kind. We are not liable for any indirect, incidental, or consequential damages arising from your use of the platform, community, or events. Our total liability shall not exceed the amount you paid for your membership.</p>
+        </div>
 
-        <section className="terms-section">
-          <h2>11. Modifications</h2>
-          <p>We reserve the right to modify these terms at any time. Continued use of our services after changes constitutes acceptance of the new terms.</p>
-        </section>
+        <div className="terms-section">
+          <h2>10. Changes to Terms</h2>
+          <p>We reserve the right to update these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms. We will notify members of significant changes via email or community announcement.</p>
+        </div>
 
-        <section className="terms-section">
-          <h2>12. Contact</h2>
+        <div className="terms-section">
+          <h2>11. Contact</h2>
           <p>For questions about these terms, contact us at:</p>
           <ul>
             <li>Email: comeandsee@gmail.com</li>
             <li>Phone: (415) 305-3689</li>
-            <li>WhatsApp: +1 (415) 305-3689</li>
+            <li>Telegram: @tshungkathy10</li>
           </ul>
-        </section>
+        </div>
+
+        <div style={{ marginTop: "3rem", paddingTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.06)", textAlign: "center", opacity: 0.4, fontSize: "0.85rem" }}>
+          <p>💕 Sissy Fantasy Island 2026 — Be who you really are 💕</p>
+        </div>
       </div>
     </div>
   );

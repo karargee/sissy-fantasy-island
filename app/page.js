@@ -262,6 +262,48 @@ const MEMBER_SPOTLIGHTS = [
   { name: "Baby Celestine", tier: "Platinum", location: "Toronto, Canada", joined: "Feb 2025", quote: "The mentorship program helped me come out of my shell. Forever grateful.", emoji: "✨" },
 ];
 
+const GALLERY_ITEMS = [
+  { img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&q=80", caption: "Community Night — Vegas 2025" },
+  { img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80", caption: "Sissy Brunch — Miami" },
+  { img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=80", caption: "Masked Gala — NYC" },
+  { img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80", caption: "Member Spotlight — Diamond Tier" },
+  { img: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=500&q=80", caption: "Glam Night — Los Angeles" },
+  { img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=500&q=80", caption: "Inner Circle Meetup — London" },
+  { img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&q=80", caption: "Annual Gala — Chicago 2025" },
+  { img: "https://images.unsplash.com/photo-1496440737103-cd596325d314?w=500&q=80", caption: "VIP Lounge — Las Vegas" },
+];
+
+const LEADERBOARD = [
+  { rank: "🥇", name: "Princess Aurora", tier: "Diamond", pts: 4820, badge: "Top Sissy" },
+  { rank: "🥈", name: "Sissy Valentina", tier: "Gold", pts: 3950, badge: "Challenge Queen" },
+  { rank: "🥉", name: "Baby Celestine", tier: "Platinum", pts: 3410, badge: "Social Butterfly" },
+  { rank: "4", name: "Candy Moon", tier: "Gold", pts: 2980, badge: "Glam Icon" },
+  { rank: "5", name: "Mistress Lace", tier: "Diamond", pts: 2750, badge: "Event Star" },
+  { rank: "6", name: "Dolly Rose", tier: "Standard", pts: 2340, badge: "Rising Star" },
+  { rank: "7", name: "Cherry Bliss", tier: "Platinum", pts: 2100, badge: "Style Queen" },
+  { rank: "8", name: "Bambi Frost", tier: "Gold", pts: 1890, badge: "Community Fave" },
+  { rank: "9", name: "Pixie Dream", tier: "Standard", pts: 1650, badge: "Daily Grinder" },
+  { rank: "10", name: "Honey Silk", tier: "Gold", pts: 1420, badge: "Newcomer" },
+];
+
+const PARTNERS = [
+  { emoji: "💜", name: "Lovense", tag: "Official Partner" },
+  { emoji: "📦", name: "Amazon", tag: "Retail Partner" },
+  { emoji: "🔒", name: "ProtonMail", tag: "Privacy Partner" },
+  { emoji: "✈️", name: "Telegram", tag: "Community Platform" },
+  { emoji: "💬", name: "Discord", tag: "Community Platform" },
+  { emoji: "₿", name: "Bitcoin", tag: "Payment Partner" },
+];
+
+const PRESS_MENTIONS = [
+  { name: "LGBTQ+ Nation", quote: "\"One of the most discreet and welcoming sissy communities online\"" },
+  { name: "Femme Weekly", quote: "\"SFI is redefining what it means to be a sissy in 2025\"" },
+  { name: "Trans Lifestyle", quote: "\"The gold standard for trans membership platforms\"" },
+  { name: "Kink Culture Mag", quote: "\"Beautifully designed, totally private, absolutely worth it\"" },
+  { name: "Adult Insider", quote: "\"Best community platform we've reviewed this year\"" },
+  { name: "Pride Digital", quote: "\"A safe haven for sissies worldwide — highly recommended\"" },
+];
+
 const FAQS = [
   { q: "What is a Sissy Card?", a: "Your official membership card for Sissy Fantasy Island. It includes your unique member ID, QR code, and grants you access to our private community and events. It's a one-time purchase — no subscriptions, no recurring charges." },
   { q: "How do I receive my card?", a: "You choose: (1) Email delivery — we send your digital card directly to your inbox. (2) Anonymous code — we give you a download code with no email required. You stay completely anonymous. (3) Physical card — shipped in a plain, unmarked envelope." },
@@ -650,6 +692,136 @@ function DailyChallenge() {
   );
 }
 
+function PhotoGallery() {
+  return (
+    <div className="gallery-grid">
+      {GALLERY_ITEMS.map((item, i) => (
+        <div key={i} className="gallery-item">
+          <Image src={item.img} alt={item.caption} fill style={{ objectFit: "cover" }} />
+          <div className="gallery-overlay">
+            <span className="gallery-caption">{item.caption}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Leaderboard() {
+  return (
+    <div className="leaderboard-list">
+      {LEADERBOARD.map((m, i) => (
+        <div key={i} className="leaderboard-item">
+          <div className="leaderboard-rank">{m.rank}</div>
+          <div className="leaderboard-avatar">{m.name[0]}</div>
+          <div className="leaderboard-info">
+            <strong>{m.name}</strong>
+            <span>{m.tier} Member</span>
+          </div>
+          <span className="leaderboard-badge">{m.badge}</span>
+          <div className="leaderboard-pts">{m.pts.toLocaleString()} pts</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SocialProofBar() {
+  const [visible, setVisible] = useState(true);
+  const [viewers, setViewers] = useState(47);
+  const [actIdx, setActIdx] = useState(0);
+  const recentActivity = [
+    "Princess Velvet just purchased a Gold Card",
+    "Sissy Jade upgraded to Diamond 💎",
+    "Baby Sparkle joined from United Kingdom 🇬🇧",
+    "Candy Moon booked a Mobile Dungeon session",
+    "Dolly Rose just joined the community 🌸",
+    "Cherry Bliss got her Starter Card",
+    "Pixie Dream upgraded to Platinum ✨",
+  ];
+  useEffect(() => {
+    const v = setInterval(() => setViewers((n) => n + Math.floor(Math.random() * 3) - 1), 5000);
+    const a = setInterval(() => setActIdx((i) => (i + 1) % recentActivity.length), 4000);
+    return () => { clearInterval(v); clearInterval(a); };
+  }, []);
+  if (!visible) return null;
+  return (
+    <div className="social-proof-bar">
+      <div className="social-proof-viewers">
+        <span className="social-proof-dot"></span>
+        {viewers} people viewing now
+      </div>
+      <div className="social-proof-activity">
+        🔥 {recentActivity[actIdx]}
+      </div>
+      <button className="social-proof-close" onClick={() => setVisible(false)}>✕</button>
+    </div>
+  );
+}
+
+function NewsletterPopup() {
+  const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    if (sessionStorage.getItem("nl_dismissed")) return;
+    const t = setTimeout(() => setShow(true), 8000);
+    return () => clearTimeout(t);
+  }, []);
+  function dismiss() { setShow(false); sessionStorage.setItem("nl_dismissed", "1"); }
+  function submit(e) { e.preventDefault(); setDone(true); setTimeout(dismiss, 2000); }
+  if (!show) return null;
+  return (
+    <div className="newsletter-popup-overlay" onClick={dismiss}>
+      <div className="newsletter-popup" onClick={(e) => e.stopPropagation()}>
+        <button className="newsletter-popup-close" onClick={dismiss}>✕</button>
+        <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>💌</div>
+        <h3>Get 10% Off Your First Card</h3>
+        <p>Join our VIP list and receive an exclusive discount code plus early access to events and drops.</p>
+        <div className="newsletter-discount">SISSY10</div>
+        {done ? (
+          <div className="email-success">✅ Check your inbox for your code!</div>
+        ) : (
+          <form className="newsletter-popup-form" onSubmit={submit}>
+            <input type="email" placeholder="your@email.com" required value={email} onChange={(e) => setEmail(e.target.value)} className="form-input" />
+            <button type="submit" className="buy-btn donate-btn">Claim My 10% Off</button>
+            <button type="button" onClick={dismiss} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", fontSize: "0.8rem" }}>No thanks, I&apos;ll pay full price</button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function TierProgress({ currentTier = "Starter" }) {
+  const tiers = [
+    { name: "Starter", emoji: "🌸" },
+    { name: "Standard", emoji: "💳" },
+    { name: "Gold", emoji: "👑" },
+    { name: "Platinum", emoji: "✨" },
+    { name: "Diamond", emoji: "💎" },
+  ];
+  const currentIdx = tiers.findIndex((t) => t.name === currentTier);
+  return (
+    <div className="tier-progress-wrap">
+      <div className="tier-progress-track">
+        {tiers.map((t, i) => (
+          <>
+            {i > 0 && <div key={`c-${i}`} className={`tier-connector ${i <= currentIdx ? "done" : ""}`} />}
+            <div key={t.name} className="tier-node">
+              <div className={`tier-node-circle ${i === currentIdx ? "active" : i < currentIdx ? "done" : ""}`}>
+                {i < currentIdx ? "✓" : t.emoji}
+              </div>
+              <span className={`tier-node-label ${i === currentIdx ? "active" : ""}`}>{t.name}</span>
+            </div>
+          </>
+        ))}
+      </div>
+      <p style={{ textAlign: "center", fontSize: "0.85rem", opacity: 0.5 }}>Upgrade your card to unlock the next tier and more perks</p>
+    </div>
+  );
+}
+
 export default function Home() {
   const [verified, setVerified] = useState(false);
   const [payModal, setPayModal] = useState(null);
@@ -726,7 +898,7 @@ export default function Home() {
         <div className="bg-orb bg-orb-3"></div>
       </div>
 
-      <div className="container">
+      <div className="container" style={{ paddingBottom: "4rem" }}>
         {/* Flash Sale Banner */}
         <div style={{ background: "linear-gradient(90deg, #d63384, #6f42c1)", padding: "0.8rem 1.5rem", borderRadius: 10, textAlign: "center", marginBottom: "1.5rem", animation: "pulse 2s ease-in-out infinite" }}>
           <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>🔥 LIMITED TIME: Get 20% off all cards — Use code <strong>SISSY20</strong> at checkout</span>
@@ -1060,11 +1232,35 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Leaderboard */}
+        <section className="section">
+          <h2>🏆 Weekly Leaderboard</h2>
+          <p className="section-subtitle">Top members by challenge points this week. Can you make the list?</p>
+          <Leaderboard />
+        </section>
+
+        {/* Tier Progress */}
+        <section className="section">
+          <h2>📈 Membership Tiers</h2>
+          <p className="section-subtitle">See where you stand and what&apos;s waiting at the next level.</p>
+          <TierProgress currentTier="Starter" />
+          <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+            <button className="buy-btn donate-btn" style={{ maxWidth: 280 }} onClick={() => document.getElementById("cards").scrollIntoView({ behavior: "smooth" })}>Upgrade My Tier →</button>
+          </div>
+        </section>
+
         {/* Daily Challenge */}
         <section className="section">
           <h2>🎯 Daily Sissy Challenge</h2>
           <p className="section-subtitle">A new challenge every day. Complete it, earn points, level up.</p>
           <DailyChallenge />
+        </section>
+
+        {/* Photo Gallery */}
+        <section className="section">
+          <h2>📸 Community Lookbook</h2>
+          <p className="section-subtitle">Real moments from our events and community. Your story starts here.</p>
+          <PhotoGallery />
         </section>
 
         {/* Member Spotlights */}
@@ -1078,6 +1274,35 @@ export default function Home() {
                 <h3 style={{ fontSize: "1.1rem", marginBottom: "0.2rem" }}>{m.name}</h3>
                 <div style={{ fontSize: "0.75rem", opacity: 0.5, marginBottom: "0.8rem" }}>{m.tier} Member · {m.location} · Since {m.joined}</div>
                 <p style={{ fontStyle: "italic", opacity: 0.7, fontSize: "0.9rem", lineHeight: 1.6 }}>&ldquo;{m.quote}&rdquo;</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* As Seen In */}
+        <section className="section">
+          <h2>📰 As Seen In</h2>
+          <p className="section-subtitle">Featured across the LGBTQ+ and lifestyle community.</p>
+          <div className="press-grid">
+            {PRESS_MENTIONS.map((p, i) => (
+              <div key={i} className="press-item">
+                <div className="press-name">{p.name}</div>
+                <div className="press-quote">{p.quote}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Official Partners */}
+        <section className="section">
+          <h2>🤝 Official Partners</h2>
+          <p className="section-subtitle">Trusted brands and platforms we work with.</p>
+          <div className="partners-grid">
+            {PARTNERS.map((p, i) => (
+              <div key={i} className="partner-badge">
+                <span>{p.emoji}</span>
+                <strong>{p.name}</strong>
+                <span className="partner-verified">{p.tag}</span>
               </div>
             ))}
           </div>
@@ -1217,6 +1442,12 @@ export default function Home() {
           <Link href="/terms" className="terms-link">Terms of Service</Link>
         </footer>
       </div>
+
+      {/* Social Proof Ticker */}
+      <SocialProofBar />
+
+      {/* Newsletter Popup */}
+      <NewsletterPopup />
 
       {/* Live Chat Widget */}
       <ChatWidget />
