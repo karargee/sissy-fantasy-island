@@ -1,36 +1,41 @@
 import { NextResponse } from "next/server";
-import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { createClient } from "@supabase/supabase-js";
 
-const DB = join(process.cwd(), "data", "users.json");
-const ADMIN_PASSWORD = "transparty2026";
-
-function getUsers() {
-  try { return JSON.parse(readFileSync(DB, "utf8")); } catch { return []; }
-}
-function saveUsers(users) {
-  writeFileSync(DB, JSON.stringify(users, null, 2));
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
 }
 
 export async function GET(req) {
   const pass = req.headers.get("x-admin-pass");
-  if (pass !== ADMIN_PASSWORD) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (pass !== "transparty2026")
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const users = getUsers().map(({ password, ...u }) => u);
-  return NextResponse.json({ users });
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from("users")
+    .select("id, email, sissy_name, tier, member_since, bio")
+    .order("member_since", { ascending: false });
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data.map(u => ({ ...u, sissyName: u.sissy_name })));
 }
 
 export async function POST(req) {
   const pass = req.headers.get("x-admin-pass");
-  if (pass !== ADMIN_PASSWORD) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (pass !== "transparty2026")
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { userId, tier } = await req.json();
-  const users = getUsers();
-  const idx = users.findIndex((u) => u.id === userId);
-  if (idx === -1) return NextResponse.json({ error: "User not found" }, { status: 404 });
+  const supabase = getSupabase();
 
-  users[idx].tier = tier;
-  saveUsers(users);
+  const { error } = await supabase
+    .from("users")
+    .update({ tier })
+    .eq("id", userId);
 
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 }

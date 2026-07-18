@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { createClient } from "@supabase/supabase-js";
 import { signToken } from "@/lib/auth";
 
-const DB = join(process.cwd(), "data", "users.json");
-
-function getUsers() {
-  try { return JSON.parse(readFileSync(DB, "utf8")); } catch { return []; }
-}
-function saveUsers(users) {
-  writeFileSync(DB, JSON.stringify(users, null, 2));
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
 }
 
 export async function POST(req) {
@@ -23,35 +20,36 @@ export async function POST(req) {
     if (password.length < 8)
       return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
 
-    let users = [];
-    try { users = getUsers(); } catch {}
+    const supabase = getSupabase();
 
-    if (users.find((u) => u.email === email.toLowerCase()))
+    // Check if email exists
+    const { data: existing } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", email.toLowerCase())
+      .single();
+
+    if (existing)
       return NextResponse.json({ error: "Email already registered" }, { status: 400 });
 
     const hashed = await bcrypt.hash(password, 10);
     const id = `SFI-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
-    const user = {
+    const { error: insertError } = await supabase.from("users").insert({
       id,
       email: email.toLowerCase(),
       password: hashed,
-      sissyName,
+      sissy_name: sissyName,
       tier: "Free",
-      memberSince: new Date().toISOString(),
-      avatar: "",
+      member_since: new Date().toISOString(),
       bio: "",
-    };
+    });
 
-    try {
-      users.push(user);
-      saveUsers(users);
-    } catch {
-      // On Vercel, filesystem is read-only — still issue the token so user can use the session
-    }
+    if (insertError)
+      return NextResponse.json({ error: "Could not create account: " + insertError.message }, { status: 500 });
 
-    const token = await signToken({ id: user.id, email: user.email, sissyName: user.sissyName, tier: user.tier });
-    const res = NextResponse.json({ success: true, user: { id, email: user.email, sissyName, tier: user.tier } });
+    const token = await signToken({ id, email: email.toLowerCase(), sissyName, tier: "Free" });
+    const res = NextResponse.json({ success: true, user: { id, email: email.toLowerCase(), sissyName, tier: "Free" } });
     res.cookies.set("sfi_session", token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 30, path: "/" });
     return res;
   } catch (e) {
