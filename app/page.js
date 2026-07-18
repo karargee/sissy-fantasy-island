@@ -4,6 +4,26 @@ import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
 import Link from "next/link";
 
+function useReveal() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.1 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, visible];
+}
+
+function Reveal({ children, delay = 0 }) {
+  const [ref, visible] = useReveal();
+  return (
+    <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(40px)", transition: `opacity 0.7s ease ${delay}ms, transform 0.7s cubic-bezier(0.34,1.56,0.64,1) ${delay}ms` }}>
+      {children}
+    </div>
+  );
+}
+
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const SISSY_CARDS = [
@@ -938,7 +958,7 @@ export default function Home() {
         </section>
 
         {/* How It Works */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>🚀 How It Works</h2>
           <p className="section-subtitle">Three simple steps to join the community.</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem", textAlign: "center" }}>
@@ -954,27 +974,27 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Live Stats */}
-        <section className="section">
+        <Reveal><section className="section">
           <div className="stats-bar">
             <div className="stat-item"><AnimatedCounter target="2847" /><span className="stat-label">Active Members</span></div>
             <div className="stat-item"><AnimatedCounter target="47" /><span className="stat-label">Countries</span></div>
             <div className="stat-item"><AnimatedCounter target="3200" suffix="+" /><span className="stat-label">Cards Issued</span></div>
             <div className="stat-item"><AnimatedCounter target="12" /><span className="stat-label">Events Hosted</span></div>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Sissy Name Generator */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>✨ Sissy Name Generator</h2>
           <p className="section-subtitle">Find your perfect sissy name. Click generate until you find the one.</p>
           <SissyNameGenerator />
-        </section>
+        </section></Reveal>
 
         {/* Sissy Card Preview */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>💳 The Official Sissy Card</h2>
           <p className="section-subtitle">Your identity. Your community. One card.</p>
           <div className="card-preview">
@@ -1017,10 +1037,10 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Sissy Card Tiers */}
-        <section className="section" id="cards">
+        <Reveal><section className="section" id="cards">
           <h2>Choose Your Card</h2>
           <p className="section-subtitle">One-time payment. Lifetime access. No subscriptions.</p>
           <div className="tickets-grid">
@@ -1055,10 +1075,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Community */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>💬 Join The Community</h2>
           <p className="section-subtitle">Connect with trans women, sissies, and admirers in a safe, private space.</p>
           <div className="community-grid">
@@ -1092,10 +1112,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Mobile Dungeon */}
-        <section className="section" id="dungeon">
+        <Reveal><section className="section" id="dungeon">
           <div className="dungeon-banner">
             <div className="dungeon-emoji">🚚</div>
             <h2>Mobile Dungeon — We Come To You</h2>
@@ -1116,10 +1136,10 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Upcoming Events */}
-        <section className="section" id="events">
+        <Reveal><section className="section" id="events">
           <h2>🎉 Upcoming Events</h2>
           <p className="section-subtitle">Exclusive parties and meetups for our community. Card holders get priority access.</p>
           <div style={{ textAlign: "center", marginBottom: "2rem" }}>
@@ -1147,10 +1167,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Shop — External Links */}
-        <section className="section" id="shop">
+        <Reveal><section className="section" id="shop">
           <h2>🛍️ Shop Costumes & Toys</h2>
           <p className="section-subtitle">We've curated the best products from trusted retailers. Click to shop directly.</p>
           <div className="shop-grid">
@@ -1166,10 +1186,10 @@ export default function Home() {
               </a>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Blog / Guides */}
-        <section className="section" id="guides">
+        <Reveal><section className="section" id="guides">
           <h2>📚 Guides & Tips</h2>
           <p className="section-subtitle">Resources to help you on your journey. Click to read full article.</p>
           <div className="blog-grid">
@@ -1187,10 +1207,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Bundle Deals */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>🎁 Bundle Deals — Save More</h2>
           <p className="section-subtitle">Combine card + community for the best value.</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
@@ -1204,10 +1224,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* About Us */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>💜 About Sissy Fantasy Island</h2>
           <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
             <p style={{ opacity: 0.7, lineHeight: 1.8, marginBottom: "1.5rem", fontSize: "1rem" }}>
@@ -1230,41 +1250,41 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Leaderboard */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>🏆 Weekly Leaderboard</h2>
           <p className="section-subtitle">Top members by challenge points this week. Can you make the list?</p>
           <Leaderboard />
-        </section>
+        </section></Reveal>
 
         {/* Tier Progress */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>📈 Membership Tiers</h2>
           <p className="section-subtitle">See where you stand and what&apos;s waiting at the next level.</p>
           <TierProgress currentTier="Starter" />
           <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
             <button className="buy-btn donate-btn" style={{ maxWidth: 280 }} onClick={() => document.getElementById("cards").scrollIntoView({ behavior: "smooth" })}>Upgrade My Tier →</button>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Daily Challenge */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>🎯 Daily Sissy Challenge</h2>
           <p className="section-subtitle">A new challenge every day. Complete it, earn points, level up.</p>
           <DailyChallenge />
-        </section>
+        </section></Reveal>
 
         {/* Photo Gallery */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>📸 Community Lookbook</h2>
           <p className="section-subtitle">Real moments from our events and community. Your story starts here.</p>
           <PhotoGallery />
-        </section>
+        </section></Reveal>
 
         {/* Member Spotlights */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>🌟 Member Spotlights</h2>
           <p className="section-subtitle">Real members, real stories.</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
@@ -1277,10 +1297,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* As Seen In */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>📰 As Seen In</h2>
           <p className="section-subtitle">Featured across the LGBTQ+ and lifestyle community.</p>
           <div className="press-grid">
@@ -1291,10 +1311,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Official Partners */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>🤝 Official Partners</h2>
           <p className="section-subtitle">Trusted brands and platforms we work with.</p>
           <div className="partners-grid">
@@ -1306,10 +1326,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Testimonials */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>💬 Member Reviews</h2>
           <p className="section-subtitle">Real feedback from verified members.</p>
           <div className="testimonials-grid">
@@ -1333,10 +1353,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Policies */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>📋 Our Policies</h2>
           <div className="policies-grid">
             {POLICIES.map((p) => (
@@ -1347,17 +1367,17 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Shipping Tracker */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>📦 Track Your Order</h2>
           <p className="section-subtitle">Enter your order ID to check shipping status.</p>
           <ShippingTracker />
-        </section>
+        </section></Reveal>
 
         {/* Referral Program */}
-        <section className="section">
+        <Reveal><section className="section">
           <div className="referral-banner">
             <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🎁</div>
             <h2>Refer a Sissy, Get $50 Off</h2>
@@ -1369,17 +1389,17 @@ export default function Home() {
             </div>
             <p className="referral-note">Get your referral code after purchasing any card. Contact us to claim your discount.</p>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Card Status Checker */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>🔍 Check Card Status</h2>
           <p className="section-subtitle">Enter your card code to verify it's active.</p>
           <CardChecker />
-        </section>
+        </section></Reveal>
 
         {/* FAQ */}
-        <section className="section">
+        <Reveal><section className="section">
           <h2>❓ FAQ</h2>
           <div className="faq-list">
             {FAQS.map((f, i) => (
@@ -1392,10 +1412,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Email Signup */}
-        <section className="section">
+        <Reveal><section className="section">
           <div className="email-section">
             <h2>📧 Stay Updated</h2>
             <p>Get notified about new events, community updates, and exclusive drops.</p>
@@ -1408,10 +1428,10 @@ export default function Home() {
               </form>
             )}
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Contact */}
-        <section className="section" id="contact">
+        <Reveal><section className="section" id="contact">
           <h2>📬 Contact</h2>
           <div className="social-bar">
             <a href="mailto:comeandsee@gmail.com" className="social-link">
@@ -1427,7 +1447,7 @@ export default function Home() {
               <span>✈️</span> Telegram
             </a>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* Footer */}
         <footer className="footer">
