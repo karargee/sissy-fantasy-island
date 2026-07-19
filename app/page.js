@@ -934,6 +934,8 @@ export default function Home() {
             <a href="#shop" onClick={() => setMobileNav(false)}>Shop</a>
             <a href="#guides" onClick={() => setMobileNav(false)}>Guides</a>
             <a href="#contact" onClick={() => setMobileNav(false)}>Contact</a>
+            <Link href="/login" onClick={() => setMobileNav(false)} style={{ color: "rgba(255,255,255,0.55)", fontWeight: 500 }}>Sign In</Link>
+            <Link href="/register" onClick={() => setMobileNav(false)} style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.5rem 1.2rem", borderRadius: 6, color: "white", fontWeight: 700, textDecoration: "none", fontSize: "0.82rem", letterSpacing: "0.5px", textTransform: "uppercase" }}>Join</Link>
 
           </div>
           <button className="nav-toggle" onClick={() => setMobileNav(!mobileNav)}>{mobileNav ? "✕" : "☰"}</button>

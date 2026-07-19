@@ -25,56 +25,31 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0a0f", display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-      <div style={{ background: "#151520", border: "1px solid rgba(214,51,132,0.3)", borderRadius: 20, padding: "2.5rem", width: "100%", maxWidth: 420 }}>
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🔐</div>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, background: "linear-gradient(135deg, #f5a9b8, #d63384)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Welcome Back</h1>
-          <p style={{ opacity: 0.5, fontSize: "0.9rem", marginTop: "0.3rem" }}>Sign in to your account</p>
-        </div>
+    <div className="auth-page">
+      <div className="auth-box">
+        <Link href="/" className="auth-back">← Back to site</Link>
+        <div className="auth-logo">SFI 💕</div>
+        <h1 className="auth-title">Welcome Back</h1>
+        <p className="auth-sub">Sign in to your account</p>
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <div>
-            <label style={{ fontSize: "0.8rem", opacity: 0.6, display: "block", marginBottom: "0.4rem" }}>Email</label>
-            <input
-              type="email"
-              placeholder="your@email.com"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              required
-              style={{ width: "100%", padding: "0.8rem 1rem", borderRadius: 10, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.06)", color: "white", fontSize: "1rem", outline: "none", boxSizing: "border-box" }}
-            />
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-field">
+            <label>Email</label>
+            <input type="email" placeholder="your@email.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
           </div>
-          <div>
-            <label style={{ fontSize: "0.8rem", opacity: 0.6, display: "block", marginBottom: "0.4rem" }}>Password</label>
-            <input
-              type="password"
-              placeholder="Your password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              required
-              style={{ width: "100%", padding: "0.8rem 1rem", borderRadius: 10, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.06)", color: "white", fontSize: "1rem", outline: "none", boxSizing: "border-box" }}
-            />
+          <div className="auth-field">
+            <label>Password</label>
+            <input type="password" placeholder="Your password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
           </div>
 
-          {error && <div style={{ background: "rgba(220,53,69,0.1)", border: "1px solid rgba(220,53,69,0.3)", borderRadius: 8, padding: "0.7rem 1rem", fontSize: "0.85rem", color: "#ff6b6b" }}>{error}</div>}
+          {error && <div className="auth-error">{error}</div>}
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{ padding: "0.9rem", borderRadius: 50, border: "none", background: "linear-gradient(135deg, #d63384, #6f42c1)", color: "white", fontSize: "1rem", fontWeight: 700, cursor: "pointer", opacity: loading ? 0.7 : 1, marginTop: "0.5rem" }}
-          >
-            {loading ? "Signing In..." : "Sign In 🔐"}
+          <button type="submit" disabled={loading} className="auth-btn">
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
-        <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.85rem", opacity: 0.5 }}>
-          Don&apos;t have an account?{" "}
-          <Link href="/register" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 600 }}>Create one</Link>
-        </p>
-        <p style={{ textAlign: "center", marginTop: "0.5rem" }}>
-          <Link href="/" style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.8rem", textDecoration: "none" }}>← Back to site</Link>
-        </p>
+        <p className="auth-switch">Don&apos;t have an account? <Link href="/register">Create one</Link></p>
       </div>
     </div>
   );
