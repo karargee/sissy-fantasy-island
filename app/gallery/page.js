@@ -22,12 +22,20 @@ const TAGS = ["All", "Events", "Members", "Community"];
 
 export default function GalleryPage() {
   const [activeTag, setActiveTag] = useState("All");
-  const [lightbox, setLightbox] = useState(null);
+  const [lightbox, setLightbox] = useState(null); // stores the img src, not index
 
   const filtered = activeTag === "All" ? GALLERY : GALLERY.filter(g => g.tag === activeTag);
+  const lightboxItem = lightbox !== null ? filtered.find(g => g.img === lightbox) || null : null;
+  const lightboxIdx = lightboxItem ? filtered.indexOf(lightboxItem) : -1;
 
-  function prev() { setLightbox(i => (i - 1 + filtered.length) % filtered.length); }
-  function next() { setLightbox(i => (i + 1) % filtered.length); }
+  function prev() {
+    const idx = (lightboxIdx - 1 + filtered.length) % filtered.length;
+    setLightbox(filtered[idx].img);
+  }
+  function next() {
+    const idx = (lightboxIdx + 1) % filtered.length;
+    setLightbox(filtered[idx].img);
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: "#060608", color: "#f0f0f0" }}>
@@ -64,7 +72,7 @@ export default function GalleryPage() {
           {filtered.map((item, i) => (
             <div
               key={i}
-              onClick={() => setLightbox(i)}
+              onClick={() => setLightbox(item.img)}
               style={{ position: "relative", borderRadius: 14, overflow: "hidden", aspectRatio: "1", cursor: "pointer" }}
               onMouseEnter={e => { e.currentTarget.querySelector(".overlay").style.opacity = "1"; e.currentTarget.querySelector("img").style.transform = "scale(1.06)"; }}
               onMouseLeave={e => { e.currentTarget.querySelector(".overlay").style.opacity = "0"; e.currentTarget.querySelector("img").style.transform = "scale(1)"; }}
@@ -90,17 +98,17 @@ export default function GalleryPage() {
       </div>
 
       {/* Lightbox */}
-      {lightbox !== null && (
+      {lightboxItem !== null && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.95)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }} onClick={() => setLightbox(null)}>
           <button onClick={(e) => { e.stopPropagation(); prev(); }} style={{ position: "absolute", left: "1rem", background: "rgba(255,255,255,0.08)", border: "none", color: "white", width: 44, height: 44, borderRadius: "50%", fontSize: "1.2rem", cursor: "pointer", zIndex: 1 }}>‹</button>
           <div style={{ position: "relative", maxWidth: 800, maxHeight: "80vh", width: "100%", aspectRatio: "4/3" }} onClick={e => e.stopPropagation()}>
-            <Image src={filtered[lightbox].img} alt={filtered[lightbox].caption} fill style={{ objectFit: "contain", borderRadius: 12 }} />
+            <Image src={lightboxItem.img} alt={lightboxItem.caption} fill style={{ objectFit: "contain", borderRadius: 12 }} />
           </div>
           <button onClick={(e) => { e.stopPropagation(); next(); }} style={{ position: "absolute", right: "1rem", background: "rgba(255,255,255,0.08)", border: "none", color: "white", width: 44, height: 44, borderRadius: "50%", fontSize: "1.2rem", cursor: "pointer", zIndex: 1 }}>›</button>
           <div style={{ position: "absolute", bottom: "2rem", textAlign: "center", width: "100%" }}>
-            <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: 1.5, color: "#f5a9b8", fontWeight: 700, marginBottom: "0.2rem" }}>{filtered[lightbox].tag}</div>
-            <div style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.7)" }}>{filtered[lightbox].caption}</div>
-            <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", marginTop: "0.3rem" }}>{lightbox + 1} / {filtered.length}</div>
+            <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: 1.5, color: "#f5a9b8", fontWeight: 700, marginBottom: "0.2rem" }}>{lightboxItem.tag}</div>
+            <div style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.7)" }}>{lightboxItem.caption}</div>
+            <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", marginTop: "0.3rem" }}>{lightboxIdx + 1} / {filtered.length}</div>
           </div>
           <button onClick={() => setLightbox(null)} style={{ position: "absolute", top: "1rem", right: "1rem", background: "rgba(255,255,255,0.08)", border: "none", color: "white", width: 36, height: 36, borderRadius: "50%", fontSize: "1rem", cursor: "pointer" }}>✕</button>
         </div>

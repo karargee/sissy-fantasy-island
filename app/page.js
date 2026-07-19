@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
 import Link from "next/link";
@@ -282,16 +282,7 @@ const MEMBER_SPOTLIGHTS = [
   { name: "Baby Celestine", tier: "Platinum", location: "Toronto, Canada", joined: "Feb 2025", quote: "The mentorship program helped me come out of my shell. Forever grateful.", emoji: "✨" },
 ];
 
-const GALLERY_ITEMS = [
-  { img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&q=80", caption: "Community Night — Vegas 2025" },
-  { img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80", caption: "Sissy Brunch — Miami" },
-  { img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=80", caption: "Masked Gala — NYC" },
-  { img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80", caption: "Member Spotlight — Diamond Tier" },
-  { img: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=500&q=80", caption: "Glam Night — Los Angeles" },
-  { img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=500&q=80", caption: "Inner Circle Meetup — London" },
-  { img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&q=80", caption: "Annual Gala — Chicago 2025" },
-  { img: "https://images.unsplash.com/photo-1496440737103-cd596325d314?w=500&q=80", caption: "VIP Lounge — Las Vegas" },
-];
+
 
 const LEADERBOARD = [
   { rank: "🥇", name: "Princess Aurora", tier: "Diamond", pts: 4820, badge: "Top Sissy" },
@@ -556,17 +547,17 @@ function ShippingTracker() {
           <div style={{ padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               {TRACKER_STATUSES.map((s, i) => (
-                <>
+                <React.Fragment key={s.label}>
                   {i > 0 && (
-                    <div key={`line-${i}`} style={{ flex: 1, height: 2, background: s.done ? "linear-gradient(90deg, #d63384, #5bcefa)" : "rgba(255,255,255,0.07)", margin: "0 4px", marginBottom: 20 }} />
+                    <div style={{ flex: 1, height: 2, background: s.done ? "linear-gradient(90deg, #d63384, #5bcefa)" : "rgba(255,255,255,0.07)", margin: "0 4px", marginBottom: 20 }} />
                   )}
-                  <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem", minWidth: 52 }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem", minWidth: 52 }}>
                     <div style={{ width: 36, height: 36, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem", background: s.active ? "rgba(91,206,250,0.15)" : s.done ? "rgba(214,51,132,0.15)" : "rgba(255,255,255,0.04)", border: `2px solid ${s.active ? "#5bcefa" : s.done ? "#d63384" : "rgba(255,255,255,0.1)"}`, boxShadow: s.active ? "0 0 14px rgba(91,206,250,0.3)" : "none" }}>
                       {s.icon}
                     </div>
                     <span style={{ fontSize: "0.58rem", textTransform: "uppercase", letterSpacing: 0.5, color: s.active ? "#5bcefa" : s.done ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.25)", textAlign: "center", fontWeight: s.active ? 700 : 500 }}>{s.label}</span>
                   </div>
-                </>
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -806,20 +797,7 @@ function DailyChallenge() {
   );
 }
 
-function PhotoGallery() {
-  return (
-    <div className="gallery-grid">
-      {GALLERY_ITEMS.map((item, i) => (
-        <div key={i} className="gallery-item">
-          <Image src={item.img} alt={item.caption} fill style={{ objectFit: "cover" }} />
-          <div className="gallery-overlay">
-            <span className="gallery-caption">{item.caption}</span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+
 
 function Leaderboard() {
   return (
@@ -1024,11 +1002,10 @@ export default function Home() {
           <div className={`nav-links ${mobileNav ? "nav-links-open" : ""}`}>
             <a href="#cards" onClick={() => setMobileNav(false)}>Cards</a>
             <a href="#dungeon" onClick={() => setMobileNav(false)}>Dungeon</a>
-            <a href="#events" onClick={() => setMobileNav(false)}>Events</a>
-            <a href="#shop" onClick={() => setMobileNav(false)}>Shop</a>
             <a href="#guides" onClick={() => setMobileNav(false)}>Guides</a>
             <Link href="/events" onClick={() => setMobileNav(false)}>Events</Link>
             <Link href="/shop" onClick={() => setMobileNav(false)}>Shop</Link>
+            <Link href="/gallery" onClick={() => setMobileNav(false)}>Gallery</Link>
             <Link href="/contact" onClick={() => setMobileNav(false)}>Contact</Link>
             <Link href="/community" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8", fontWeight: 600 }}>Community</Link>
             <Link href="/search" onClick={() => setMobileNav(false)} style={{ color: "rgba(255,255,255,0.55)" }}>🔍</Link>

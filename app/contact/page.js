@@ -38,7 +38,7 @@ export default function ContactPage() {
           <p style={{ color: "rgba(255,255,255,0.4)", maxWidth: 480, margin: "0 auto", lineHeight: 1.7, fontSize: "0.95rem" }}>We respond within 24 hours. All messages are private and confidential.</p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", alignItems: "start" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2.5rem", alignItems: "start" }}>
           {/* Contact Methods */}
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.5rem" }}>Reach Us Directly</h2>

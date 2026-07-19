@@ -25,11 +25,19 @@ export async function GET(req) {
     const convos = await redis.smembers(`convos:${session.id}`);
     if (!convos.length) return NextResponse.json([]);
 
+    // Build id->user map by scanning all user keys
+    const userKeys = await redis.keys("user:*");
+    const allUsers = await Promise.all(userKeys.map(k => redis.get(k)));
+    const userById = {};
+    allUsers.filter(Boolean).forEach(raw => {
+      const u = typeof raw === "string" ? JSON.parse(raw) : raw;
+      if (u?.id) userById[u.id] = u;
+    });
+
     const results = await Promise.all(convos.map(async (otherId) => {
       const key = `convo:${convoKey(session.id, otherId)}`;
       const last = await redis.lindex(key, -1);
-      const otherRaw = await redis.get(`user:${otherId}`);
-      const other = otherRaw ? (typeof otherRaw === "string" ? JSON.parse(otherRaw) : otherRaw) : null;
+      const other = userById[otherId] || null;
       return {
         userId: otherId,
         userName: other?.sissyName || "Unknown",

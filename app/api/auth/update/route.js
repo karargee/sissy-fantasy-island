@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { getSession, signToken } from "@/lib/auth";
 import redis from "@/lib/redis";
 
 export async function POST(req) {
@@ -13,8 +13,14 @@ export async function POST(req) {
     if (!raw) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     const user = typeof raw === "string" ? JSON.parse(raw) : raw;
-    await redis.set(key, JSON.stringify({ ...user, bio, sissyName }));
-    return NextResponse.json({ success: true });
+    const updated = { ...user, bio, sissyName };
+    await redis.set(key, JSON.stringify(updated));
+
+    // Re-issue JWT so sissyName is current in session
+    const token = await signToken({ id: updated.id, email: updated.email, sissyName, tier: updated.tier });
+    const res = NextResponse.json({ success: true });
+    res.cookies.set("sfi_session", token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 30, path: "/" });
+    return res;
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
