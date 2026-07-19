@@ -933,7 +933,9 @@ export default function Home() {
             <a href="#events" onClick={() => setMobileNav(false)}>Events</a>
             <a href="#shop" onClick={() => setMobileNav(false)}>Shop</a>
             <a href="#guides" onClick={() => setMobileNav(false)}>Guides</a>
-            <a href="#contact" onClick={() => setMobileNav(false)}>Contact</a>
+            <Link href="/events" onClick={() => setMobileNav(false)}>Events</Link>
+            <Link href="/shop" onClick={() => setMobileNav(false)}>Shop</Link>
+            <Link href="/contact" onClick={() => setMobileNav(false)}>Contact</Link>
             <Link href="/community" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8", fontWeight: 600 }}>Community</Link>
             <Link href="/search" onClick={() => setMobileNav(false)} style={{ color: "rgba(255,255,255,0.55)" }}>🔍</Link>
             <Link href="/messages" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8", fontWeight: 600 }}>Messages</Link>
@@ -1470,8 +1472,9 @@ export default function Home() {
             <div className="footer-col">
               <h4>Company</h4>
               <a href="#guides">Guides</a>
-              <a href="#events">Events</a>
-              <a href="#contact">Contact</a>
+              <Link href="/events">Events</Link>
+              <Link href="/gallery">Gallery</Link>
+              <Link href="/contact">Contact</Link>
             </div>
             <div className="footer-col">
               <h4>Legal</h4>
