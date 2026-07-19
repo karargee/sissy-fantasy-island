@@ -480,41 +480,135 @@ function ChatWidget() {
   );
 }
 
+const TRACKER_STATUSES = [
+  { label: "Order Received", icon: "✅", done: true },
+  { label: "Processing", icon: "⚙️", done: true },
+  { label: "Shipped", icon: "📦", done: true },
+  { label: "In Transit", icon: "🚚", done: false, active: true },
+  { label: "Delivered", icon: "🏠", done: false },
+];
+
 function ShippingTracker() {
   const [orderId, setOrderId] = useState("");
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   function handleTrack(e) {
     e.preventDefault();
     if (!orderId.trim()) return;
-    setResult({
-      id: orderId,
-      status: "In Transit",
-      shipped: "2 days ago",
-      eta: "3-5 business days",
-      carrier: "Discreet Express",
-    });
+    setLoading(true);
+    setNotFound(false);
+    setResult(null);
+    setTimeout(() => {
+      setLoading(false);
+      if (orderId.toUpperCase().startsWith("SFI-") || orderId.toUpperCase().startsWith("ORD-")) {
+        setResult({
+          id: orderId.toUpperCase(),
+          status: "In Transit",
+          statusColor: "#5bcefa",
+          shipped: new Date(Date.now() - 2 * 86400000).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+          eta: new Date(Date.now() + 4 * 86400000).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+          carrier: "Discreet Express",
+          origin: "Los Angeles, CA",
+          destination: "Your Address",
+          updates: [
+            { time: "Today, 9:14 AM", msg: "Package in transit — en route to destination", loc: "Phoenix, AZ" },
+            { time: "Yesterday, 6:30 PM", msg: "Departed sorting facility", loc: "Los Angeles, CA" },
+            { time: "Yesterday, 11:02 AM", msg: "Package picked up by carrier", loc: "Los Angeles, CA" },
+            { time: "2 days ago, 3:45 PM", msg: "Order shipped — tracking activated", loc: "SFI Fulfillment Center" },
+          ],
+        });
+      } else {
+        setNotFound(true);
+      }
+    }, 900);
   }
 
   return (
-    <div className="checker">
-      <form className="checker-form" onSubmit={handleTrack}>
-        <input type="text" placeholder="Enter order ID (e.g. ORD-XXXXX)" value={orderId} onChange={(e) => setOrderId(e.target.value)} className="form-input" />
-        <button type="submit" className="buy-btn donate-btn" style={{ maxWidth: 200 }}>Track</button>
+    <div style={{ maxWidth: 600, margin: "0 auto" }}>
+      <form style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap", justifyContent: "center", marginBottom: "1.5rem" }} onSubmit={handleTrack}>
+        <input type="text" placeholder="Enter order ID (e.g. SFI-XXXXX or ORD-XXXXX)" value={orderId} onChange={(e) => setOrderId(e.target.value)} className="form-input" style={{ flex: 1, minWidth: 240 }} />
+        <button type="submit" className="buy-btn donate-btn" style={{ maxWidth: 160 }} disabled={loading}>{loading ? "Searching..." : "Track Order"}</button>
       </form>
+
+      {notFound && (
+        <div style={{ background: "rgba(220,53,69,0.08)", border: "1px solid rgba(220,53,69,0.25)", borderRadius: 14, padding: "1.2rem", textAlign: "center", color: "#ff6b6b", fontSize: "0.9rem" }}>
+          ❌ Order not found. Check your ID or <a href="mailto:comeandsee@gmail.com" style={{ color: "#f5a9b8" }}>contact support</a>.
+        </div>
+      )}
+
       {result && (
-        <div className="tracker-result">
-          <div className="tracker-header">
-            <span>📦</span>
-            <strong>{result.status}</strong>
+        <div style={{ background: "#0d0d12", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 18, overflow: "hidden" }}>
+          {/* Header */}
+          <div style={{ background: "linear-gradient(135deg, rgba(214,51,132,0.12), rgba(111,66,193,0.12))", padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.8rem" }}>
+            <div>
+              <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: 2, color: "rgba(255,255,255,0.35)", marginBottom: "0.3rem" }}>Order ID</div>
+              <div style={{ fontFamily: "monospace", fontSize: "1rem", fontWeight: 700, color: "#f5a9b8" }}>{result.id}</div>
+            </div>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(91,206,250,0.1)", border: "1px solid rgba(91,206,250,0.25)", borderRadius: 50, padding: "0.4rem 1rem" }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#5bcefa", display: "inline-block", animation: "pulse 1.5s ease-in-out infinite" }}></span>
+              <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#5bcefa" }}>{result.status}</span>
+            </div>
           </div>
-          <div className="tracker-details">
-            <div><span>Order:</span><strong>{result.id}</strong></div>
-            <div><span>Shipped:</span><strong>{result.shipped}</strong></div>
-            <div><span>ETA:</span><strong>{result.eta}</strong></div>
-            <div><span>Carrier:</span><strong>{result.carrier}</strong></div>
+
+          {/* Progress Steps */}
+          <div style={{ padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              {TRACKER_STATUSES.map((s, i) => (
+                <>
+                  {i > 0 && (
+                    <div key={`line-${i}`} style={{ flex: 1, height: 2, background: s.done ? "linear-gradient(90deg, #d63384, #5bcefa)" : "rgba(255,255,255,0.07)", margin: "0 4px", marginBottom: 20 }} />
+                  )}
+                  <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem", minWidth: 52 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem", background: s.active ? "rgba(91,206,250,0.15)" : s.done ? "rgba(214,51,132,0.15)" : "rgba(255,255,255,0.04)", border: `2px solid ${s.active ? "#5bcefa" : s.done ? "#d63384" : "rgba(255,255,255,0.1)"}`, boxShadow: s.active ? "0 0 14px rgba(91,206,250,0.3)" : "none" }}>
+                      {s.icon}
+                    </div>
+                    <span style={{ fontSize: "0.58rem", textTransform: "uppercase", letterSpacing: 0.5, color: s.active ? "#5bcefa" : s.done ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.25)", textAlign: "center", fontWeight: s.active ? 700 : 500 }}>{s.label}</span>
+                  </div>
+                </>
+              ))}
+            </div>
           </div>
-          <div className="tracker-bar"><div className="tracker-progress"></div></div>
+
+          {/* Details Grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            {[
+              { label: "Carrier", value: result.carrier },
+              { label: "Est. Delivery", value: result.eta },
+              { label: "Shipped", value: result.shipped },
+              { label: "Packaging", value: "Plain / Discreet" },
+            ].map(d => (
+              <div key={d.label} style={{ padding: "1rem 1.2rem", background: "#0d0d12" }}>
+                <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: 1.5, color: "rgba(255,255,255,0.3)", marginBottom: "0.3rem" }}>{d.label}</div>
+                <div style={{ fontSize: "0.88rem", fontWeight: 600 }}>{d.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tracking Updates */}
+          <div style={{ padding: "1.2rem 1.5rem" }}>
+            <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: 2, color: "rgba(255,255,255,0.3)", fontWeight: 700, marginBottom: "1rem" }}>Tracking Updates</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+              {result.updates.map((u, i) => (
+                <div key={i} style={{ display: "flex", gap: "1rem", paddingBottom: i < result.updates.length - 1 ? "1rem" : 0, position: "relative" }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
+                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: i === 0 ? "#5bcefa" : "rgba(255,255,255,0.2)", border: i === 0 ? "2px solid rgba(91,206,250,0.4)" : "2px solid rgba(255,255,255,0.1)", boxShadow: i === 0 ? "0 0 8px rgba(91,206,250,0.5)" : "none", marginTop: 3, flexShrink: 0 }} />
+                    {i < result.updates.length - 1 && <div style={{ width: 1, flex: 1, background: "rgba(255,255,255,0.07)", marginTop: 4 }} />}
+                  </div>
+                  <div style={{ paddingBottom: i < result.updates.length - 1 ? "0.8rem" : 0 }}>
+                    <div style={{ fontSize: "0.85rem", fontWeight: i === 0 ? 600 : 400, color: i === 0 ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.55)", marginBottom: "0.2rem" }}>{u.msg}</div>
+                    <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)" }}>{u.loc} · {u.time}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer note */}
+          <div style={{ padding: "0.8rem 1.5rem", background: "rgba(255,255,255,0.02)", borderTop: "1px solid rgba(255,255,255,0.04)", fontSize: "0.75rem", color: "rgba(255,255,255,0.3)", textAlign: "center" }}>
+            📦 All orders ship in plain, unmarked packaging — no SFI branding on the outside
+          </div>
         </div>
       )}
     </div>
@@ -1283,13 +1377,6 @@ export default function Home() {
           <DailyChallenge />
         </section></Reveal>
 
-        {/* Photo Gallery */}
-        <Reveal><section className="section">
-          <h2>📸 Community Lookbook</h2>
-          <p className="section-subtitle">Real moments from our events and community. Your story starts here.</p>
-          <PhotoGallery />
-        </section></Reveal>
-
         {/* Member Spotlights */}
         <Reveal><section className="section">
           <h2>🌟 Member Spotlights</h2>
@@ -1315,21 +1402,6 @@ export default function Home() {
               <div key={i} className="press-item">
                 <div className="press-name">{p.name}</div>
                 <div className="press-quote">{p.quote}</div>
-              </div>
-            ))}
-          </div>
-        </section></Reveal>
-
-        {/* Official Partners */}
-        <Reveal><section className="section">
-          <h2>🤝 Official Partners</h2>
-          <p className="section-subtitle">Trusted brands and platforms we work with.</p>
-          <div className="partners-grid">
-            {PARTNERS.map((p, i) => (
-              <div key={i} className="partner-badge">
-                <span>{p.emoji}</span>
-                <strong>{p.name}</strong>
-                <span className="partner-verified">{p.tag}</span>
               </div>
             ))}
           </div>
