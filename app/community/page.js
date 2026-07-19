@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
 const TIER_COLORS = {
@@ -19,11 +19,12 @@ function timeAgo(date) {
   return `${Math.floor(s / 86400)}d ago`;
 }
 
-function PostCard({ post, session, onLike, onComment }) {
+function PostCard({ post, session, onLike, onComment, onDelete }) {
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const liked = session && post.likes?.includes(session.id);
+  const isOwner = session && post.authorId === session.id;
   const tierColor = TIER_COLORS[post.authorTier] || "#888";
 
   async function submitComment(e) {
@@ -48,6 +49,9 @@ function PostCard({ post, session, onLike, onComment }) {
             <span className="post-time">{timeAgo(post.createdAt)}</span>
           </div>
         </div>
+        {isOwner && (
+          <button className="post-delete-btn" onClick={() => onDelete(post.id)} title="Delete post">🗑</button>
+        )}
       </div>
 
       <p className="post-content">{post.content}</p>
@@ -70,7 +74,7 @@ function PostCard({ post, session, onLike, onComment }) {
               </div>
               <div className="comment-body">
                 <div className="comment-author">
-                  <strong>{c.authorName}</strong>
+                  <Link href={`/members/${c.authorId}`} style={{ textDecoration: "none", color: "white" }}><strong>{c.authorName}</strong></Link>
                   <span>{timeAgo(c.createdAt)}</span>
                 </div>
                 <p>{c.content}</p>
@@ -79,15 +83,8 @@ function PostCard({ post, session, onLike, onComment }) {
           ))}
           {session ? (
             <form className="comment-form" onSubmit={submitComment}>
-              <input
-                placeholder="Write a comment..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                className="comment-input"
-              />
-              <button type="submit" disabled={submitting} className="comment-submit">
-                {submitting ? "..." : "Post"}
-              </button>
+              <input placeholder="Write a comment..." value={comment} onChange={(e) => setComment(e.target.value)} className="comment-input" />
+              <button type="submit" disabled={submitting} className="comment-submit">{submitting ? "..." : "Post"}</button>
             </form>
           ) : (
             <p className="comment-login"><Link href="/login">Sign in</Link> to comment</p>
@@ -101,26 +98,36 @@ function PostCard({ post, session, onLike, onComment }) {
 export default function Community() {
   const [posts, setPosts] = useState([]);
   const [session, setSession] = useState(null);
+  const [online, setOnline] = useState([]);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetch("/api/auth/me").then(r => r.json()).then(d => setSession(d.user || null));
-    fetch("/api/posts").then(r => r.json()).then(d => { setPosts(Array.isArray(d) ? d : []); setLoading(false); });
+  const pingOnline = useCallback(() => {
+    fetch("/api/online", { method: "POST" });
   }, []);
+
+  useEffect(() => {
+    fetch("/api/auth/me").then(r => r.json()).then(d => {
+      setSession(d.user || null);
+      if (d.user) pingOnline();
+    });
+    fetch("/api/posts").then(r => r.json()).then(d => { setPosts(Array.isArray(d) ? d : []); setLoading(false); });
+    fetch("/api/online").then(r => r.json()).then(d => setOnline(Array.isArray(d) ? d : []));
+
+    const interval = setInterval(() => {
+      pingOnline();
+      fetch("/api/online").then(r => r.json()).then(d => setOnline(Array.isArray(d) ? d : []));
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [pingOnline]);
 
   async function handlePost(e) {
     e.preventDefault();
     if (!content.trim()) return;
-    setPosting(true);
-    setError("");
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content }),
-    });
+    setPosting(true); setError("");
+    const res = await fetch("/api/posts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content }) });
     const data = await res.json();
     setPosting(false);
     if (data.error) return setError(data.error);
@@ -130,33 +137,27 @@ export default function Community() {
 
   async function handleLike(postId) {
     if (!session) return;
-    const res = await fetch("/api/posts/like", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ postId }),
-    });
+    const res = await fetch("/api/posts/like", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId }) });
     const data = await res.json();
-    if (data.likes) {
-      setPosts(posts.map(p => p.id === postId ? { ...p, likes: data.likes } : p));
-    }
+    if (data.likes) setPosts(posts.map(p => p.id === postId ? { ...p, likes: data.likes } : p));
   }
 
   async function handleComment(postId, content) {
-    const res = await fetch("/api/posts/comment", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ postId, content }),
-    });
+    const res = await fetch("/api/posts/comment", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId, content }) });
     const comment = await res.json();
-    if (comment.id) {
-      setPosts(posts.map(p => p.id === postId ? { ...p, comments: [...(p.comments || []), comment] } : p));
-    }
+    if (comment.id) setPosts(posts.map(p => p.id === postId ? { ...p, comments: [...(p.comments || []), comment] } : p));
+  }
+
+  async function handleDelete(postId) {
+    if (!confirm("Delete this post?")) return;
+    const res = await fetch("/api/posts/delete", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId }) });
+    const data = await res.json();
+    if (data.success) setPosts(posts.filter(p => p.id !== postId));
   }
 
   return (
     <div className="community-page">
       <div className="community-container">
-        {/* Header */}
         <div className="community-header">
           <Link href="/" className="auth-back">← Back to site</Link>
           <div className="community-header-row">
@@ -164,44 +165,34 @@ export default function Community() {
               <h1 className="community-title">Community Feed</h1>
               <p className="community-sub">Connect with sissies worldwide 🌸</p>
             </div>
-            {session ? (
-              <Link href="/profile" className="community-profile-btn">
-                <div className="community-profile-avatar">{session.sissyName?.[0]}</div>
-                <span>{session.sissyName}</span>
-              </Link>
-            ) : (
-              <Link href="/login" className="auth-btn" style={{ width: "auto", padding: "0.6rem 1.5rem" }}>Sign In</Link>
-            )}
+            <div style={{ display: "flex", gap: "0.6rem", alignItems: "center" }}>
+              <Link href="/search" className="community-profile-btn">🔍 Search</Link>
+              {session ? (
+                <Link href="/profile" className="community-profile-btn">
+                  <div className="community-profile-avatar">{session.sissyName?.[0]}</div>
+                  <span>{session.sissyName}</span>
+                </Link>
+              ) : (
+                <Link href="/login" className="auth-btn" style={{ width: "auto", padding: "0.6rem 1.5rem" }}>Sign In</Link>
+              )}
+            </div>
           </div>
         </div>
 
         <div className="community-layout">
-          {/* Main Feed */}
           <div className="community-feed">
-            {/* Post Composer */}
             {session ? (
               <div className="post-composer">
                 <div className="post-composer-header">
-                  <div className="post-avatar" style={{ background: "linear-gradient(135deg, #d63384, #6f42c1)" }}>
-                    {session.sissyName?.[0]}
-                  </div>
+                  <div className="post-avatar" style={{ background: "linear-gradient(135deg, #d63384, #6f42c1)" }}>{session.sissyName?.[0]}</div>
                   <span>What&apos;s on your mind, {session.sissyName}?</span>
                 </div>
                 <form onSubmit={handlePost}>
-                  <textarea
-                    className="post-textarea"
-                    placeholder="Share something with the community..."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    rows={3}
-                    maxLength={500}
-                  />
+                  <textarea className="post-textarea" placeholder="Share something with the community..." value={content} onChange={(e) => setContent(e.target.value)} rows={3} maxLength={500} />
                   <div className="post-composer-footer">
                     <span className="post-char-count">{content.length}/500</span>
                     {error && <span className="post-error">{error}</span>}
-                    <button type="submit" disabled={posting || !content.trim()} className="post-submit-btn">
-                      {posting ? "Posting..." : "Post"}
-                    </button>
+                    <button type="submit" disabled={posting || !content.trim()} className="post-submit-btn">{posting ? "Posting..." : "Post"}</button>
                   </div>
                 </form>
               </div>
@@ -211,7 +202,6 @@ export default function Community() {
               </div>
             )}
 
-            {/* Posts */}
             {loading ? (
               <div className="community-loading">Loading posts...</div>
             ) : posts.length === 0 ? (
@@ -221,12 +211,11 @@ export default function Community() {
               </div>
             ) : (
               posts.map(post => (
-                <PostCard key={post.id} post={post} session={session} onLike={handleLike} onComment={handleComment} />
+                <PostCard key={post.id} post={post} session={session} onLike={handleLike} onComment={handleComment} onDelete={handleDelete} />
               ))
             )}
           </div>
 
-          {/* Sidebar */}
           <div className="community-sidebar">
             <div className="sidebar-card">
               <h3>Community Rules</h3>
@@ -240,10 +229,19 @@ export default function Community() {
             </div>
             <div className="sidebar-card">
               <h3>Members Online</h3>
-              <div className="sidebar-online">
-                <span className="online-dot"></span>
-                <span>{Math.floor(Math.random() * 30) + 10} members online</span>
-              </div>
+              {online.length === 0 ? (
+                <div className="sidebar-online"><span className="online-dot"></span><span>No one online yet</span></div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                  {online.slice(0, 8).map(u => (
+                    <div key={u.id} className="sidebar-online">
+                      <span className="online-dot"></span>
+                      <span style={{ fontSize: "0.82rem" }}>{u.name}</span>
+                    </div>
+                  ))}
+                  {online.length > 8 && <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)" }}>+{online.length - 8} more</span>}
+                </div>
+              )}
             </div>
             {!session && (
               <div className="sidebar-card sidebar-cta">

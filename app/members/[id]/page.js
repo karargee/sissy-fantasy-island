@@ -26,6 +26,7 @@ export default function MemberProfile() {
   const [member, setMember] = useState(null);
   const [posts, setPosts] = useState([]);
   const [session, setSession] = useState(null);
+  const [followData, setFollowData] = useState({ followers: 0, following: 0, isFollowing: false });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +37,14 @@ export default function MemberProfile() {
       setPosts(d.posts || []);
       setLoading(false);
     });
+    fetch(`/api/follow?targetId=${id}`).then(r => r.json()).then(d => setFollowData(d));
   }, [id, router]);
+
+  async function handleFollow() {
+    const res = await fetch("/api/follow", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ targetId: id }) });
+    const data = await res.json();
+    setFollowData(prev => ({ ...prev, isFollowing: data.following, followers: data.following ? prev.followers + 1 : prev.followers - 1 }));
+  }
 
   if (loading) return <div className="community-page"><div className="community-loading">Loading...</div></div>;
   if (!member) return null;
@@ -63,17 +71,20 @@ export default function MemberProfile() {
             {member.bio && <p className="member-profile-bio">{member.bio}</p>}
           </div>
           {session && session.id !== member.id && (
-            <Link href={`/messages?with=${member.id}`} className="member-msg-btn">
-              💬 Message
-            </Link>
+            <div style={{ display: "flex", gap: "0.6rem", alignSelf: "flex-start" }}>
+              <button onClick={handleFollow} className={`member-msg-btn ${followData.isFollowing ? "following" : ""}`}>
+                {followData.isFollowing ? "✓ Following" : "+ Follow"}
+              </button>
+              <Link href={`/messages?with=${member.id}`} className="member-msg-btn">💬 Message</Link>
+            </div>
           )}
         </div>
 
         {/* Stats */}
         <div className="member-stats">
           <div className="member-stat"><strong>{posts.length}</strong><span>Posts</span></div>
-          <div className="member-stat"><strong>{posts.reduce((a, p) => a + (p.likes?.length || 0), 0)}</strong><span>Likes received</span></div>
-          <div className="member-stat"><strong>{posts.reduce((a, p) => a + (p.comments?.length || 0), 0)}</strong><span>Comments</span></div>
+          <div className="member-stat"><strong>{followData.followers}</strong><span>Followers</span></div>
+          <div className="member-stat"><strong>{followData.following}</strong><span>Following</span></div>
         </div>
 
         {/* Posts */}
