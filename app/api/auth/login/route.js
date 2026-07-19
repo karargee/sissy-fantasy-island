@@ -1,13 +1,10 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { Redis } from "@upstash/redis";
 import { signToken } from "@/lib/auth";
+import redis from "@/lib/redis";
 
 export async function POST(req) {
   try {
-    if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN)
-      return NextResponse.json({ error: "Redis env vars not configured" }, { status: 500 });
-    const redis = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN });
     const { email, password } = await req.json();
 
     if (!email || !password)

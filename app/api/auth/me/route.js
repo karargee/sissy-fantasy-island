@@ -1,22 +1,15 @@
 import { NextResponse } from "next/server";
-import { readFileSync } from "fs";
-import { join } from "path";
 import { getSession } from "@/lib/auth";
-
-const DB = join(process.cwd(), "data", "users.json");
-
-function getUsers() {
-  try { return JSON.parse(readFileSync(DB, "utf8")); } catch { return []; }
-}
+import redis from "@/lib/redis";
 
 export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ user: null });
 
-  const users = getUsers();
-  const user = users.find((u) => u.id === session.id);
-  if (!user) return NextResponse.json({ user: null });
+  const raw = await redis.get(`user:${session.email}`);
+  if (!raw) return NextResponse.json({ user: null });
 
+  const user = typeof raw === "string" ? JSON.parse(raw) : raw;
   const { password, ...safe } = user;
   return NextResponse.json({ user: safe });
 }
