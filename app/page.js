@@ -390,6 +390,21 @@ function AnimatedCounter({ target, suffix = "" }) {
 function BtcConfirmForm() {
   const [form, setForm] = useState({ email: "", tier: "Standard Sissy Card", txid: "", delivery: "email" });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setSending(true);
+    try {
+      await fetch("/api/btc-confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+    } catch {}
+    setSending(false);
+    setSent(true);
+  }
 
   if (sent) {
     return (
@@ -400,7 +415,7 @@ function BtcConfirmForm() {
   }
 
   return (
-    <form className="btc-confirm-card" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
+    <form className="btc-confirm-card" onSubmit={handleSubmit}>
       <h3>Confirm Your BTC Payment</h3>
       <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })} className="form-input form-select">
         <option value="Starter Sissy Card">🌸 Starter Sissy Card — $50</option>
@@ -419,8 +434,8 @@ function BtcConfirmForm() {
         <input type="email" placeholder="Your email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="form-input" />
       )}
       <input type="text" placeholder="BTC Transaction ID (optional)" value={form.txid} onChange={(e) => setForm({ ...form, txid: e.target.value })} className="form-input" />
-      <button type="submit" className="buy-btn donate-btn">Confirm Payment</button>
-      <p className="donate-note">We'll verify on-chain and deliver within 1 hour</p>
+      <button type="submit" className="buy-btn donate-btn" disabled={sending}>{sending ? "Submitting..." : "Confirm Payment"}</button>
+      <p className="donate-note">We&apos;ll verify on-chain and deliver within 1 hour</p>
     </form>
   );
 }

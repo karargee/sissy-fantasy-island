@@ -5,8 +5,6 @@ import redis from "@/lib/redis";
 export async function GET() {
   try {
     const session = await getSession();
-    if (!session) return NextResponse.json({ error: "Not logged in" }, { status: 401 });
-
     const keys = await redis.keys("user:*");
     if (!keys.length) return NextResponse.json([]);
 
@@ -15,7 +13,7 @@ export async function GET() {
       users
         .filter(Boolean)
         .map(u => typeof u === "string" ? JSON.parse(u) : u)
-        .filter(u => u.id !== session.id)
+        .filter(u => !session || u.id !== session.id)
         .map(u => ({ id: u.id, sissyName: u.sissyName, tier: u.tier }))
     );
   } catch (e) {

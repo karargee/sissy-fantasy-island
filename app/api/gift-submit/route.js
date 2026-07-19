@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
 
+export async function GET() {
+  try {
+    const subs = await redis.lrange("gift_submissions", 0, 199);
+    return NextResponse.json({ submissions: subs.map(s => typeof s === "string" ? JSON.parse(s) : s) });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
 export async function POST(req) {
   try {
     const formData = await req.formData();
@@ -9,7 +18,6 @@ export async function POST(req) {
     const code = formData.get("code") || "";
     const image = formData.get("image");
 
-    // Always save to Redis first so nothing is lost
     const submission = {
       id: Date.now(),
       tier,
@@ -23,7 +31,6 @@ export async function POST(req) {
     await redis.lpush("gift_submissions", JSON.stringify(submission));
     await redis.ltrim("gift_submissions", 0, 499);
 
-    // Try email if configured
     if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
       try {
         const nodemailer = (await import("nodemailer")).default;
