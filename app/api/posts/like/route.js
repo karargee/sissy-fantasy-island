@@ -1,0 +1,31 @@
+import { NextResponse } from "next/server";
+import { Redis } from "@upstash/redis";
+import { getSession } from "@/lib/auth";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
+
+export async function POST(req) {
+  try {
+    const session = await getSession();
+    if (!session) return NextResponse.json({ error: "Not logged in" }, { status: 401 });
+
+    const { postId } = await req.json();
+    const raw = await redis.get(`post:${postId}`);
+    if (!raw) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+
+    const post = typeof raw === "string" ? JSON.parse(raw) : raw;
+    const likes = post.likes || [];
+    const idx = likes.indexOf(session.id);
+    if (idx === -1) likes.push(session.id);
+    else likes.splice(idx, 1);
+
+    post.likes = likes;
+    await redis.set(`post:${postId}`, JSON.stringify(post));
+    return NextResponse.json({ likes });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
