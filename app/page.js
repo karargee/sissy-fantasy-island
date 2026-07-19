@@ -943,7 +943,7 @@ export default function Home() {
         <section className="hero">
           <Image src="/hero.jpg" alt="" fill className="hero-bg-img" priority />
           <div className="hero-overlay"></div>
-          <h1>SISSY FANTASY ISLAND</h1>
+          <h1>The Ultimate <span>Sissy</span> Experience</h1>
           <p className="tagline">The official membership platform for the trans & sissy community. Get your card. Join the community. Live your truth.</p>
           <div style={{ margin: "1.5rem 0" }}>
             <LiveActivityFeed />
@@ -1450,15 +1450,37 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="footer">
-          <div className="trust-badges">
-            <span>🔒 SSL Encrypted</span>
-            <span>💳 Discreet Billing</span>
-            <span>✅ Verified Platform</span>
-            <span>🌍 Worldwide Shipping</span>
+          <div className="footer-grid">
+            <div className="footer-brand">
+              <div className="nav-logo">SFI 💕</div>
+              <p>The official membership platform for the trans & sissy community. Discreet. Private. Worldwide.</p>
+            </div>
+            <div className="footer-col">
+              <h4>Membership</h4>
+              <a href="#cards">Sissy Cards</a>
+              <a href="#cards">Community Access</a>
+              <a href="#cards">Bundle Deals</a>
+            </div>
+            <div className="footer-col">
+              <h4>Company</h4>
+              <a href="#guides">Guides</a>
+              <a href="#events">Events</a>
+              <a href="#contact">Contact</a>
+            </div>
+            <div className="footer-col">
+              <h4>Legal</h4>
+              <a href="/terms">Terms of Service</a>
+              <a href="#contact">Privacy Policy</a>
+            </div>
           </div>
-          <p>💕 Sissy Fantasy Island 2026 — Be who you really are 💕</p>
-          <p>Discreet billing · One-time payments · Worldwide · All sales final</p>
-          <Link href="/terms" className="terms-link">Terms of Service</Link>
+          <div className="footer-bottom">
+            <p>© 2026 Sissy Fantasy Island. All rights reserved.</p>
+            <div className="trust-badges">
+              <span>🔒 SSL Encrypted</span>
+              <span>💳 Discreet Billing</span>
+              <span>🌍 Worldwide</span>
+            </div>
+          </div>
         </footer>
       </div>
 
