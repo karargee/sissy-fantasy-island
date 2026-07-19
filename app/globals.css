@@ -1259,3 +1259,43 @@ body {
 .sidebar-online { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
 .online-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulse 1.5s ease-in-out infinite; flex-shrink: 0; }
 .sidebar-cta p { font-size: 0.82rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+/* ══ MESSAGES / DMs ══ */
+.messages-page { display: grid; grid-template-columns: 320px 1fr; height: 100vh; background: #060608; color: #f0f0f0; overflow: hidden; }
+@media (max-width: 768px) { .messages-page { grid-template-columns: 1fr; } }
+
+.messages-sidebar { border-right: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; overflow: hidden; }
+.messages-sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.messages-sidebar-header h2 { font-size: 1rem; font-weight: 700; }
+.new-msg-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: white; width: 32px; height: 32px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.new-msg-btn:hover { background: rgba(214,51,132,0.15); }
+
+.new-msg-search { padding: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.member-search-results { margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.2rem; max-height: 200px; overflow-y: auto; }
+.member-search-item { display: flex; align-items: center; gap: 0.7rem; padding: 0.5rem 0.3rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; }
+.member-search-item:hover { background: rgba(255,255,255,0.05); }
+
+.convo-list { flex: 1; overflow-y: auto; }
+.convo-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.9rem 1rem; cursor: pointer; transition: background 0.2s; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.convo-item:hover { background: rgba(255,255,255,0.04); }
+.convo-item.active { background: rgba(214,51,132,0.08); border-left: 2px solid #d63384; }
+.convo-info { flex: 1; min-width: 0; }
+.convo-info strong { display: block; font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.convo-info span { font-size: 0.75rem; color: rgba(255,255,255,0.35); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.convo-time { font-size: 0.68rem; color: rgba(255,255,255,0.25); flex-shrink: 0; }
+
+.messages-chat { display: flex; flex-direction: column; overflow: hidden; }
+.chat-top-bar { display: flex; align-items: center; gap: 0.8rem; padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.chat-top-bar strong { font-size: 0.95rem; }
+.chat-messages-area { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.chat-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.25); font-size: 0.9rem; }
+
+.dm-msg { display: flex; flex-direction: column; max-width: 65%; }
+.dm-msg-mine { align-self: flex-end; align-items: flex-end; }
+.dm-msg-theirs { align-self: flex-start; align-items: flex-start; }
+.dm-bubble { padding: 0.7rem 1rem; border-radius: 12px; font-size: 0.88rem; line-height: 1.5; word-break: break-word; }
+.dm-msg-mine .dm-bubble { background: linear-gradient(135deg, #d63384, #7c3aed); color: white; border-bottom-right-radius: 4px; }
+.dm-msg-theirs .dm-bubble { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85); border-bottom-left-radius: 4px; }
+.dm-time { font-size: 0.65rem; color: rgba(255,255,255,0.25); margin-top: 0.2rem; padding: 0 0.3rem; }
+
+.chat-input-form { display: flex; gap: 0.5rem; padding: 1rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); }
