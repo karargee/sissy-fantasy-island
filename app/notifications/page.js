@@ -11,11 +11,12 @@ function timeAgo(date) {
   return `${Math.floor(s / 86400)}d ago`;
 }
 
-const NOTIF_ICONS = { like: "❤️", comment: "💬", message: "✉️" };
+const NOTIF_ICONS = { like: "❤️", comment: "💬", message: "✉️", follow: "👤" };
 const NOTIF_TEXT = {
   like: (n) => `${n.fromName} liked your post`,
   comment: (n) => `${n.fromName} commented on your post`,
   message: (n) => `${n.fromName} sent you a message`,
+  follow: (n) => `${n.fromName} started following you`,
 };
 
 export default function Notifications() {

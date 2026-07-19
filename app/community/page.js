@@ -118,8 +118,9 @@ export default function Community() {
 
     const interval = setInterval(() => {
       pingOnline();
+      fetch("/api/posts").then(r => r.json()).then(d => { if (Array.isArray(d)) setPosts(d); });
       fetch("/api/online").then(r => r.json()).then(d => setOnline(Array.isArray(d) ? d : []));
-    }, 60000);
+    }, 30000);
     return () => clearInterval(interval);
   }, [pingOnline]);
 

@@ -51,6 +51,13 @@ function MessagesInner() {
       setMessages(Array.isArray(d) ? d : []);
       setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
     });
+    // Poll for new messages every 4 seconds
+    const poll = setInterval(() => {
+      fetch(`/api/messages?with=${activeId}`).then(r => r.json()).then(d => {
+        if (Array.isArray(d)) setMessages(d);
+      });
+    }, 4000);
+    return () => clearInterval(poll);
   }, [activeId, session]);
 
   async function sendMessage(e) {

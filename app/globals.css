@@ -922,6 +922,8 @@ body {
 .chat-input { flex: 1; padding: 0.85rem 1rem; background: transparent; border: none; color: white; font-size: 0.88rem; outline: none; font-family: inherit; }
 .chat-send { padding: 0.85rem 1.1rem; background: none; border: none; color: #d63384; font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
 .chat-send:hover { color: #f5a9b8; }
+.chat-close { background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 0.9rem; padding: 0.2rem 0.4rem; border-radius: 4px; transition: color 0.2s; margin-left: auto; }
+.chat-close:hover { color: white; }
 @media (max-width: 768px) { .chat-window { width: calc(100% - 2rem); right: 1rem; } }
 
 /* ══ FOOTER ══ */

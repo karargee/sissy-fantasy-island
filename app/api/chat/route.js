@@ -1,17 +1,8 @@
 import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
 
-const KEY = "chats";
-
-async function getChats() {
-  const raw = await redis.get(KEY);
-  if (!raw) return {};
-  return typeof raw === "string" ? JSON.parse(raw) : raw;
-}
-
-async function saveChats(chats) {
-  await redis.set(KEY, JSON.stringify(chats));
-}
+// Per-session keys: chat:msgs:{sessionId} (list), chat:unread:{sessionId} (int)
+// Index of all sessions: chat:sessions (set)
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -19,15 +10,26 @@ export async function GET(req) {
   const admin = searchParams.get("admin");
 
   try {
-    const chats = await getChats();
-
     if (admin === "true") {
+      const sessions = await redis.smembers("chat:sessions");
+      const chats = {};
+      await Promise.all(sessions.map(async (sid) => {
+        const msgs = await redis.lrange(`chat:msgs:${sid}`, 0, 99);
+        const unread = await redis.get(`chat:unread:${sid}`);
+        chats[sid] = {
+          messages: msgs.map(m => typeof m === "string" ? JSON.parse(m) : m),
+          unreadAdmin: parseInt(unread || "0"),
+          startedAt: null,
+        };
+      }));
       return NextResponse.json({ chats });
     }
 
     if (!sessionId) return NextResponse.json({ messages: [] });
-    const chat = chats[sessionId] || { messages: [], unreadAdmin: 0 };
-    return NextResponse.json({ messages: chat.messages });
+    const msgs = await redis.lrange(`chat:msgs:${sessionId}`, 0, 99);
+    return NextResponse.json({
+      messages: msgs.map(m => typeof m === "string" ? JSON.parse(m) : m),
+    });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
@@ -39,11 +41,6 @@ export async function POST(req) {
     if (!sessionId || !text || !from)
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
-    const chats = await getChats();
-    if (!chats[sessionId]) {
-      chats[sessionId] = { messages: [], startedAt: new Date().toISOString(), unreadAdmin: 0 };
-    }
-
     const msg = {
       id: Date.now(),
       from,
@@ -51,19 +48,17 @@ export async function POST(req) {
       time: new Date().toISOString(),
     };
 
-    chats[sessionId].messages.push(msg);
-    // Keep last 100 messages per session
-    if (chats[sessionId].messages.length > 100) {
-      chats[sessionId].messages = chats[sessionId].messages.slice(-100);
-    }
+    await redis.sadd("chat:sessions", sessionId);
+    await redis.rpush(`chat:msgs:${sessionId}`, JSON.stringify(msg));
+    // Cap at 100 messages per session
+    await redis.ltrim(`chat:msgs:${sessionId}`, -100, -1);
 
     if (from === "user") {
-      chats[sessionId].unreadAdmin = (chats[sessionId].unreadAdmin || 0) + 1;
+      await redis.incr(`chat:unread:${sessionId}`);
     } else if (from === "admin") {
-      chats[sessionId].unreadAdmin = 0;
+      await redis.set(`chat:unread:${sessionId}`, "0");
     }
 
-    await saveChats(chats);
     return NextResponse.json({ ok: true, msg });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
