@@ -1173,18 +1173,90 @@ body {
 
 /* ══ MOBILE ══ */
 @media (max-width: 768px) {
-  .hero h1 { letter-spacing: 2px; }
-  .card-preview { grid-template-columns: 1fr; gap: 2rem; }
+  /* Base */
+  .container { padding: 0 1rem; }
+  .section { padding: 2.5rem 0; }
+  .section h2 { font-size: 1.5rem; }
+
+  /* Hero */
+  .hero { min-height: 70vh; padding: 6rem 1rem 4rem; }
+  .hero h1 { font-size: clamp(2rem, 8vw, 3rem); letter-spacing: -0.5px; }
+  .tagline { font-size: 0.95rem; }
+  .hero-badges { gap: 0.4rem; }
+  .hero-badge { font-size: 0.68rem; padding: 0.35rem 0.7rem; }
+
+  /* Nav */
+  .nav { padding: 0.9rem 0; }
+  .nav-logo { font-size: 1rem; }
+
+  /* Stats */
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1.5rem 1rem; }
+  .stat-num { font-size: 2rem; }
+
+  /* Cards */
   .tickets-grid { grid-template-columns: 1fr; }
   .community-grid { grid-template-columns: 1fr; }
   .events-grid { grid-template-columns: 1fr; }
-  .shop-grid { grid-template-columns: 1fr; }
-  .policies-grid { grid-template-columns: 1fr; }
-  .pay-modal { padding: 1.5rem; margin: 0 1rem; }
-  .social-proof-bar { justify-content: center; }
+  .shop-grid { grid-template-columns: 1fr 1fr; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .policies-grid { grid-template-columns: 1fr 1fr; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-  .chat-toggle { bottom: 4rem; }
-  .section { padding: 3rem 0; }
+
+  /* Card preview */
+  .card-preview { grid-template-columns: 1fr; gap: 2rem; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+
+  /* Modal */
+  .pay-modal { padding: 1.5rem; margin: 0 0.5rem; max-height: 95vh; }
+  .age-gate-box { padding: 2rem 1.5rem; }
+
+  /* Social proof */
+  .social-proof-bar { padding: 0.5rem 1rem; gap: 0.5rem; }
+  .social-proof-viewers { font-size: 0.7rem; }
+  .social-proof-activity { font-size: 0.68rem; }
+
+  /* Chat */
+  .chat-toggle { bottom: 4rem; right: 1rem; width: 48px; height: 48px; font-size: 1.2rem; }
+  .chat-window { width: calc(100% - 1.5rem); right: 0.75rem; bottom: 7.5rem; }
+
+  /* Dungeon */
+  .dungeon-features { grid-template-columns: 1fr; }
+  .dungeon-contact { flex-direction: column; align-items: center; }
+
+  /* Referral */
+  .referral-steps { gap: 1rem; }
+
+  /* Tier progress */
+  .tier-node-label { font-size: 0.5rem; }
+  .tier-node-circle { width: 36px; height: 36px; font-size: 0.9rem; }
+
+  /* Leaderboard */
+  .leaderboard-badge { display: none; }
+
+  /* Auth */
+  .auth-box { padding: 1.8rem 1.2rem; }
+
+  /* Community */
+  .community-page { padding: 1.5rem 0.8rem 5rem; }
+  .community-title { font-size: 1.5rem; }
+  .community-header-row { flex-direction: column; align-items: flex-start; }
+  .post-card { padding: 1rem; }
+  .member-profile-card { flex-direction: column; align-items: center; text-align: center; }
+  .member-stats { grid-template-columns: repeat(3, 1fr); }
+
+  /* Messages */
+  .messages-page { grid-template-columns: 1fr; }
+  .messages-chat { display: none; }
+  .messages-page.chat-open .messages-sidebar { display: none; }
+  .messages-page.chat-open .messages-chat { display: flex; }
+
+  /* Search */
+  .search-tabs { flex-wrap: wrap; }
 }
 
 /* ══ COMMUNITY ══ */
