@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
 import Link from "next/link";
+import ChatWidget from "./components/ChatWidget";
 
 function useReveal() {
   const ref = useRef(null);
@@ -437,52 +438,6 @@ function BtcConfirmForm() {
       <button type="submit" className="buy-btn donate-btn" disabled={sending}>{sending ? "Submitting..." : "Confirm Payment"}</button>
       <p className="donate-note">We&apos;ll verify on-chain and deliver within 1 hour</p>
     </form>
-  );
-}
-
-function ChatWidget() {
-  const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { from: "bot", text: "Hey! 💕 Welcome to Sissy Fantasy Island. How can I help you today?" },
-  ]);
-  const [input, setInput] = useState("");
-
-  function handleSend(e) {
-    e.preventDefault();
-    if (!input.trim()) return;
-    setMessages([...messages, { from: "user", text: input }]);
-    const q = input.toLowerCase();
-    setInput("");
-    setTimeout(() => {
-      let reply = "Thanks for your message! For faster support, reach us at comeandsee@gmail.com or WhatsApp (415) 305-3689.";
-      if (q.includes("card")) reply = "Our Sissy Cards start at just $50! We have Starter ($50), Standard ($75), Gold ($100), Platinum ($150), and Diamond ($200). All one-time payments with lifetime access. Want me to help you choose?";
-      else if (q.includes("ship") || q.includes("deliver")) reply = "Digital cards are delivered within 1 hour. Physical cards ship in 5-14 business days in plain, unmarked packaging.";
-      else if (q.includes("anon") || q.includes("discreet") || q.includes("private")) reply = "We offer anonymous codes — no email needed. Billing shows as 'SFI Digital Services'. Total privacy guaranteed.";
-      else if (q.includes("event") || q.includes("party")) reply = "Our next event is the Trans & Sex Party in Las Vegas, August 15-16, 2026. Card holders get priority access!";
-      else if (q.includes("refund")) reply = "Digital cards are non-refundable once generated. Physical cards can be returned unopened within 14 days.";
-      else if (q.includes("community") || q.includes("join")) reply = "Community Access is $25 (one-time). Inner Circle is $75 for the exclusive group. Both include lifetime access.";
-      setMessages((m) => [...m, { from: "bot", text: reply }]);
-    }, 800);
-  }
-
-  return (
-    <>
-      <button className="chat-toggle" onClick={() => setOpen(!open)}>{open ? "✕" : "💬"}</button>
-      {open && (
-        <div className="chat-window">
-          <div className="chat-header"><span>💬 Support</span></div>
-          <div className="chat-messages">
-            {messages.map((m, i) => (
-              <div key={i} className={`chat-msg chat-msg-${m.from === "bot" ? "bot" : "user"}`}>{m.text}</div>
-            ))}
-          </div>
-          <form className="chat-input-bar" onSubmit={handleSend}>
-            <input className="chat-input" placeholder="Type a message..." value={input} onChange={(e) => setInput(e.target.value)} />
-            <button type="submit" className="chat-send">➤</button>
-          </form>
-        </div>
-      )}
-    </>
   );
 }
 

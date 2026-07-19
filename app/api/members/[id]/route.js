@@ -4,7 +4,7 @@ import redis from "@/lib/redis";
 
 export async function GET(req, { params }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Find user by id
     const keys = await redis.keys("user:*");
