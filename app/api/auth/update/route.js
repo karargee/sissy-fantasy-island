@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
-import { neon } from "@neondatabase/serverless";
+import { Redis } from "@upstash/redis";
 import { getSession } from "@/lib/auth";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export async function POST(req) {
   try {
@@ -8,8 +13,12 @@ export async function POST(req) {
     if (!session) return NextResponse.json({ error: "Not logged in" }, { status: 401 });
 
     const { bio, sissyName } = await req.json();
-    const sql = neon(process.env.DATABASE_URL);
-    await sql`UPDATE users SET bio = ${bio}, sissy_name = ${sissyName} WHERE id = ${session.id}`;
+    const key = `user:${session.email}`;
+    const raw = await redis.get(key);
+    if (!raw) return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+    const user = typeof raw === "string" ? JSON.parse(raw) : raw;
+    await redis.set(key, JSON.stringify({ ...user, bio, sissyName }));
     return NextResponse.json({ success: true });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });

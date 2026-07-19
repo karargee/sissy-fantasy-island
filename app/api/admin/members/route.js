@@ -1,14 +1,23 @@
 import { NextResponse } from "next/server";
-import { neon } from "@neondatabase/serverless";
+import { Redis } from "@upstash/redis";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export async function GET(req) {
   const pass = req.headers.get("x-admin-pass");
   if (pass !== "transparty2026")
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const sql = neon(process.env.DATABASE_URL);
-  const rows = await sql`SELECT id, email, sissy_name, tier, member_since, bio FROM users ORDER BY member_since DESC`;
-  return NextResponse.json(rows.map(u => ({ ...u, sissyName: u.sissy_name })));
+  const keys = await redis.keys("user:*");
+  if (!keys.length) return NextResponse.json([]);
+  const users = await Promise.all(keys.map(k => redis.get(k)));
+  return NextResponse.json(users.map(u => {
+    const user = typeof u === "string" ? JSON.parse(u) : u;
+    return { id: user.id, email: user.email, sissyName: user.sissyName, tier: user.tier, memberSince: user.memberSince, bio: user.bio };
+  }));
 }
 
 export async function POST(req) {
@@ -17,7 +26,14 @@ export async function POST(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { userId, tier } = await req.json();
-  const sql = neon(process.env.DATABASE_URL);
-  await sql`UPDATE users SET tier = ${tier} WHERE id = ${userId}`;
+  const keys = await redis.keys("user:*");
+  for (const k of keys) {
+    const raw = await redis.get(k);
+    const user = typeof raw === "string" ? JSON.parse(raw) : raw;
+    if (user.id === userId) {
+      await redis.set(k, JSON.stringify({ ...user, tier }));
+      break;
+    }
+  }
   return NextResponse.json({ success: true });
 }
