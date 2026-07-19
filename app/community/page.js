@@ -42,7 +42,7 @@ function PostCard({ post, session, onLike, onComment }) {
           {post.authorName?.[0] || "?"}
         </div>
         <div className="post-meta">
-          <strong>{post.authorName}</strong>
+          <Link href={`/members/${post.authorId}`} style={{ textDecoration: "none", color: "white" }}><strong>{post.authorName}</strong></Link>
           <div className="post-meta-row">
             <span className="post-tier" style={{ color: tierColor }}>{TIER_BADGES[post.authorTier] || "Free"}</span>
             <span className="post-time">{timeAgo(post.createdAt)}</span>

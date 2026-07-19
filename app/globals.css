@@ -1307,3 +1307,18 @@ body {
 .notif-icon { font-size: 1.4rem; flex-shrink: 0; }
 .notif-body p { font-size: 0.88rem; color: rgba(255,255,255,0.8); margin-bottom: 0.2rem; }
 .notif-body span { font-size: 0.72rem; color: rgba(255,255,255,0.3); }
+
+/* ══ MEMBER PROFILE ══ */
+.member-profile-card { display: flex; align-items: flex-start; gap: 1.5rem; background: #0d0d12; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 2rem; margin: 1.5rem 0; flex-wrap: wrap; }
+.member-profile-avatar { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; color: white; flex-shrink: 0; }
+.member-profile-info { flex: 1; min-width: 0; }
+.member-profile-info h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.3rem; }
+.member-profile-tier { font-size: 0.82rem; font-weight: 700; }
+.member-profile-since { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-top: 0.3rem; }
+.member-profile-bio { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; margin-top: 0.8rem; }
+.member-msg-btn { padding: 0.6rem 1.2rem; border-radius: 6px; background: rgba(214,51,132,0.12); border: 1px solid rgba(214,51,132,0.25); color: #f5a9b8; text-decoration: none; font-size: 0.82rem; font-weight: 700; white-space: nowrap; transition: background 0.2s; align-self: flex-start; }
+.member-msg-btn:hover { background: rgba(214,51,132,0.2); }
+.member-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; margin-bottom: 2rem; }
+.member-stat { text-align: center; padding: 1.2rem; background: #0d0d12; }
+.member-stat strong { display: block; font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; }
+.member-stat span { font-size: 0.7rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; }
