@@ -1,39 +1,43 @@
 import { NextResponse } from "next/server";
-import { Redis } from "@upstash/redis";
+import redis from "@/lib/redis";
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const ADMIN_PASS = "transparty2026";
 
 export async function GET(req) {
-  const pass = req.headers.get("x-admin-pass");
-  if (pass !== "transparty2026")
+  if (req.headers.get("x-admin-pass") !== ADMIN_PASS)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const keys = await redis.keys("user:*");
-  if (!keys.length) return NextResponse.json([]);
-  const users = await Promise.all(keys.map(k => redis.get(k)));
-  return NextResponse.json(users.map(u => {
-    const user = typeof u === "string" ? JSON.parse(u) : u;
-    return { id: user.id, email: user.email, sissyName: user.sissyName, tier: user.tier, memberSince: user.memberSince, bio: user.bio };
-  }));
+  try {
+    const keys = await redis.keys("user:*");
+    if (!keys.length) return NextResponse.json({ users: [] });
+    const raw = await Promise.all(keys.map(k => redis.get(k)));
+    const users = raw
+      .filter(Boolean)
+      .map(u => typeof u === "string" ? JSON.parse(u) : u)
+      .map(u => ({ id: u.id, email: u.email, sissyName: u.sissyName, tier: u.tier, memberSince: u.memberSince, bio: u.bio }));
+    return NextResponse.json({ users });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
 }
 
 export async function POST(req) {
-  const pass = req.headers.get("x-admin-pass");
-  if (pass !== "transparty2026")
+  if (req.headers.get("x-admin-pass") !== ADMIN_PASS)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { userId, tier } = await req.json();
-  const keys = await redis.keys("user:*");
-  for (const k of keys) {
-    const raw = await redis.get(k);
-    const user = typeof raw === "string" ? JSON.parse(raw) : raw;
-    if (user.id === userId) {
-      await redis.set(k, JSON.stringify({ ...user, tier }));
-      break;
+  try {
+    const { userId, tier } = await req.json();
+    const keys = await redis.keys("user:*");
+    for (const k of keys) {
+      const raw = await redis.get(k);
+      const user = typeof raw === "string" ? JSON.parse(raw) : raw;
+      if (user?.id === userId) {
+        await redis.set(k, JSON.stringify({ ...user, tier }));
+        return NextResponse.json({ success: true });
+      }
     }
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
-  return NextResponse.json({ success: true });
 }

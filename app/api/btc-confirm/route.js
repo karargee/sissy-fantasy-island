@@ -1,44 +1,33 @@
 import { NextResponse } from "next/server";
-import { readFile, writeFile } from "fs/promises";
-import { join } from "path";
-
-const DATA_FILE = join(process.cwd(), "data", "btc-payments.json");
-
-async function getPayments() {
-  try {
-    const data = await readFile(DATA_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-async function savePayments(payments) {
-  await writeFile(DATA_FILE, JSON.stringify(payments, null, 2));
-}
+import redis from "@/lib/redis";
 
 export async function GET() {
-  const payments = await getPayments();
-  return NextResponse.json({ payments });
+  try {
+    const payments = await redis.lrange("btc_payments", 0, 199);
+    return NextResponse.json({ payments: payments.map(p => typeof p === "string" ? JSON.parse(p) : p) });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
 }
 
 export async function POST(req) {
-  const { email, tier, txid } = await req.json();
+  try {
+    const { email, tier, txid, delivery } = await req.json();
+    if (!tier) return NextResponse.json({ error: "Tier is required" }, { status: 400 });
 
-  if (!email || !tier) {
-    return NextResponse.json({ error: "Email and tier are required" }, { status: 400 });
+    const payment = {
+      id: Date.now(),
+      email: email || "anonymous",
+      tier,
+      txid: txid || "",
+      delivery: delivery || "email",
+      status: "pending",
+      date: new Date().toISOString(),
+    };
+    await redis.lpush("btc_payments", JSON.stringify(payment));
+    await redis.ltrim("btc_payments", 0, 499);
+    return NextResponse.json({ message: "Payment confirmation received" });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
-
-  const payments = await getPayments();
-  payments.push({
-    id: Date.now(),
-    email,
-    tier,
-    txid: txid || "",
-    status: "pending",
-    date: new Date().toISOString(),
-  });
-  await savePayments(payments);
-
-  return NextResponse.json({ message: "Payment confirmation received" });
 }

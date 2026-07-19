@@ -46,6 +46,7 @@ const TABS = [
   { key: "giftcards", label: "🎁 Gift Cards" },
   { key: "btc", label: "₿ BTC Payments" },
   { key: "messages", label: "📬 Messages" },
+  { key: "contact", label: "✉️ Contact Forms" },
   { key: "subscribers", label: "📧 Subscribers" },
   { key: "settings", label: "⚙️ Settings" },
 ];
@@ -76,6 +77,10 @@ export default function Admin() {
   const [members, setMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(false);
   const [upgradeMsg, setUpgradeMsg] = useState("");
+  const [contactMsgs, setContactMsgs] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
+  const [btcConfirms, setBtcConfirms] = useState([]);
+  const [giftSubs, setGiftSubs] = useState([]);
   const [settings, setSettings] = useState({
     eventDate: "2026-06-20",
     eventTime: "19:00",
@@ -97,7 +102,7 @@ export default function Admin() {
   const chatBottomRef = useRef(null);
   const chatPollRef = useRef(null);
 
-  // Load members when tab is active
+  // Load data when tabs are active
   useEffect(() => {
     if (!authed || tab !== "members") return;
     setMembersLoading(true);
@@ -105,6 +110,21 @@ export default function Admin() {
       .then((r) => r.json())
       .then((data) => { setMembers(data.users || []); setMembersLoading(false); })
       .catch(() => setMembersLoading(false));
+  }, [authed, tab]);
+
+  useEffect(() => {
+    if (!authed || tab !== "contact") return;
+    fetch("/api/contact").then(r => r.json()).then(d => setContactMsgs(d.messages || []));
+  }, [authed, tab]);
+
+  useEffect(() => {
+    if (!authed || tab !== "subscribers") return;
+    fetch("/api/subscribe").then(r => r.json()).then(d => setSubscribers(d.subscribers || []));
+  }, [authed, tab]);
+
+  useEffect(() => {
+    if (!authed || tab !== "btc") return;
+    fetch("/api/btc-confirm").then(r => r.json()).then(d => setBtcConfirms(d.payments || []));
   }, [authed, tab]);
 
   async function upgradeMember(userId, tier) {
@@ -498,31 +518,33 @@ export default function Admin() {
         {/* BTC Payments */}
         {tab === "btc" && (
           <div>
-            <h1 className="admin-title">Bitcoin Payments</h1>
+            <h1 className="admin-title">Bitcoin Payments ({btcConfirms.length})</h1>
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
-                  <tr><th>ID</th><th>Email</th><th>Tier</th><th>TX ID</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+                  <tr><th>ID</th><th>Email</th><th>Tier</th><th>TX ID</th><th>Delivery</th><th>Status</th><th>Date</th><th>Actions</th></tr>
                 </thead>
                 <tbody>
-                  {btcPayments.map((b) => (
+                  {btcConfirms.map((b) => (
                     <tr key={b.id}>
                       <td>#{b.id}</td>
                       <td>{b.email}</td>
                       <td>{b.tier}</td>
                       <td style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>{b.txid || "—"}</td>
+                      <td>{b.delivery || "email"}</td>
                       <td><StatusBadge status={b.status} /></td>
-                      <td>{b.date}</td>
+                      <td style={{ fontSize: "0.8rem" }}>{new Date(b.date).toLocaleDateString()}</td>
                       <td className="admin-actions">
                         {b.status === "pending" && (
                           <>
-                            <button className="admin-btn-approve" onClick={() => updateBtcStatus(b.id, "verified")}>✓</button>
-                            <button className="admin-btn-reject" onClick={() => updateBtcStatus(b.id, "rejected")}>✕</button>
+                            <button className="admin-btn-approve" onClick={() => setBtcConfirms(prev => prev.map(x => x.id === b.id ? { ...x, status: "verified" } : x))}>✓</button>
+                            <button className="admin-btn-reject" onClick={() => setBtcConfirms(prev => prev.map(x => x.id === b.id ? { ...x, status: "rejected" } : x))}>✕</button>
                           </>
                         )}
                       </td>
                     </tr>
                   ))}
+                  {btcConfirms.length === 0 && <tr><td colSpan={8} style={{ opacity: 0.4, textAlign: "center", padding: "2rem" }}>No BTC payments yet</td></tr>}
                 </tbody>
               </table>
             </div>
@@ -560,22 +582,39 @@ export default function Admin() {
           </div>
         )}
 
+        {/* Contact Forms */}
+        {tab === "contact" && (
+          <div>
+            <h1 className="admin-title">Contact Form Submissions ({contactMsgs.length})</h1>
+            {contactMsgs.length === 0 ? (
+              <p style={{ opacity: 0.5 }}>No contact messages yet.</p>
+            ) : (
+              <div className="admin-messages">
+                {contactMsgs.map((m) => (
+                  <div key={m.id} className="admin-msg-card">
+                    <div className="admin-msg-header">
+                      <div><strong>{m.name}</strong><span style={{ opacity: 0.5, marginLeft: "0.5rem", fontSize: "0.85rem" }}>{m.email}</span></div>
+                      <span style={{ fontSize: "0.8rem", opacity: 0.4 }}>{new Date(m.date).toLocaleDateString()}</span>
+                    </div>
+                    <div style={{ fontWeight: 600, margin: "0.5rem 0 0.3rem" }}>{m.subject}</div>
+                    <p style={{ opacity: 0.7, lineHeight: 1.6, fontSize: "0.95rem" }}>{m.message}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Subscribers */}
         {tab === "subscribers" && (
           <div>
-            <h1 className="admin-title">Email Subscribers ({MOCK_SUBSCRIBERS.length})</h1>
+            <h1 className="admin-title">Email Subscribers ({subscribers.length})</h1>
             <div className="admin-table-wrap">
               <table className="admin-table">
-                <thead>
-                  <tr><th>#</th><th>Email</th><th>Date</th></tr>
-                </thead>
+                <thead><tr><th>#</th><th>Email</th></tr></thead>
                 <tbody>
-                  {MOCK_SUBSCRIBERS.map((s, i) => (
-                    <tr key={s.id}>
-                      <td>{i + 1}</td>
-                      <td>{s.email}</td>
-                      <td>{s.date}</td>
-                    </tr>
+                  {subscribers.map((s, i) => (
+                    <tr key={i}><td>{i + 1}</td><td>{s.email}</td></tr>
                   ))}
                 </tbody>
               </table>
