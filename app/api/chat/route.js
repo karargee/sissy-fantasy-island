@@ -1,63 +1,71 @@
 import { NextResponse } from "next/server";
+import redis from "@/lib/redis";
 
-// In-memory chat store (resets on server restart)
-const chats = {};
+const KEY = "chats";
 
-// GET: fetch messages for a session
+async function getChats() {
+  const raw = await redis.get(KEY);
+  if (!raw) return {};
+  return typeof raw === "string" ? JSON.parse(raw) : raw;
+}
+
+async function saveChats(chats) {
+  await redis.set(KEY, JSON.stringify(chats));
+}
+
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get("sessionId");
   const admin = searchParams.get("admin");
 
-  // Admin: return all chats
-  if (admin === "true") {
-    return NextResponse.json({ chats });
-  }
+  try {
+    const chats = await getChats();
 
-  // User: return their chat
-  if (!sessionId) return NextResponse.json({ messages: [] });
-  const chat = chats[sessionId] || { messages: [], unreadAdmin: 0 };
-  // Mark admin messages as read by user
-  chat.messages = chat.messages.map((m) =>
-    m.from === "admin" ? { ...m, readByUser: true } : m
-  );
-  return NextResponse.json({ messages: chat.messages });
+    if (admin === "true") {
+      return NextResponse.json({ chats });
+    }
+
+    if (!sessionId) return NextResponse.json({ messages: [] });
+    const chat = chats[sessionId] || { messages: [], unreadAdmin: 0 };
+    return NextResponse.json({ messages: chat.messages });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
 }
 
-// POST: send a message
 export async function POST(req) {
-  const { sessionId, text, from, replyTo } = await req.json();
+  try {
+    const { sessionId, text, from } = await req.json();
+    if (!sessionId || !text || !from)
+      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
-  if (!sessionId || !text || !from) {
-    return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    const chats = await getChats();
+    if (!chats[sessionId]) {
+      chats[sessionId] = { messages: [], startedAt: new Date().toISOString(), unreadAdmin: 0 };
+    }
+
+    const msg = {
+      id: Date.now(),
+      from,
+      text,
+      time: new Date().toISOString(),
+    };
+
+    chats[sessionId].messages.push(msg);
+    // Keep last 100 messages per session
+    if (chats[sessionId].messages.length > 100) {
+      chats[sessionId].messages = chats[sessionId].messages.slice(-100);
+    }
+
+    if (from === "user") {
+      chats[sessionId].unreadAdmin = (chats[sessionId].unreadAdmin || 0) + 1;
+    } else if (from === "admin") {
+      chats[sessionId].unreadAdmin = 0;
+    }
+
+    await saveChats(chats);
+    return NextResponse.json({ ok: true, msg });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
-
-  if (!chats[sessionId]) {
-    chats[sessionId] = { messages: [], startedAt: new Date().toISOString(), unreadAdmin: 0 };
-  }
-
-  const msg = {
-    id: Date.now(),
-    from, // "user" or "admin"
-    text,
-    time: new Date().toISOString(),
-    readByUser: from === "admin" ? false : true,
-    readByAdmin: from === "user" ? false : true,
-  };
-
-  chats[sessionId].messages.push(msg);
-
-  if (from === "user") {
-    chats[sessionId].unreadAdmin = (chats[sessionId].unreadAdmin || 0) + 1;
-  }
-
-  // If admin replies, clear unread count
-  if (from === "admin") {
-    chats[sessionId].unreadAdmin = 0;
-    chats[sessionId].messages = chats[sessionId].messages.map((m) =>
-      m.from === "user" ? { ...m, readByAdmin: true } : m
-    );
-  }
-
-  return NextResponse.json({ ok: true, msg });
 }

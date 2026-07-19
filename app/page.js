@@ -876,7 +876,12 @@ function NewsletterPopup() {
     return () => clearTimeout(t);
   }, []);
   function dismiss() { setShow(false); sessionStorage.setItem("nl_dismissed", "1"); }
-  function submit(e) { e.preventDefault(); setDone(true); setTimeout(dismiss, 2000); }
+  async function submit(e) {
+    e.preventDefault();
+    try { await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) }); } catch {}
+    setDone(true);
+    setTimeout(dismiss, 2000);
+  }
   if (!show) return null;
   return (
     <div className="newsletter-popup-overlay" onClick={dismiss}>
@@ -913,15 +918,15 @@ function TierProgress({ currentTier = "Starter" }) {
     <div className="tier-progress-wrap">
       <div className="tier-progress-track">
         {tiers.map((t, i) => (
-          <>
+          <React.Fragment key={t.name}>
             {i > 0 && <div key={`c-${i}`} className={`tier-connector ${i <= currentIdx ? "done" : ""}`} />}
-            <div key={t.name} className="tier-node">
+            <div className="tier-node">
               <div className={`tier-node-circle ${i === currentIdx ? "active" : i < currentIdx ? "done" : ""}`}>
                 {i < currentIdx ? "✓" : t.emoji}
               </div>
               <span className={`tier-node-label ${i === currentIdx ? "active" : ""}`}>{t.name}</span>
             </div>
-          </>
+          </React.Fragment>
         ))}
       </div>
       <p style={{ textAlign: "center", fontSize: "0.85rem", opacity: 0.5 }}>Upgrade your card to unlock the next tier and more perks</p>
@@ -1493,7 +1498,7 @@ export default function Home() {
             {emailSent ? (
               <div className="email-success">✅ You're in! Check your inbox.</div>
             ) : (
-              <form className="email-form" onSubmit={(e) => { e.preventDefault(); if (email) setEmailSent(true); }}>
+              <form className="email-form" onSubmit={async (e) => { e.preventDefault(); if (!email) return; try { await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) }); } catch {} setEmailSent(true); }}>
                 <input type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="email-input" />
                 <button type="submit" className="email-btn">Join</button>
               </form>

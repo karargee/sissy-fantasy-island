@@ -228,7 +228,18 @@ export default function EventsPage() {
                 {submitted ? (
                   <div style={{ color: "#4ade80", fontWeight: 600, textAlign: "center", padding: "1rem" }}>✅ Confirmed! Your ticket will be sent within 1 hour.</div>
                 ) : (
-                  <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    const txid = e.target.querySelector('[placeholder="BTC Transaction ID (optional)"]')?.value || "";
+                    try {
+                      await fetch("/api/btc-confirm", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, tier: `${modal.ticket.name} — ${modal.event.name}`, txid, delivery: "email" }),
+                      });
+                    } catch {}
+                    setSubmitted(true);
+                  }} style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                     <input type="email" placeholder="Your email for ticket delivery" required value={email} onChange={(e) => setEmail(e.target.value)} className="form-input" />
                     <input type="text" placeholder="BTC Transaction ID (optional)" className="form-input" />
                     <button type="submit" className="buy-btn donate-btn">Confirm Payment</button>
@@ -244,7 +255,17 @@ export default function EventsPage() {
                 {submitted ? (
                   <div style={{ color: "#4ade80", fontWeight: 600, textAlign: "center", padding: "1.5rem" }}>✅ Gift card submitted! Ticket will be sent within 1 hour.</div>
                 ) : (
-                  <form onSubmit={(e) => { e.preventDefault(); if (giftCode || giftImage) setSubmitted(true); }} style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    if (!giftCode && !giftImage) return;
+                    const fd = new FormData();
+                    fd.append("tier", `${modal.ticket.name} — ${modal.event.name}`);
+                    fd.append("price", modal.ticket.price);
+                    fd.append("code", giftCode);
+                    if (giftImage) fd.append("image", giftImage);
+                    try { await fetch("/api/gift-submit", { method: "POST", body: fd }); } catch {}
+                    setSubmitted(true);
+                  }} style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                     <input type="email" placeholder="Your email for ticket delivery" required value={email} onChange={(e) => setEmail(e.target.value)} className="form-input" />
                     <input type="text" placeholder="Gift card code" value={giftCode} onChange={(e) => setGiftCode(e.target.value)} className="form-input" />
                     <label style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem", border: "2px dashed rgba(255,255,255,0.12)", borderRadius: 10, cursor: "pointer", fontSize: "0.85rem", color: "rgba(255,255,255,0.4)" }}>

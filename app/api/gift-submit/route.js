@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
 
+const ADMIN_PASS = "transparty2026";
+
 export async function GET() {
   try {
     const subs = await redis.lrange("gift_submissions", 0, 199);
@@ -59,5 +61,23 @@ export async function POST(req) {
   } catch (e) {
     console.error("Gift submit error:", e);
     return NextResponse.json({ success: false }, { status: 500 });
+  }
+}
+
+export async function PATCH(req) {
+  if (req.headers.get("x-admin-pass") !== ADMIN_PASS)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const { id, status } = await req.json();
+    const subs = await redis.lrange("gift_submissions", 0, 499);
+    const updated = subs.map(s => {
+      const obj = typeof s === "string" ? JSON.parse(s) : s;
+      return obj.id === id ? JSON.stringify({ ...obj, status }) : (typeof s === "string" ? s : JSON.stringify(s));
+    });
+    await redis.del("gift_submissions");
+    for (const s of updated.reverse()) await redis.rpush("gift_submissions", s);
+    return NextResponse.json({ success: true });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

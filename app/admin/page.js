@@ -330,8 +330,16 @@ export default function Admin() {
                         <td className="admin-actions">
                           {b.status === "pending" && (
                             <>
-                              <button className="admin-btn-approve" onClick={() => setBtcPayments(prev => prev.map(x => x.id === b.id ? { ...x, status: "verified" } : x))}>✓</button>
-                              <button className="admin-btn-reject" onClick={() => setBtcPayments(prev => prev.map(x => x.id === b.id ? { ...x, status: "rejected" } : x))}>✕</button>
+                              <button className="admin-btn-approve" onClick={async () => {
+                                const updated = btcPayments.map(x => x.id === b.id ? { ...x, status: "verified" } : x);
+                                setBtcPayments(updated);
+                                await fetch("/api/btc-confirm", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: b.id, status: "verified" }) });
+                              }}>✓</button>
+                              <button className="admin-btn-reject" onClick={async () => {
+                                const updated = btcPayments.map(x => x.id === b.id ? { ...x, status: "rejected" } : x);
+                                setBtcPayments(updated);
+                                await fetch("/api/btc-confirm", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: b.id, status: "rejected" }) });
+                              }}>✕</button>
                             </>
                           )}
                         </td>
@@ -364,8 +372,16 @@ export default function Admin() {
                         <td className="admin-actions">
                           {g.status === "pending" && (
                             <>
-                              <button className="admin-btn-approve" onClick={() => setGiftSubs(prev => prev.map(x => x.id === g.id ? { ...x, status: "approved" } : x))}>✓</button>
-                              <button className="admin-btn-reject" onClick={() => setGiftSubs(prev => prev.map(x => x.id === g.id ? { ...x, status: "rejected" } : x))}>✕</button>
+                              <button className="admin-btn-approve" onClick={async () => {
+                                const updated = giftSubs.map(x => x.id === g.id ? { ...x, status: "approved" } : x);
+                                setGiftSubs(updated);
+                                await fetch("/api/gift-submit", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: g.id, status: "approved" }) });
+                              }}>✓</button>
+                              <button className="admin-btn-reject" onClick={async () => {
+                                const updated = giftSubs.map(x => x.id === g.id ? { ...x, status: "rejected" } : x);
+                                setGiftSubs(updated);
+                                await fetch("/api/gift-submit", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: g.id, status: "rejected" }) });
+                              }}>✕</button>
                             </>
                           )}
                         </td>
