@@ -936,6 +936,7 @@ export default function Home() {
             <a href="#contact" onClick={() => setMobileNav(false)}>Contact</a>
             <Link href="/community" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8", fontWeight: 600 }}>Community</Link>
             <Link href="/messages" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8", fontWeight: 600 }}>Messages</Link>
+            <Link href="/notifications" onClick={() => setMobileNav(false)} style={{ color: "rgba(255,255,255,0.55)" }}>🔔</Link>
             <Link href="/login" onClick={() => setMobileNav(false)} style={{ color: "rgba(255,255,255,0.55)", fontWeight: 500 }}>Sign In</Link>
             <Link href="/register" onClick={() => setMobileNav(false)} style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.5rem 1.2rem", borderRadius: 6, color: "white", fontWeight: 700, textDecoration: "none", fontSize: "0.82rem", letterSpacing: "0.5px", textTransform: "uppercase" }}>Join</Link>
 

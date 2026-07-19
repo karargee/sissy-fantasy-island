@@ -30,6 +30,14 @@ export async function POST(req) {
 
     post.comments = [...(post.comments || []), comment];
     await redis.set(`post:${postId}`, JSON.stringify(post));
+
+    // Send notification to post author (not self)
+    if (post.authorId !== session.id) {
+      const notif = { id: `${Date.now()}`, type: "comment", fromName: session.sissyName, postId, read: false, createdAt: new Date().toISOString() };
+      await redis.lpush(`notifs:${post.authorId}`, JSON.stringify(notif));
+      await redis.ltrim(`notifs:${post.authorId}`, 0, 49);
+    }
+
     return NextResponse.json(comment);
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
