@@ -1011,6 +1011,7 @@ export default function Home() {
             <Link href="/contact" onClick={() => setMobileNav(false)}>Contact</Link>
             <Link href="/vote" onClick={() => setMobileNav(false)} style={{ color: "#f7931a", fontWeight: 700 }}>🗳️ Vote</Link>
             <Link href="/community" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8", fontWeight: 600 }}>Community</Link>
+            <Link href="/chat" onClick={() => setMobileNav(false)} style={{ color: "#5bcefa", fontWeight: 600 }}>💬 Chat</Link>
             <Link href="/search" onClick={() => setMobileNav(false)} style={{ color: "rgba(255,255,255,0.55)" }}>🔍</Link>
             <Link href="/messages" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8", fontWeight: 600 }}>Messages</Link>
             <Link href="/notifications" onClick={() => setMobileNav(false)} style={{ color: "rgba(255,255,255,0.55)" }}>🔔</Link>
