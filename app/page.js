@@ -1223,31 +1223,17 @@ export default function Home() {
         {/* Upcoming Events */}
         <Reveal><section className="section" id="events">
           <h2>🎉 Upcoming Events</h2>
-          <p className="section-subtitle">Exclusive parties and meetups for our community. Card holders get priority access.</p>
-          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-            <p style={{ opacity: 0.6, marginBottom: "1rem" }}>🎰 Trans & Sex Party Las Vegas — Countdown:</p>
-            <CountdownTimer targetDate="2026-08-15T20:00:00" />
-          </div>
-          <div className="events-grid">
-            {(cmsEvents || UPCOMING_EVENTS).map((ev) => (
-              <div key={ev.name} className="event-card">
-                <div className="event-card-img">
-                  <Image src={ev.img} alt={ev.name} fill style={{ objectFit: "cover" }} />
-                </div>
-                <div className="event-card-body">
-                  <div className="event-emoji">{ev.emoji}</div>
-                  <h3>{ev.name}</h3>
-                  <div className="event-details-list">
-                    <span>📅 {ev.date}</span>
-                    <span>📍 {ev.location}</span>
-                    <span>💰 {ev.price}</span>
-                  </div>
-                  <div className={`event-status ${ev.status === "Tickets Available" ? "event-status-live" : ""}`}>
-                    {ev.status}
-                  </div>
-                </div>
-              </div>
-            ))}
+          <p className="section-subtitle">Exclusive parties and meetups are coming. Card holders get priority access and first notification.</p>
+          <div style={{ background: "linear-gradient(135deg, rgba(214,51,132,0.06), rgba(111,66,193,0.06))", border: "1px solid rgba(214,51,132,0.15)", borderRadius: 20, padding: "3rem 2rem", textAlign: "center", maxWidth: 600, margin: "0 auto" }}>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔒</div>
+            <h3 style={{ fontSize: "1.4rem", fontWeight: 800, marginBottom: "0.8rem" }}>Events Being Planned</h3>
+            <p style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.8, marginBottom: "1.5rem", fontSize: "0.95rem" }}>Something big is coming. Private parties, exclusive meetups, and unforgettable experiences — worldwide. Card holders will be the first to know.</p>
+            <div style={{ display: "flex", gap: "0.8rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1.5rem" }}>
+              {["🎉 Parties", "🥂 Brunches", "🎭 Galas", "🌍 Worldwide"].map(tag => (
+                <span key={tag} style={{ padding: "0.35rem 1rem", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 50, fontSize: "0.8rem", color: "rgba(255,255,255,0.5)" }}>{tag}</span>
+              ))}
+            </div>
+            <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.3)" }}>🔔 Get notified — subscribe below or grab a card to get priority access</p>
           </div>
         </section></Reveal>
 
