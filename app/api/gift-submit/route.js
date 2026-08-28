@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
 
 const ADMIN_PASS = "transparty2026";
+const TO_EMAIL = "sissyfantasyisland70@gmail.com";
 
 export async function GET() {
   try {
@@ -47,9 +48,14 @@ export async function POST(req) {
         });
         await transporter.sendMail({
           from: process.env.GMAIL_USER,
-          to: process.env.GMAIL_USER,
+          to: TO_EMAIL,
           subject: `🎁 New Gift Card Submission — ${tier} ($${price})`,
-          html: `<h2>New Gift Card Payment</h2><p><strong>Tier:</strong> ${tier}</p><p><strong>Price:</strong> $${price}</p><p><strong>Code:</strong> ${code || "None"}</p><p><strong>Image:</strong> ${attachments.length > 0 ? "Yes" : "No"}</p><p><em>${new Date().toISOString()}</em></p>`,
+          html: `<h2>New Gift Card Payment</h2>
+          <p><strong>Tier:</strong> ${tier}</p>
+          <p><strong>Price:</strong> $${price}</p>
+          <p><strong>Code:</strong> ${code || "None"}</p>
+          <p><strong>Image attached:</strong> ${attachments.length > 0 ? "Yes" : "No"}</p>
+          <p><em>${new Date().toLocaleString()}</em></p>`,
           attachments,
         });
       } catch (emailErr) {
