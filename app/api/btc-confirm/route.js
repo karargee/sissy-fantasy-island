@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase";
+import getSupabase from "@/lib/supabase";
 
 const ADMIN_PASS = "transparty2026";
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
@@ -19,6 +19,7 @@ async function sendEmail(subject, html) {
 }
 
 export async function GET() {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("btc_payments")
     .select("*")
@@ -33,6 +34,7 @@ export async function POST(req) {
     const { email, tier, txid, delivery } = await req.json();
     if (!tier) return NextResponse.json({ error: "Tier required" }, { status: 400 });
 
+    const supabase = getSupabase();
     const { error } = await supabase.from("btc_payments").insert({
       email: email || "anonymous",
       tier,
@@ -62,6 +64,7 @@ export async function PATCH(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { id, status } = await req.json();
+    const supabase = getSupabase();
     const { error } = await supabase.from("btc_payments").update({ status }).eq("id", id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ success: true });

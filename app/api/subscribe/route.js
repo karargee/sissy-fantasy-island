@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase";
+import getSupabase from "@/lib/supabase";
 
 export async function GET() {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("subscribers")
     .select("email, created_at")
@@ -16,6 +17,7 @@ export async function POST(req) {
     if (!email || !email.includes("@"))
       return NextResponse.json({ error: "Invalid email" }, { status: 400 });
 
+    const supabase = getSupabase();
     const { error } = await supabase
       .from("subscribers")
       .upsert({ email: email.toLowerCase().trim() }, { onConflict: "email" });

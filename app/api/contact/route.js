@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase";
+import getSupabase from "@/lib/supabase";
 
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
 
@@ -18,6 +18,7 @@ async function sendEmail(subject, html) {
 }
 
 export async function GET() {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("contact_messages")
     .select("*")
@@ -36,6 +37,7 @@ export async function POST(req) {
     if (!isDungeon && (!name || !email || !subject || !message))
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
 
+    const supabase = getSupabase();
     const { error } = await supabase.from("contact_messages").insert({
       name: name || "N/A",
       email: email || "N/A",

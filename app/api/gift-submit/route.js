@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase";
+import getSupabase from "@/lib/supabase";
 
 const ADMIN_PASS = "transparty2026";
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
 
 export async function GET() {
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("gift_submissions")
     .select("*")
@@ -25,6 +26,7 @@ export async function POST(req) {
     const hasImage = !!(image && image.size > 0);
     const imageName = image?.name || null;
 
+    const supabase = getSupabase();
     const { error } = await supabase.from("gift_submissions").insert({
       tier,
       price,
@@ -74,6 +76,7 @@ export async function PATCH(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { id, status } = await req.json();
+    const supabase = getSupabase();
     const { error } = await supabase.from("gift_submissions").update({ status }).eq("id", id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ success: true });

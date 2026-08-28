@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { signToken } from "@/lib/auth";
-import supabase from "@/lib/supabase";
+import getSupabase from "@/lib/supabase";
 
 export async function POST(req) {
   try {
@@ -12,6 +12,7 @@ export async function POST(req) {
     if (password.length < 8)
       return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
 
+    const supabase = getSupabase();
     const { data: existing } = await supabase
       .from("users")
       .select("id")
@@ -23,6 +24,7 @@ export async function POST(req) {
     const hashed = await bcrypt.hash(password, 10);
     const id = `SFI-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
+    const supabase = getSupabase();
     const { error } = await supabase.from("users").insert({
       id,
       email: email.toLowerCase(),

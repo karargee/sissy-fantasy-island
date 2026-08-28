@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { signToken } from "@/lib/auth";
-import supabase from "@/lib/supabase";
+import getSupabase from "@/lib/supabase";
 
 export async function POST(req) {
   try {
@@ -9,6 +9,7 @@ export async function POST(req) {
     if (!email || !password)
       return NextResponse.json({ error: "Email and password required" }, { status: 400 });
 
+    const supabase = getSupabase();
     const { data: user, error } = await supabase
       .from("users")
       .select("*")

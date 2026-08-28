@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase";
+import getSupabase from "@/lib/supabase";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -7,6 +7,7 @@ export async function GET(req) {
   const admin = searchParams.get("admin");
 
   try {
+    const supabase = getSupabase();
     if (admin === "true") {
       const { data: sessions } = await supabase
         .from("chat_sessions")
@@ -49,6 +50,7 @@ export async function POST(req) {
     if (!sessionId || !text || !from)
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
+    const supabase = getSupabase();
     // Upsert session
     await supabase.from("chat_sessions").upsert(
       { session_id: sessionId, started_at: new Date().toISOString() },
