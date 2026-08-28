@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import redis from "@/lib/redis";
+import getSupabase from "@/lib/supabase";
 
 export async function POST() {
   try {
     const session = await getSession();
     if (!session) return NextResponse.json({ error: "Not logged in" }, { status: 401 });
-    await redis.setex(`online:${session.id}`, 120, session.sissyName);
+
+    const supabase = getSupabase();
+    await supabase.from("users").update({ last_seen: new Date().toISOString() }).eq("id", session.id);
     return NextResponse.json({ success: true });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
@@ -15,12 +17,14 @@ export async function POST() {
 
 export async function GET() {
   try {
-    const keys = await redis.keys("online:*");
-    const online = await Promise.all(keys.map(async k => {
-      const name = await redis.get(k);
-      return { id: k.replace("online:", ""), name };
-    }));
-    return NextResponse.json(online.filter(o => o.name));
+    const supabase = getSupabase();
+    const cutoff = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+    const { data, error } = await supabase
+      .from("users")
+      .select("id, sissy_name")
+      .gte("last_seen", cutoff);
+    if (error) throw error;
+    return NextResponse.json((data || []).map(u => ({ id: u.id, name: u.sissy_name })));
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

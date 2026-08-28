@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import redis from "@/lib/redis";
+import getSupabase from "@/lib/supabase";
 
 export async function POST(req) {
   try {
@@ -10,18 +10,20 @@ export async function POST(req) {
     const { targetId } = await req.json();
     if (targetId === session.id) return NextResponse.json({ error: "Cannot follow yourself" }, { status: 400 });
 
-    const isFollowing = await redis.sismember(`following:${session.id}`, targetId);
-    if (isFollowing) {
-      await redis.srem(`following:${session.id}`, targetId);
-      await redis.srem(`followers:${targetId}`, session.id);
+    const supabase = getSupabase();
+    const { data: existing } = await supabase
+      .from("follows")
+      .select("follower_id")
+      .eq("follower_id", session.id)
+      .eq("following_id", targetId)
+      .single();
+
+    if (existing) {
+      await supabase.from("follows").delete().eq("follower_id", session.id).eq("following_id", targetId);
       return NextResponse.json({ following: false });
     } else {
-      await redis.sadd(`following:${session.id}`, targetId);
-      await redis.sadd(`followers:${targetId}`, session.id);
-      // Notify
-      const notif = { id: `${Date.now()}`, type: "follow", fromName: session.sissyName, read: false, createdAt: new Date().toISOString() };
-      await redis.lpush(`notifs:${targetId}`, JSON.stringify(notif));
-      await redis.ltrim(`notifs:${targetId}`, 0, 49);
+      await supabase.from("follows").insert({ follower_id: session.id, following_id: targetId });
+      await supabase.from("notifications").insert({ user_id: targetId, type: "follow", message: `${session.sissyName} followed you`, read: false });
       return NextResponse.json({ following: true });
     }
   } catch (e) {
@@ -34,12 +36,20 @@ export async function GET(req) {
     const session = await getSession();
     const { searchParams } = new URL(req.url);
     const targetId = searchParams.get("targetId");
+    const supabase = getSupabase();
 
-    const followers = await redis.scard(`followers:${targetId}`);
-    const following = await redis.scard(`following:${targetId}`);
-    const isFollowing = session ? await redis.sismember(`following:${session.id}`, targetId) : false;
+    const [{ count: followers }, { count: following }] = await Promise.all([
+      supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", targetId),
+      supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", targetId),
+    ]);
 
-    return NextResponse.json({ followers, following, isFollowing: !!isFollowing });
+    let isFollowing = false;
+    if (session) {
+      const { data } = await supabase.from("follows").select("follower_id").eq("follower_id", session.id).eq("following_id", targetId).single();
+      isFollowing = !!data;
+    }
+
+    return NextResponse.json({ followers: followers || 0, following: following || 0, isFollowing });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

@@ -11,7 +11,8 @@ create table if not exists users (
   sissy_name text not null,
   tier text not null default 'Free',
   member_since timestamptz not null default now(),
-  bio text default ''
+  bio text default '',
+  last_seen timestamptz
 );
 
 -- CONTACT MESSAGES (includes dungeon bookings)

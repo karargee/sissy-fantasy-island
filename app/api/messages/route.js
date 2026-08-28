@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import redis from "@/lib/redis";
-
-function convoKey(a, b) {
-  return [a, b].sort().join(":");
-}
+import getSupabase from "@/lib/supabase";
 
 export async function GET(req) {
   try {
@@ -13,42 +9,42 @@ export async function GET(req) {
 
     const { searchParams } = new URL(req.url);
     const withUser = searchParams.get("with");
+    const supabase = getSupabase();
 
     if (withUser) {
-      // Get conversation messages
-      const key = `convo:${convoKey(session.id, withUser)}`;
-      const msgs = await redis.lrange(key, 0, 99);
-      return NextResponse.json(msgs.map(m => typeof m === "string" ? JSON.parse(m) : m));
+      const { data, error } = await supabase
+        .from("direct_messages")
+        .select("*")
+        .or(`and(from_id.eq.${session.id},to_id.eq.${withUser}),and(from_id.eq.${withUser},to_id.eq.${session.id})`)
+        .order("created_at", { ascending: true })
+        .limit(100);
+      if (error) throw error;
+      return NextResponse.json(data || []);
     }
 
-    // Get all conversations for this user
-    const convos = await redis.smembers(`convos:${session.id}`);
-    if (!convos.length) return NextResponse.json([]);
+    // Get all conversations
+    const { data: msgs, error } = await supabase
+      .from("direct_messages")
+      .select("*")
+      .or(`from_id.eq.${session.id},to_id.eq.${session.id}`)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
 
-    // Build id->user map by scanning all user keys
-    const userKeys = await redis.keys("user:*");
-    const allUsers = await Promise.all(userKeys.map(k => redis.get(k)));
-    const userById = {};
-    allUsers.filter(Boolean).forEach(raw => {
-      const u = typeof raw === "string" ? JSON.parse(raw) : raw;
-      if (u?.id) userById[u.id] = u;
-    });
-
-    const results = await Promise.all(convos.map(async (otherId) => {
-      const key = `convo:${convoKey(session.id, otherId)}`;
-      const last = await redis.lindex(key, -1);
-      const other = userById[otherId] || null;
-      return {
+    const seen = new Set();
+    const convos = [];
+    for (const m of msgs || []) {
+      const otherId = m.from_id === session.id ? m.to_id : m.from_id;
+      if (seen.has(otherId)) continue;
+      seen.add(otherId);
+      const { data: other } = await supabase.from("users").select("sissy_name, tier").eq("id", otherId).single();
+      convos.push({
         userId: otherId,
-        userName: other?.sissyName || "Unknown",
+        userName: other?.sissy_name || "Unknown",
         userTier: other?.tier || "Free",
-        lastMessage: last ? (typeof last === "string" ? JSON.parse(last) : last) : null,
-      };
-    }));
-
-    return NextResponse.json(results.filter(r => r.lastMessage).sort((a, b) =>
-      new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt)
-    ));
+        lastMessage: { content: m.content, createdAt: m.created_at },
+      });
+    }
+    return NextResponse.json(convos);
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
@@ -63,20 +59,14 @@ export async function POST(req) {
     if (!content?.trim()) return NextResponse.json({ error: "Message cannot be empty" }, { status: 400 });
     if (!toId) return NextResponse.json({ error: "Recipient required" }, { status: 400 });
 
-    const msg = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
-      fromId: session.id,
-      fromName: session.sissyName,
-      content: content.trim(),
-      createdAt: new Date().toISOString(),
-    };
-
-    const key = `convo:${convoKey(session.id, toId)}`;
-    await redis.rpush(key, JSON.stringify(msg));
-    await redis.sadd(`convos:${session.id}`, toId);
-    await redis.sadd(`convos:${toId}`, session.id);
-
-    return NextResponse.json(msg);
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("direct_messages")
+      .insert({ from_id: session.id, to_id: toId, content: content.trim() })
+      .select()
+      .single();
+    if (error) throw error;
+    return NextResponse.json(data);
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
