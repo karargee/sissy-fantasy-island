@@ -13,6 +13,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
 
     const supabase = getSupabase();
+
     const { data: existing } = await supabase
       .from("users")
       .select("id")
@@ -23,6 +24,7 @@ export async function POST(req) {
 
     const hashed = await bcrypt.hash(password, 10);
     const id = `SFI-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+
     const { error } = await supabase.from("users").insert({
       id,
       email: email.toLowerCase(),
