@@ -23,8 +23,6 @@ export async function POST(req) {
 
     const hashed = await bcrypt.hash(password, 10);
     const id = `SFI-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
-
-    const supabase = getSupabase();
     const { error } = await supabase.from("users").insert({
       id,
       email: email.toLowerCase(),
