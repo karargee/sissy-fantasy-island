@@ -22,9 +22,16 @@ const TAGS = ["All", "Events", "Members", "Community"];
 
 export default function GalleryPage() {
   const [activeTag, setActiveTag] = useState("All");
-  const [lightbox, setLightbox] = useState(null); // stores the img src, not index
+  const [lightbox, setLightbox] = useState(null);
+  const [gallery, setGallery] = useState(GALLERY);
 
-  const filtered = activeTag === "All" ? GALLERY : GALLERY.filter(g => g.tag === activeTag);
+  useEffect(() => {
+    fetch("/api/settings").then(r => r.json()).then(d => {
+      if (d.settings?.gallery) setGallery(d.settings.gallery);
+    }).catch(() => {});
+  }, []);
+
+  const filtered = activeTag === "All" ? gallery : gallery.filter(g => g.tag === activeTag);
   const lightboxItem = lightbox !== null ? filtered.find(g => g.img === lightbox) || null : null;
   const lightboxIdx = lightboxItem ? filtered.indexOf(lightboxItem) : -1;
 

@@ -388,7 +388,8 @@ function AnimatedCounter({ target, suffix = "" }) {
   return <span ref={ref} className="stat-num">{count.toLocaleString()}{suffix}</span>;
 }
 
-function BtcConfirmForm() {
+function BtcConfirmForm({ wallet }) {
+  const cmsBtcWallet = wallet || BTC_WALLET;
   const [form, setForm] = useState({ email: "", tier: "Standard Sissy Card", txid: "", delivery: "email" });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -400,7 +401,7 @@ function BtcConfirmForm() {
       await fetch("/api/btc-confirm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, wallet: cmsBtcWallet }),
       });
     } catch {}
     setSending(false);
@@ -903,6 +904,30 @@ export default function Home() {
   const [openBlog, setOpenBlog] = useState(null);
   const [splash, setSplash] = useState(true);
 
+  // CMS settings
+  const [cmsBanner, setCmsBanner] = useState(null);
+  const [cmsBtcWallet, setCmsBtcWallet] = useState(BTC_WALLET);
+  const [cmsStats, setCmsStats] = useState(null);
+  const [cmsEvents, setCmsEvents] = useState(null);
+  const [cmsFaqs, setCmsFaqs] = useState(null);
+  const [cmsTestimonials, setCmsTestimonials] = useState(null);
+  const [cmsBlogPosts, setCmsBlogPosts] = useState(null);
+  const [cmsShopLinks, setCmsShopLinks] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/settings").then(r => r.json()).then(d => {
+      const s = d.settings || {};
+      if (s.banner) setCmsBanner(s.banner);
+      if (s.btcWallet) setCmsBtcWallet(s.btcWallet);
+      if (s.stats) setCmsStats(s.stats);
+      if (s.events) setCmsEvents(s.events);
+      if (s.faqs) setCmsFaqs(s.faqs);
+      if (s.testimonials) setCmsTestimonials(s.testimonials);
+      if (s.blogPosts) setCmsBlogPosts(s.blogPosts);
+      if (s.shopLinks) setCmsShopLinks(s.shopLinks);
+    }).catch(() => {});
+  }, []);
+
   function openPayModal(name, price) {
     setPayModal({ tier: name, price });
     setPayMethod(null);
@@ -967,9 +992,11 @@ export default function Home() {
 
       <div className="container" style={{ paddingBottom: "4rem" }}>
         {/* Flash Sale Banner */}
-        <div style={{ background: "linear-gradient(90deg, #d63384, #6f42c1)", padding: "0.8rem 1.5rem", borderRadius: 10, textAlign: "center", marginBottom: "1.5rem", animation: "pulse 2s ease-in-out infinite" }}>
-          <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>🔥 LIMITED TIME: Get 20% off all cards — Use code <strong>SISSY20</strong> at checkout</span>
-        </div>
+        {(cmsBanner ? cmsBanner.active : true) && (
+          <div style={{ background: "linear-gradient(90deg, #d63384, #6f42c1)", padding: "0.8rem 1.5rem", borderRadius: 10, textAlign: "center", marginBottom: "1.5rem", animation: "pulse 2s ease-in-out infinite" }}>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>{cmsBanner ? cmsBanner.text : "🔥 LIMITED TIME: Get 20% off all cards — Use code SISSY20 at checkout"}</span>
+          </div>
+        )}
 
         {/* Navigation */}
         <nav className="nav">
@@ -1033,10 +1060,10 @@ export default function Home() {
         {/* Live Stats */}
         <Reveal><section className="section">
           <div className="stats-bar">
-            <div className="stat-item"><AnimatedCounter target="2847" /><span className="stat-label">Active Members</span></div>
-            <div className="stat-item"><AnimatedCounter target="47" /><span className="stat-label">Countries</span></div>
-            <div className="stat-item"><AnimatedCounter target="3200" suffix="+" /><span className="stat-label">Cards Issued</span></div>
-            <div className="stat-item"><AnimatedCounter target="12" /><span className="stat-label">Events Hosted</span></div>
+            <div className="stat-item"><AnimatedCounter target={cmsStats ? cmsStats.members : "2847"} /><span className="stat-label">Active Members</span></div>
+            <div className="stat-item"><AnimatedCounter target={cmsStats ? cmsStats.countries : "47"} /><span className="stat-label">Countries</span></div>
+            <div className="stat-item"><AnimatedCounter target={cmsStats ? cmsStats.cards : "3200"} suffix="+" /><span className="stat-label">Cards Issued</span></div>
+            <div className="stat-item"><AnimatedCounter target={cmsStats ? cmsStats.events : "12"} /><span className="stat-label">Events Hosted</span></div>
           </div>
         </section></Reveal>
 
@@ -1201,7 +1228,7 @@ export default function Home() {
             <CountdownTimer targetDate="2026-08-15T20:00:00" />
           </div>
           <div className="events-grid">
-            {UPCOMING_EVENTS.map((ev) => (
+            {(cmsEvents || UPCOMING_EVENTS).map((ev) => (
               <div key={ev.name} className="event-card">
                 <div className="event-card-img">
                   <Image src={ev.img} alt={ev.name} fill style={{ objectFit: "cover" }} />
@@ -1228,7 +1255,7 @@ export default function Home() {
           <h2>🛍️ Shop Costumes & Toys</h2>
           <p className="section-subtitle">We've curated the best products from trusted retailers. Click to shop directly.</p>
           <div className="shop-grid">
-            {EXTERNAL_SHOPS.map((item) => (
+            {(cmsShopLinks || EXTERNAL_SHOPS).map((item) => (
               <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer" className="shop-card-link">
                 <div className="shop-card">
                   <div className="shop-emoji">{item.emoji}</div>
@@ -1247,7 +1274,7 @@ export default function Home() {
           <h2>📚 Guides & Tips</h2>
           <p className="section-subtitle">Resources to help you on your journey. Click to read full article.</p>
           <div className="blog-grid">
-            {BLOG_POSTS.map((post, i) => (
+            {(cmsBlogPosts || BLOG_POSTS).map((post, i) => (
               <div key={i} className={`blog-card ${openBlog === i ? "blog-card-open" : ""}`} onClick={() => setOpenBlog(openBlog === i ? null : i)}>
                 <div className="blog-emoji">{post.emoji}</div>
                 <div className="blog-tag">{post.tag}</div>
@@ -1365,7 +1392,7 @@ export default function Home() {
           <h2>💬 Member Reviews</h2>
           <p className="section-subtitle">Real feedback from verified members.</p>
           <div className="testimonials-grid">
-            {[
+            {(cmsTestimonials || [
               { name: "Sissy Bella", tier: "Gold", stars: 5, text: "The card arrived in a plain envelope, totally discreet. The community is amazing — I finally found my people." },
               { name: "Anonymous", tier: "Standard", stars: 5, text: "Used the anonymous code option. No email, no trace. Exactly what I needed. The community chat is active 24/7." },
               { name: "Princess Jade", tier: "Diamond", stars: 5, text: "The concierge service is real. They booked my event tickets and even helped me find outfits. Worth every penny." },
@@ -1374,7 +1401,7 @@ export default function Home() {
               { name: "Mistress Velvet", tier: "Diamond", stars: 5, text: "Been a member for 6 months. The events are incredible, the community is tight-knit, and the team actually cares." },
               { name: "Candy Frost", tier: "Starter", stars: 5, text: "Started with the Starter card just to test it out. Upgraded to Gold within a week. So worth it!" },
               { name: "Dolly Lace", tier: "Gold", stars: 5, text: "The physical card is STUNNING. Holographic, my name on it, came in a plain envelope. Absolutely love it." },
-            ].map((t, i) => (
+            ]).map((t, i) => (
               <div key={i} className="testimonial-card">
                 <div style={{ color: "#f7931a", fontSize: "0.9rem", marginBottom: "0.5rem" }}>{"★".repeat(t.stars)}</div>
                 <p className="testimonial-text">&ldquo;{t.text}&rdquo;</p>
@@ -1434,7 +1461,7 @@ export default function Home() {
         <Reveal><section className="section">
           <h2>❓ FAQ</h2>
           <div className="faq-list">
-            {FAQS.map((f, i) => (
+            {(cmsFaqs || FAQS).map((f, i) => (
               <div key={i} className="faq-item" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                 <div className="faq-q">
                   {f.q}
@@ -1575,15 +1602,15 @@ export default function Home() {
               <div className="pay-btc-content">
                 <div className="btc-qr-card">
                   <div className="btc-qr-wrap">
-                    <QRCodeSVG value={`bitcoin:${BTC_WALLET}`} size={160} bgColor="#ffffff" fgColor="#0a0a0f" level="H" />
+                    <QRCodeSVG value={`bitcoin:${cmsBtcWallet}`} size={160} bgColor="#ffffff" fgColor="#0a0a0f" level="H" />
                   </div>
                   <p className="btc-label">Scan to send BTC</p>
                   <div className="btc-address">
-                    <code>{BTC_WALLET}</code>
-                    <button className="btc-copy" onClick={() => navigator.clipboard.writeText(BTC_WALLET)}>Copy</button>
+                    <code>{cmsBtcWallet}</code>
+                    <button className="btc-copy" onClick={() => navigator.clipboard.writeText(cmsBtcWallet)}>Copy</button>
                   </div>
                 </div>
-                <BtcConfirmForm />
+                <BtcConfirmForm wallet={cmsBtcWallet} />
                 <button className="pay-back" onClick={() => setPayMethod(null)}>← Back</button>
               </div>
             )}

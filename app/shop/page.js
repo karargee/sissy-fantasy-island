@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const SHOPS = [
@@ -28,8 +28,15 @@ const TIPS = [
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [shops, setShops] = useState(SHOPS);
 
-  const filtered = activeCategory === "All" ? SHOPS : SHOPS.filter(s => s.category === activeCategory);
+  useEffect(() => {
+    fetch("/api/settings").then(r => r.json()).then(d => {
+      if (d.settings?.shopLinks) setShops(d.settings.shopLinks);
+    }).catch(() => {});
+  }, []);
+
+  const filtered = activeCategory === "All" ? shops : shops.filter(s => s.category === activeCategory);
 
   return (
     <div style={{ minHeight: "100vh", background: "#060608", color: "#f0f0f0" }}>

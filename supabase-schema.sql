@@ -127,6 +127,12 @@ create table if not exists notifications (
   created_at timestamptz default now()
 );
 
+-- SITE SETTINGS (admin-controlled content)
+create table if not exists site_settings (
+  key text primary key,
+  value jsonb not null
+);
+
 -- VOTES
 create table if not exists votes (
   id bigint generated always as identity primary key,
@@ -158,6 +164,7 @@ alter table comments enable row level security;
 alter table follows enable row level security;
 alter table direct_messages enable row level security;
 alter table notifications enable row level security;
+alter table site_settings enable row level security;
 alter table votes enable row level security;
 
 -- Service role bypasses RLS automatically — no policies needed for server-side
