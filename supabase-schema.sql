@@ -133,6 +133,15 @@ create table if not exists site_settings (
   value jsonb not null
 );
 
+-- CHATROOM MESSAGES (public community chat)
+create table if not exists chatroom_messages (
+  id bigint generated always as identity primary key,
+  nickname text not null,
+  text text not null,
+  color text default '#f5a9b8',
+  created_at timestamptz default now()
+);
+
 -- VOTES
 create table if not exists votes (
   id bigint generated always as identity primary key,
@@ -165,6 +174,7 @@ alter table follows enable row level security;
 alter table direct_messages enable row level security;
 alter table notifications enable row level security;
 alter table site_settings enable row level security;
+alter table chatroom_messages enable row level security;
 alter table votes enable row level security;
 
 -- Service role bypasses RLS automatically — no policies needed for server-side
