@@ -1,18 +1,19 @@
-"use client";
+﻿"use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 const ADMIN_PASSWORD = "transparty2026";
 
 const TABS = [
-  { key: "overview", label: "📊 Overview" },
-  { key: "members", label: "👥 Members" },
-  { key: "livechat", label: "💬 Live Chat" },
-  { key: "btc", label: "₿ BTC Payments" },
-  { key: "giftcards", label: "🎁 Gift Cards" },
-  { key: "contact", label: "✉️ Contact Forms" },
-  { key: "subscribers", label: "📧 Subscribers" },
-  { key: "settings", label: "⚙️ Settings" },
+  { key: "overview", label: "ðŸ“Š Overview" },
+  { key: "members", label: "ðŸ‘¥ Members" },
+  { key: "dungeon", label: "ðŸšš Dungeon Bookings" },
+  { key: "livechat", label: "ðŸ’¬ Live Chat" },
+  { key: "btc", label: "â‚¿ BTC Payments" },
+  { key: "giftcards", label: "ðŸŽ Gift Cards" },
+  { key: "contact", label: "âœ‰ï¸ Contact Forms" },
+  { key: "subscribers", label: "ðŸ“§ Subscribers" },
+  { key: "settings", label: "âš™ï¸ Settings" },
 ];
 
 function StatusBadge({ status }) {
@@ -43,6 +44,7 @@ export default function Admin() {
   const [members, setMembers] = useState([]);
   const [membersLoading, setMembersLoading] = useState(false);
   const [upgradeMsg, setUpgradeMsg] = useState("");
+  const [dungeonBookings, setDungeonBookings] = useState([]);
   const [btcPayments, setBtcPayments] = useState([]);
   const [giftSubs, setGiftSubs] = useState([]);
   const [contactMsgs, setContactMsgs] = useState([]);
@@ -69,6 +71,11 @@ export default function Admin() {
         .then(r => r.json()).then(d => { setMembers(d.users || []); setMembersLoading(false); })
         .catch(() => setMembersLoading(false));
     }
+    if (tab === "dungeon") {
+      fetch("/api/contact").then(r => r.json()).then(d => {
+        setDungeonBookings((d.messages || []).filter(m => m.subject === "Dungeon Booking Request"));
+      });
+    }
     if (tab === "btc") {
       fetch("/api/btc-confirm").then(r => r.json()).then(d => setBtcPayments(d.payments || []));
     }
@@ -76,7 +83,7 @@ export default function Admin() {
       fetch("/api/gift-submit").then(r => r.json()).then(d => setGiftSubs(d.submissions || []));
     }
     if (tab === "contact") {
-      fetch("/api/contact").then(r => r.json()).then(d => setContactMsgs(d.messages || []));
+      fetch(`/api/contact`).then(r => r.json()).then(d => { const all = d.messages || []; setContactMsgs(all.filter(m => m.subject !== `Dungeon Booking Request`)); setDungeonBookings(all.filter(m => m.subject === `Dungeon Booking Request`)); });
     }
     if (tab === "subscribers") {
       fetch("/api/subscribe").then(r => r.json()).then(d => setSubscribers(d.subscribers || []));
@@ -86,7 +93,7 @@ export default function Admin() {
         .then(r => r.json()).then(d => setMembers(d.users || []));
       fetch("/api/btc-confirm").then(r => r.json()).then(d => setBtcPayments(d.payments || []));
       fetch("/api/gift-submit").then(r => r.json()).then(d => setGiftSubs(d.submissions || []));
-      fetch("/api/contact").then(r => r.json()).then(d => setContactMsgs(d.messages || []));
+      fetch(`/api/contact`).then(r => r.json()).then(d => { const all = d.messages || []; setContactMsgs(all.filter(m => m.subject !== `Dungeon Booking Request`)); setDungeonBookings(all.filter(m => m.subject === `Dungeon Booking Request`)); });
       fetch("/api/subscribe").then(r => r.json()).then(d => setSubscribers(d.subscribers || []));
     }
   }, [authed, tab]);
@@ -119,7 +126,7 @@ export default function Admin() {
     const data = await res.json();
     if (data.success) {
       setMembers(m => m.map(u => u.id === userId ? { ...u, tier } : u));
-      setUpgradeMsg(`✅ ${tier} assigned!`);
+      setUpgradeMsg(`âœ… ${tier} assigned!`);
       setTimeout(() => setUpgradeMsg(""), 3000);
     }
   }
@@ -152,7 +159,7 @@ export default function Admin() {
     return (
       <div className="age-gate-overlay">
         <div className="age-gate-box">
-          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔐</div>
+          <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>ðŸ”</div>
           <h2>Admin Login</h2>
           <form onSubmit={handleLogin} style={{ marginTop: "1.5rem", display: "flex", flexDirection: "column", gap: "0.8rem" }}>
             <input type="password" placeholder="Enter admin password" value={pass} onChange={e => setPass(e.target.value)} className="form-input" style={{ textAlign: "center" }} />
@@ -167,7 +174,7 @@ export default function Admin() {
     <div style={{ display: "flex", minHeight: "100vh" }}>
       {/* Sidebar */}
       <div className="admin-sidebar">
-        <div className="admin-logo">🏳️‍⚧️ Admin</div>
+        <div className="admin-logo">ðŸ³ï¸â€âš§ï¸ Admin</div>
         {TABS.map(t => (
           <button key={t.key} className={`admin-tab ${tab === t.key ? "admin-tab-active" : ""}`} onClick={() => setTab(t.key)}>
             {t.label}
@@ -177,7 +184,7 @@ export default function Admin() {
             {t.key === "contact" && unreadContact > 0 && <span className="admin-badge">{unreadContact}</span>}
           </button>
         ))}
-        <Link href="/" className="admin-tab" style={{ marginTop: "auto", opacity: 0.5 }}>← Back to Site</Link>
+        <Link href="/" className="admin-tab" style={{ marginTop: "auto", opacity: 0.5 }}>â† Back to Site</Link>
       </div>
 
       {/* Main */}
@@ -195,6 +202,7 @@ export default function Admin() {
               <div className="admin-stat-card"><div className="admin-stat-num">{pendingGift}</div><div className="admin-stat-label">Pending Gift Cards</div></div>
               <div className="admin-stat-card"><div className="admin-stat-num">{subscribers.length}</div><div className="admin-stat-label">Subscribers</div></div>
               <div className="admin-stat-card"><div className="admin-stat-num">{contactMsgs.length}</div><div className="admin-stat-label">Contact Messages</div></div>
+              <div className="admin-stat-card"><div className="admin-stat-num">{dungeonBookings.length}</div><div className="admin-stat-label">Dungeon Bookings</div></div>
               <div className="admin-stat-card"><div className="admin-stat-num">{unreadContact}</div><div className="admin-stat-label">Unread Contact</div></div>
             </div>
 
@@ -248,12 +256,12 @@ export default function Admin() {
                           <select defaultValue="" onChange={e => { if (e.target.value) upgradeMember(u.id, e.target.value); }}
                             style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "white", padding: "0.4rem 0.6rem", borderRadius: 8, cursor: "pointer", fontSize: "0.85rem" }}>
                             <option value="" disabled>Assign tier...</option>
-                            <option value="Free">🆓 Free</option>
-                            <option value="Starter Sissy Card">🌸 Starter — $50</option>
-                            <option value="Standard Sissy Card">💳 Standard — $75</option>
-                            <option value="Gold Sissy Card">👑 Gold — $100</option>
-                            <option value="Platinum Sissy Card">✨ Platinum — $150</option>
-                            <option value="Diamond Sissy Card">💎 Diamond — $200</option>
+                            <option value="Free">ðŸ†“ Free</option>
+                            <option value="Starter Sissy Card">ðŸŒ¸ Starter â€” $50</option>
+                            <option value="Standard Sissy Card">ðŸ’³ Standard â€” $75</option>
+                            <option value="Gold Sissy Card">ðŸ‘‘ Gold â€” $100</option>
+                            <option value="Platinum Sissy Card">âœ¨ Platinum â€” $150</option>
+                            <option value="Diamond Sissy Card">ðŸ’Ž Diamond â€” $200</option>
                           </select>
                         </td>
                       </tr>
@@ -301,12 +309,38 @@ export default function Admin() {
                     </div>
                     <form className="admin-chat-input" onSubmit={sendAdminReply}>
                       <input type="text" value={adminReply} onChange={e => setAdminReply(e.target.value)} placeholder="Type a reply..." className="chat-input" />
-                      <button type="submit" className="chat-send">→</button>
+                      <button type="submit" className="chat-send">â†’</button>
                     </form>
                   </>
                 )}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Dungeon Bookings */}
+        {tab === "dungeon" && (
+          <div>
+            <h1 className="admin-title">Dungeon Bookings ({dungeonBookings.length})</h1>
+            {dungeonBookings.length === 0 ? <Empty text="No dungeon bookings yet." /> : (
+              <div className="admin-messages">
+                {dungeonBookings.map(m => (
+                  <div key={m.id} className="admin-msg-card">
+                    <div className="admin-msg-header">
+                      <div><strong>{m.name}</strong><span style={{ opacity: 0.5, marginLeft: "0.5rem", fontSize: "0.85rem" }}>{m.email}</span></div>
+                      <span style={{ fontSize: "0.8rem", opacity: 0.4 }}>{new Date(m.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.5rem", margin: "0.8rem 0", fontSize: "0.85rem" }}>
+                      <div><span style={{ opacity: 0.4 }}>Package: </span><strong>{m.pkg || "â€”"}</strong></div>
+                      <div><span style={{ opacity: 0.4 }}>Date: </span><strong>{m.date || "â€”"}</strong></div>
+                      <div><span style={{ opacity: 0.4 }}>Phone: </span><strong>{m.phone || "â€”"}</strong></div>
+                      <div><span style={{ opacity: 0.4 }}>Location: </span><strong>{m.location || "â€”"}</strong></div>
+                    </div>
+                    {m.notes && <p style={{ opacity: 0.6, fontSize: "0.88rem", lineHeight: 1.6, borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "0.8rem" }}>{m.notes}</p>}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -323,7 +357,7 @@ export default function Admin() {
                       <tr key={b.id}>
                         <td>{b.email}</td>
                         <td>{b.tier}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.78rem", maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis" }}>{b.txid || "—"}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.78rem", maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis" }}>{b.txid || "â€”"}</td>
                         <td>{b.delivery || "email"}</td>
                         <td><StatusBadge status={b.status} /></td>
                         <td style={{ fontSize: "0.8rem" }}>{new Date(b.date).toLocaleDateString()}</td>
@@ -334,12 +368,12 @@ export default function Admin() {
                                 const updated = btcPayments.map(x => x.id === b.id ? { ...x, status: "verified" } : x);
                                 setBtcPayments(updated);
                                 await fetch("/api/btc-confirm", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: b.id, status: "verified" }) });
-                              }}>✓</button>
+                              }}>âœ“</button>
                               <button className="admin-btn-reject" onClick={async () => {
                                 const updated = btcPayments.map(x => x.id === b.id ? { ...x, status: "rejected" } : x);
                                 setBtcPayments(updated);
                                 await fetch("/api/btc-confirm", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: b.id, status: "rejected" }) });
-                              }}>✕</button>
+                              }}>âœ•</button>
                             </>
                           )}
                         </td>
@@ -365,8 +399,8 @@ export default function Admin() {
                       <tr key={g.id}>
                         <td>{g.tier}</td>
                         <td>${g.price}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.82rem" }}>{g.code !== "No code" ? g.code : "—"}</td>
-                        <td>{g.hasImage ? `📎 ${g.imageName || "yes"}` : "—"}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.82rem" }}>{g.code !== "No code" ? g.code : "â€”"}</td>
+                        <td>{g.hasImage ? `ðŸ“Ž ${g.imageName || "yes"}` : "â€”"}</td>
                         <td><StatusBadge status={g.status} /></td>
                         <td style={{ fontSize: "0.8rem" }}>{new Date(g.date).toLocaleDateString()}</td>
                         <td className="admin-actions">
@@ -376,12 +410,12 @@ export default function Admin() {
                                 const updated = giftSubs.map(x => x.id === g.id ? { ...x, status: "approved" } : x);
                                 setGiftSubs(updated);
                                 await fetch("/api/gift-submit", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: g.id, status: "approved" }) });
-                              }}>✓</button>
+                              }}>âœ“</button>
                               <button className="admin-btn-reject" onClick={async () => {
                                 const updated = giftSubs.map(x => x.id === g.id ? { ...x, status: "rejected" } : x);
                                 setGiftSubs(updated);
                                 await fetch("/api/gift-submit", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: g.id, status: "rejected" }) });
-                              }}>✕</button>
+                              }}>âœ•</button>
                             </>
                           )}
                         </td>

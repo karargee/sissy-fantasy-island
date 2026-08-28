@@ -1,15 +1,27 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import redis from "@/lib/redis";
+import supabase from "@/lib/supabase";
 
 export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ user: null });
 
-  const raw = await redis.get(`user:${session.email}`);
-  if (!raw) return NextResponse.json({ user: null });
+  const { data: user, error } = await supabase
+    .from("users")
+    .select("id, email, sissy_name, tier, member_since, bio")
+    .eq("email", session.email)
+    .single();
 
-  const user = typeof raw === "string" ? JSON.parse(raw) : raw;
-  const { password, ...safe } = user;
-  return NextResponse.json({ user: safe });
+  if (error || !user) return NextResponse.json({ user: null });
+
+  return NextResponse.json({
+    user: {
+      id: user.id,
+      email: user.email,
+      sissyName: user.sissy_name,
+      tier: user.tier,
+      memberSince: user.member_since,
+      bio: user.bio,
+    },
+  });
 }

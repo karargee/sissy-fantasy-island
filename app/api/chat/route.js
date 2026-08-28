@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import redis from "@/lib/redis";
-
-// Per-session keys: chat:msgs:{sessionId} (list), chat:unread:{sessionId} (int)
-// Index of all sessions: chat:sessions (set)
+import supabase from "@/lib/supabase";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -11,25 +8,36 @@ export async function GET(req) {
 
   try {
     if (admin === "true") {
-      const sessions = await redis.smembers("chat:sessions");
+      const { data: sessions } = await supabase
+        .from("chat_sessions")
+        .select("session_id, unread_admin, started_at")
+        .order("started_at", { ascending: false });
+
       const chats = {};
-      await Promise.all(sessions.map(async (sid) => {
-        const msgs = await redis.lrange(`chat:msgs:${sid}`, 0, 99);
-        const unread = await redis.get(`chat:unread:${sid}`);
-        chats[sid] = {
-          messages: msgs.map(m => typeof m === "string" ? JSON.parse(m) : m),
-          unreadAdmin: parseInt(unread || "0"),
-          startedAt: null,
+      await Promise.all((sessions || []).map(async (s) => {
+        const { data: msgs } = await supabase
+          .from("chat_messages")
+          .select("*")
+          .eq("session_id", s.session_id)
+          .order("created_at", { ascending: true })
+          .limit(100);
+        chats[s.session_id] = {
+          messages: msgs || [],
+          unreadAdmin: s.unread_admin || 0,
+          startedAt: s.started_at,
         };
       }));
       return NextResponse.json({ chats });
     }
 
     if (!sessionId) return NextResponse.json({ messages: [] });
-    const msgs = await redis.lrange(`chat:msgs:${sessionId}`, 0, 99);
-    return NextResponse.json({
-      messages: msgs.map(m => typeof m === "string" ? JSON.parse(m) : m),
-    });
+    const { data: msgs } = await supabase
+      .from("chat_messages")
+      .select("*")
+      .eq("session_id", sessionId)
+      .order("created_at", { ascending: true })
+      .limit(100);
+    return NextResponse.json({ messages: msgs || [] });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
@@ -41,22 +49,24 @@ export async function POST(req) {
     if (!sessionId || !text || !from)
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
-    const msg = {
-      id: Date.now(),
-      from,
+    // Upsert session
+    await supabase.from("chat_sessions").upsert(
+      { session_id: sessionId, started_at: new Date().toISOString() },
+      { onConflict: "session_id" }
+    );
+
+    // Insert message
+    const { data: msg } = await supabase.from("chat_messages").insert({
+      session_id: sessionId,
+      from_role: from,
       text,
-      time: new Date().toISOString(),
-    };
+    }).select().single();
 
-    await redis.sadd("chat:sessions", sessionId);
-    await redis.rpush(`chat:msgs:${sessionId}`, JSON.stringify(msg));
-    // Cap at 100 messages per session
-    await redis.ltrim(`chat:msgs:${sessionId}`, -100, -1);
-
+    // Update unread count
     if (from === "user") {
-      await redis.incr(`chat:unread:${sessionId}`);
+      await supabase.rpc("increment_unread", { sid: sessionId });
     } else if (from === "admin") {
-      await redis.set(`chat:unread:${sessionId}`, "0");
+      await supabase.from("chat_sessions").update({ unread_admin: 0 }).eq("session_id", sessionId);
     }
 
     return NextResponse.json({ ok: true, msg });
