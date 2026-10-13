@@ -6,17 +6,21 @@ export default function ChatWidget() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
     setSending(true);
+    setError("");
     try {
-      await fetch("/api/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, subject: "Live Chat Message" }),
       });
-    } catch {}
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "Something went wrong"); setSending(false); return; }
+    } catch (e) { setError(e.message); setSending(false); return; }
     setSending(false);
     setSent(true);
   }
@@ -75,6 +79,7 @@ export default function ChatWidget() {
                   className="chat-input"
                   style={{ borderRadius: 8, padding: "0.6rem 0.8rem", resize: "none" }}
                 />
+                {error && <p style={{ color: "#ff6b6b", fontSize: "0.8rem", textAlign: "center" }}>{error}</p>}
                 <button type="submit" className="chat-send" disabled={sending}
                   style={{ borderRadius: 8, padding: "0.7rem", fontSize: "0.88rem", fontWeight: 700 }}>
                   {sending ? "Sending..." : "Send Message →"}
