@@ -23,18 +23,17 @@ export async function POST(req) {
       return NextResponse.json({ error: "Email already registered" }, { status: 400 });
 
     const hashed = await bcrypt.hash(password, 10);
-    const id = `SFI-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
-
-    const { error } = await supabase.from("users").insert({
-      id,
+    const { data: insertData, error } = await supabase.from("users").insert({
       email: email.toLowerCase(),
       password_hash: hashed,
+      name: sissyName,
       sissy_name: sissyName,
       tier: "Free",
       member_since: new Date().toISOString(),
       bio: "",
-    });
+    }).select("id").single();
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    const id = insertData.id;
 
     const token = await signToken({ id, email: email.toLowerCase(), sissyName, tier: "Free" });
     const res = NextResponse.json({ success: true, user: { id, email: email.toLowerCase(), sissyName, tier: "Free" } });
