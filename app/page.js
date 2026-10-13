@@ -76,25 +76,25 @@ const TICKETS = [
 ];
 
 const FAQS = [
-  { q: "Where is the venue?", a: "The venue is private and disclosed only to ticket holders 48 hours before the event via email. It is located in Los Angeles, CA." },
-  { q: "What is the dress code?", a: "Glamorous, fetish-friendly, or formal. Trans-affirming attire celebrated. Lingerie, latex, leather, gowns, suits — all welcome. Come as your most authentic self." },
-  { q: "Is this event safe?", a: "Absolutely. We have strict consent policies, trained staff, and a zero-tolerance policy for harassment. Safe words are enforced. Everyone is here to have a good time respectfully." },
-  { q: "Can I attend just one night?", a: "All tickets cover both nights. Single-night tickets may be available closer to the date — join the waitlist to be notified." },
-  { q: "Is this 18+ only?", a: "Yes. This is a strictly 18+ adult event. Valid ID required at the door." },
-  { q: "How do I pay?", a: "We accept Bitcoin and gift cards for maximum privacy. All transactions are completely discreet — no event name appears on any statement." },
-  { q: "Can I watch remotely if I can't attend?", a: "Yes! Purchase Virtual Access ($75) to get HD live stream access for both nights, exclusive party content, photo sets, behind-the-scenes footage, and private gallery access — all delivered to your email." },
-  { q: "What are the ticket prices?", a: "General Admission is $150 per person (both nights). VIP is $250 and includes lounge access, priority entry, drinks, and a gift bag. Ultra VIP is $500 and includes a private suite, open bar, limo pickup, and a personal host. Virtual Access (remote) is $75." },
-  { q: "Can I bring a guest?", a: "Yes. Each ticket is for one person. Purchase separate tickets for guests. Group discounts available — contact us." },
-  { q: "What happens at the party?", a: "Music, dancing, themed rooms, performances, socializing, and a fully inclusive atmosphere for trans women, sissies, subs, doms, and admirers." },
+  { q: "Where is the venue?", a: "The venue is a stunning private location in LA — disclosed exclusively to ticket holders 48 hours before the event. No address leaks, no walk-ins. You'll get full entry instructions by email." },
+  { q: "What is the dress code?", a: "Heels, lingerie, latex, leather, gowns, corsets, collars — all of it. Come as your kinkiest, most glamorous self. Fetish-friendly attire is not just allowed, it's encouraged. No street clothes at the door." },
+  { q: "Is this event safe?", a: "100%. Trained staff, strict consent policies, safe words enforced, and zero tolerance for harassment. This is a space built on respect — everyone plays by the rules or they leave." },
+  { q: "Can I attend just one night?", a: "All tickets cover both wild nights. Single-night passes may drop closer to the date — get on the waitlist so you don't miss out." },
+  { q: "Is this 18+ only?", a: "Strictly 18+. Valid ID checked at the door, no exceptions. This is an adults-only playground." },
+  { q: "How do I pay?", a: "Bitcoin or gift cards only — maximum privacy, zero paper trail. No event name ever appears on any statement. Completely discreet from start to finish." },
+  { q: "Can I watch remotely if I can't attend?", a: "Yes! Grab Virtual Access ($75) for HD live stream both nights, exclusive content, photo sets, behind-the-scenes footage, and private gallery access — all straight to your inbox." },
+  { q: "What are the ticket prices?", a: "GA is $150 (both nights). VIP is $250 — lounge, priority entry, drinks & gift bag. Ultra VIP is $500 — private suite, open bar, limo pickup & personal host. Virtual Access is $75." },
+  { q: "Can I bring a guest?", a: "Yes — one ticket per person. Grab separate tickets for your plus one. Group discounts available, just reach out." },
+  { q: "What actually happens at the party?", a: "Banging music, themed kink rooms, live performances, free-flowing drinks (VIP+), and an electric crowd of trans women, sissies, subs, doms, and admirers all there to have the time of their lives." },
 ];
 
 const FALLBACK_ACTIVITY = [];
 
 const TESTIMONIALS = [
-  { text: "Absolutely the most magical night of my life. I felt completely safe, seen, and celebrated from the moment I walked in. Already bought my 2026 ticket.", author: "Valentina R.", role: "VIP Attendee · 2025", stars: 5 },
-  { text: "The level of production, music, and energy was beyond anything I expected. LA's best-kept secret. Nothing comes close.", author: "Mistress D.", role: "Ultra VIP · 2025", stars: 5 },
-  { text: "As a first-timer I was nervous, but the staff were incredible. Zero judgment, all love. I cried happy tears on the way home.", author: "Anonymous", role: "GA Attendee · 2025", stars: 5 },
-  { text: "The private suite was worth every cent. Open bar, photographer, limo — they thought of everything. 10/10 no notes.", author: "Princess Aurora", role: "Ultra VIP · 2025", stars: 5 },
+  { text: "I've been to kink events all over the world. Nothing comes close to this. The energy, the crowd, the themed rooms — absolutely filthy in the best way possible.", author: "Valentina R.", role: "VIP Attendee · 2025", stars: 5 },
+  { text: "Walked in nervous, left feeling like a goddess. The staff made sure everyone felt safe and sexy. Already counting down to 2026.", author: "Mistress D.", role: "Ultra VIP · 2025", stars: 5 },
+  { text: "First time at an event like this and I was shaking. By midnight I never wanted to leave. Zero judgment, pure liberation.", author: "Anonymous", role: "GA Attendee · 2025", stars: 5 },
+  { text: "The Ultra VIP suite paid for itself in the first hour. Open bar, limo, photographer — they thought of every filthy detail. 10/10.", author: "Princess Aurora", role: "Ultra VIP · 2025", stars: 5 },
 ];
 
 function useReveal() {
@@ -291,6 +291,41 @@ function NewsletterPopup() {
   );
 }
 
+function VenueTeaser() {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    fetch("/api/auth/me").then(r => r.json()).then(d => setUser(d.user)).catch(() => {});
+  }, []);
+
+  return (
+    <div className="venue-teaser" style={{ marginBottom: "2rem" }}>
+      <div style={{ fontSize: "2.5rem", marginBottom: "0.8rem" }}>📍</div>
+      <h3 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: "0.5rem" }}>Venue Location</h3>
+      {user ? (
+        <>
+          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.95rem", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 1.2rem" }}>
+            🏢 <strong>The Majestic Venue</strong><br />
+            1234 Sunset Blvd, West Hollywood, CA 90028<br />
+            <span style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)" }}>Doors open 9PM · Full entry instructions sent 48hrs before</span>
+          </p>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1.2rem", background: "rgba(40,167,69,0.1)", border: "1px solid rgba(40,167,69,0.3)", borderRadius: 50, fontSize: "0.78rem", color: "#28a745", fontWeight: 700 }}>
+            ✅ Members only — keep this private
+          </div>
+        </>
+      ) : (
+        <>
+          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 1.2rem" }}>
+            Private venue — Los Angeles, CA. Full address disclosed exclusively to members 48 hours before the event. No walk-ins, no exceptions.
+          </p>
+          <Link href="/register" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.6rem 1.4rem", background: "rgba(214,51,132,0.1)", border: "1px solid rgba(214,51,132,0.25)", borderRadius: 50, fontSize: "0.78rem", color: "#f5a9b8", fontWeight: 700, textDecoration: "none" }}>
+            🔒 Members only — sign up to unlock
+          </Link>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function Home() {
   const [verified, setVerified] = useState(false);
   const [splash, setSplash] = useState(true);
@@ -385,7 +420,6 @@ export default function Home() {
             <a href="#faq" onClick={() => setMobileNav(false)}>FAQ</a>
             <a href="#contact" onClick={() => setMobileNav(false)}>Contact</a>
             <Link href="/gallery" onClick={() => setMobileNav(false)}>Gallery</Link>
-            <Link href="/community" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8" }}>Community</Link>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
             <button
@@ -483,29 +517,29 @@ export default function Home() {
           <section className="section" id="about">
             <div style={{ textAlign: "center", marginBottom: "0.8rem" }}><span className="section-pill">💜 The Experience</span></div>
             <h2>About The Party</h2>
-            <p className="section-subtitle">Two nights. One unforgettable experience. A space where you can finally be yourself — no judgment, no limits.</p>
+            <p className="section-subtitle">Two nights of pure filth, freedom & fantasy. A space where your kinks are celebrated, your identity is honored, and the only rule is consent.</p>
 
             {/* Night Cards */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.2rem", marginBottom: "2.5rem" }}>
               <div className="night-card" style={{ borderTop: "3px solid rgba(245,169,184,0.4)" }}>
                 <div className="night-card-night">Night One — Oct 23, 2026</div>
                 <h3>🎵 Opening Night</h3>
-                <p>Live DJ sets, themed rooms, welcome cocktails, and an opening night energy unlike anything you&apos;ve experienced. Dress to impress and come ready to let go.</p>
+                <p>DJ sets that hit hard, themed kink rooms, welcome cocktails, and an opening night energy that&apos;ll make your knees weak. Dress up, show up, and let go of everything.</p>
               </div>
               <div className="night-card" style={{ borderTop: "3px solid rgba(214,51,132,0.5)" }}>
                 <div className="night-card-night">Night Two — Oct 24, 2026</div>
                 <h3>🔥 The Main Event</h3>
-                <p>Full performances, VIP experiences, exclusive themed spaces, and an atmosphere you won&apos;t find anywhere else in Los Angeles. The grand finale you&apos;ll never forget.</p>
+                <p>Live performances, exclusive VIP spaces, the kinkiest themed rooms, and an atmosphere so electric you&apos;ll feel it in your chest. The grand finale that ruins all other parties forever.</p>
               </div>
             </div>
 
             {/* Feature Grid */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
               {[
-                { icon: "🏳️⚧️", title: "Trans & Subs Welcome", desc: "A fully inclusive space for trans women, sissies, subs, doms, and admirers. Everyone belongs here, no exceptions." },
-                { icon: "🔒", title: "Private & Discreet", desc: "Venue revealed 48hrs before. No photos without consent. What happens at the party stays at the party." },
-                { icon: "🛡️", title: "Consent First", desc: "Trained staff, strict consent policies, safe words enforced. Zero tolerance for harassment — we take this seriously." },
-                { icon: "✨", title: "Luxury Experience", desc: "Premium venue, professional lighting, top-tier sound system, and an atmosphere dripping in glamour and excellence." },
+                { icon: "🏳️⚧️", title: "Trans & Subs Welcome", desc: "Trans women, sissies, subs, doms, admirers — all welcome, all celebrated. This is your space, no exceptions." },
+                { icon: "🔒", title: "Private & Discreet", desc: "Venue drops 48hrs before. No photos without consent. What happens at the party is nobody else's business." },
+                { icon: "🛡️", title: "Consent First", desc: "Safe words enforced, trained staff on the floor, zero tolerance for creeps. Play hard, play safe." },
+                { icon: "✨", title: "Luxury Kink Experience", desc: "Premium venue, pro lighting, top-tier sound, themed rooms dripping in atmosphere. This isn't a house party." },
               ].map(f => (
                 <div key={f.title} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 18, padding: "1.8rem", transition: "border-color 0.3s, transform 0.3s", cursor: "default" }} className="glass-card">
                   <div className="feature-icon">{f.icon}</div>
@@ -522,7 +556,7 @@ export default function Home() {
           <section className="section" id="tickets">
             <div style={{ textAlign: "center", marginBottom: "0.8rem" }}><span className="section-pill">🎟️ Pricing</span></div>
             <h2>Get Your Tickets</h2>
-            <p className="section-subtitle">Limited capacity. Once they&apos;re gone, they&apos;re gone. Prices increase as the event approaches.</p>
+            <p className="section-subtitle">Limited spots. No exceptions. Prices go up as we sell out — don&apos;t wait and cry about it later.</p>
 
           <div className="tickets-grid">
             {TICKETS.map(t => (
@@ -630,16 +664,7 @@ export default function Home() {
 
         {/* ── Venue Reveal Teaser ── */}
         <Reveal delay={100}>
-          <div className="venue-teaser" style={{ marginBottom: "2rem" }}>
-            <div style={{ fontSize: "2.5rem", marginBottom: "0.8rem" }}>📍</div>
-            <h3 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: "0.5rem" }}>Venue Reveal</h3>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.7, maxWidth: 480, margin: "0 auto 1.2rem" }}>
-              The venue is a stunning private location in Los Angeles. Full address and entry instructions are sent exclusively to ticket holders <strong>48 hours before the event.</strong> No walk-ins, no exceptions.
-            </p>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1.2rem", background: "rgba(214,51,132,0.1)", border: "1px solid rgba(214,51,132,0.25)", borderRadius: 50, fontSize: "0.78rem", color: "#f5a9b8", fontWeight: 700 }}>
-              🔒 Disclosed to ticket holders only
-            </div>
-          </div>
+          <VenueTeaser />
         </Reveal>
 
         {/* ── FAQ ── */}
@@ -670,7 +695,7 @@ export default function Home() {
             <div className="email-section">
               <div style={{ marginBottom: "0.8rem" }}><span className="section-pill">📧 Waitlist</span></div>
               <h2>Join the Waitlist</h2>
-              <p>Be first to know about ticket drops, venue reveal, and exclusive pre-party info. No spam, ever.</p>
+              <p>Get early bird pricing, the venue reveal 48hrs before anyone else, and exclusive pre-party info. No spam — just the good stuff.</p>
               {emailSent ? (
                 <div className="email-success" style={{ textAlign: "center" }}>✅ You&apos;re on the list!</div>
               ) : (
@@ -693,7 +718,7 @@ export default function Home() {
           <section className="section" id="contact">
             <div style={{ textAlign: "center", marginBottom: "0.8rem" }}><span className="section-pill">📬 Get In Touch</span></div>
             <h2>Contact Us</h2>
-            <p className="section-subtitle">Questions? Group bookings? Special requests? We&apos;re here for you.</p>
+            <p className="section-subtitle">Questions? Group bookings? Special requests? Slide into our DMs — we don&apos;t bite. Unless you ask nicely. 😈</p>
             <div className="social-bar">
               <a href="mailto:sissyfantasyisland70@gmail.com" className="social-link"><span>📧</span> Email Us</a>
               <a href="https://wa.me/14153053689" target="_blank" rel="noopener" className="social-link"><span>💬</span> WhatsApp</a>
@@ -728,8 +753,6 @@ export default function Home() {
             </div>
             <div className="footer-col">
               <h4>Community</h4>
-              <Link href="/community">Community</Link>
-              <Link href="/chat">Live Chat</Link>
               <Link href="/gallery">Gallery</Link>
               <Link href="/events">Events</Link>
             </div>
