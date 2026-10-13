@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
-import getSupabase from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
+
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "https://bjebmtxqoikzyeklgkex.supabase.co";
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+  return createClient(url, key);
+}
 
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
 
