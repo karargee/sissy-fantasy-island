@@ -91,7 +91,6 @@ const FAQS = [
 
 const FALLBACK_ACTIVITY = [
   { name: "Anonymous", action: "purchased VIP Access — $250", time: "recently", emoji: "👑" },
-  { name: "Anonymous", action: "joined the waitlist", time: "recently", emoji: "🌸" },
   { name: "Anonymous", action: "got General Admission — $150", time: "recently", emoji: "🎟️" },
 ];
 
