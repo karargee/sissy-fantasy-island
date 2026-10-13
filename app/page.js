@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
 import Link from "next/link";
+import ChatWidget from "@/app/components/ChatWidget";
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const VIRTUAL_TIER = {
@@ -777,6 +778,7 @@ export default function Home() {
 
       <SocialProofBar />
       <NewsletterPopup />
+      <ChatWidget />
 
       {/* ── Payment Modal ── */}
       {payModal && (
