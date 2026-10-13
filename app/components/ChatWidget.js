@@ -35,10 +35,9 @@ export default function ChatWidget() {
         const data = await res.json();
         if (data.messages && data.messages.length > 0) {
           setMessages([
-            { id: 0, from: "admin", text: "Hey! 👋 Welcome to Trans Party. Ask us anything — tickets, dress code, consent, masked sessions, and more!" },
+            { id: 0, from: "admin", text: "Hey gorgeous 😈 Welcome to LA Trans Party — LA's kinkiest adults-only playground. Ask us anything — tickets, kink rooms, dress code, what to expect on the night, and more. We don't bite... unless you want us to. 😏" },
             ...data.messages.map((m) => ({ id: m.id, from: m.from === "admin" ? "bot" : "user", text: m.text })),
           ]);
-        }
         }
       } catch {}
     }
