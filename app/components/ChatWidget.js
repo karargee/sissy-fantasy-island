@@ -14,7 +14,7 @@ function getSessionId() {
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 0, from: "admin", text: "Hey! 👋 Welcome to Trans Party. Ask us anything — tickets, dress code, consent, masked sessions, and more!" },
+    { id: 0, from: "admin", text: "Hey gorgeous 😈 Welcome to LA Trans Party — LA's kinkiest adults-only playground. Ask us anything — tickets, kink rooms, dress code, what to expect on the night, and more. We don't bite... unless you want us to. 😏" },
   ]);
   const [input, setInput] = useState("");
   const [sessionId, setSessionId] = useState(null);
@@ -38,6 +38,7 @@ export default function ChatWidget() {
             { id: 0, from: "admin", text: "Hey! 👋 Welcome to Trans Party. Ask us anything — tickets, dress code, consent, masked sessions, and more!" },
             ...data.messages.map((m) => ({ id: m.id, from: m.from === "admin" ? "bot" : "user", text: m.text })),
           ]);
+        }
         }
       } catch {}
     }
@@ -78,7 +79,7 @@ export default function ChatWidget() {
       {open && (
         <div className="chat-window">
           <div className="chat-header">
-            <span>🏳️⚧️ Trans Party Chat</span>
+            <span>😈 LA Trans Party — Live Chat</span>
             <button className="chat-close" onClick={() => setOpen(false)}>✕</button>
           </div>
           <div className="chat-messages">
@@ -94,7 +95,7 @@ export default function ChatWidget() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message..."
+              placeholder="Ask us anything... 😈"
               className="chat-input"
             />
             <button type="submit" className="chat-send">→</button>

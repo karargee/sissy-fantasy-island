@@ -13,9 +13,9 @@ const VIRTUAL_TIER = {
   color: "#5bcefa",
   night: "Both Nights — Remote",
   perks: [
-    "HD live stream — both nights",
-    "Full party content & photo sets",
-    "Private members-only gallery access",
+    "HD live stream — watch the kink unfold both nights",
+    "Explicit party content & uncensored photo sets",
+    "Private members-only gallery — no filters, no limits",
     "Behind-the-scenes & backstage footage",
     "Live chat with attendees during the event",
     "Downloadable content after the event",
@@ -31,11 +31,12 @@ const TICKETS = [
     night: "Both Nights",
     perks: [
       "Entry both nights — Oct 23 & 24",
-      "Full access to main party floor & all themed rooms",
+      "Full access to main party floor & all kink rooms",
       "Welcome cocktail on arrival",
       "Professional DJ both nights",
-      "Consent-first environment with trained staff",
-      "Trans women, sissies, subs & admirers welcome",
+      "Themed play spaces — explore your deepest fantasies",
+      "Trans women, sissies, subs, doms & admirers welcome",
+      "Consent-first environment — play hard, play safe",
     ],
   },
   {
@@ -50,9 +51,10 @@ const TICKETS = [
       "Exclusive VIP lounge — both nights",
       "Priority entry, no waiting in line",
       "3 premium drinks per night included",
+      "Access to private kink spaces — VIP only",
       "Reserved VIP seating area",
-      "Private meet & greet with hosts",
-      "Curated VIP gift bag ($80+ value)",
+      "Private meet & greet with hosts & performers",
+      "Curated VIP gift bag with kinky surprises ($80+ value)",
       "Name on the VIP guest list",
     ],
   },
@@ -64,12 +66,13 @@ const TICKETS = [
     night: "Both Nights",
     perks: [
       "Everything in VIP",
-      "Private suite access both nights",
+      "Private suite — your own space to play both nights",
       "Personal host assigned for the evening",
       "Unlimited premium open bar both nights",
+      "Exclusive access to the most explicit kink rooms",
       "Backstage & performer meet & greet",
       "Professional photo session with photographer",
-      "Luxury gift package ($200+ value)",
+      "Luxury kink gift package ($200+ value)",
       "Complimentary limo pickup — LA area",
       "Early venue access — 1hr before doors open",
     ],
@@ -86,7 +89,7 @@ const FAQS = [
   { q: "Can I watch remotely if I can't attend?", a: "Yes! Grab Virtual Access ($75) for HD live stream both nights, exclusive content, photo sets, behind-the-scenes footage, and private gallery access — all straight to your inbox." },
   { q: "What are the ticket prices?", a: "GA is $150 (both nights). VIP is $250 — lounge, priority entry, drinks & gift bag. Ultra VIP is $500 — private suite, open bar, limo pickup & personal host. Virtual Access is $75." },
   { q: "Can I bring a guest?", a: "Yes — one ticket per person. Grab separate tickets for your plus one. Group discounts available, just reach out." },
-  { q: "What actually happens at the party?", a: "Banging music, themed kink rooms, live performances, free-flowing drinks (VIP+), and an electric crowd of trans women, sissies, subs, doms, and admirers all there to have the time of their lives." },
+  { q: "What actually happens at the party?", a: "Banging music, themed kink rooms, live erotic performances, free-flowing drinks (VIP+), and an electric crowd of trans women, sissies, subs, doms, and admirers all there to explore their deepest sexual fantasies. This is an adults-only sexual playground — come ready to play." },
 ];
 
 const FALLBACK_ACTIVITY = [];
@@ -450,7 +453,7 @@ export default function Home() {
             </h1>
 
             <p style={{ fontSize: "clamp(1rem, 2.2vw, 1.25rem)", color: "rgba(255,255,255,0.5)", maxWidth: 520, margin: "0 auto 2rem", lineHeight: 1.8 }}>
-              Two wild nights of music, kink & pure liberation. Dress up, let go, and play — LA&apos;s most exclusive trans &amp; subs party is back. Oct 23 &amp; 24, 2026.
+              Two filthy nights of music, kink, and sexual liberation. Themed play rooms, live performances, and a crowd that&apos;s here to explore every fantasy. LA&apos;s most explicit trans &amp; subs party. Oct 23 &amp; 24, 2026.
             </p>
 
             <div style={{ margin: "0 auto 2.5rem" }}><LiveActivityFeed /></div>
@@ -519,29 +522,29 @@ export default function Home() {
           <section className="section" id="about">
             <div style={{ textAlign: "center", marginBottom: "0.8rem" }}><span className="section-pill">💜 The Experience</span></div>
             <h2>About The Party</h2>
-            <p className="section-subtitle">Two nights of pure filth, freedom & fantasy. A space where your kinks are celebrated, your identity is honored, and the only rule is consent.</p>
+            <p className="section-subtitle">Two nights of pure filth, sexual freedom & fantasy. A space where your kinks are celebrated, your identity is honored, and the only rule is consent. Expect themed kink rooms, live erotic performances, and a crowd that came to play.</p>
 
             {/* Night Cards */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.2rem", marginBottom: "2.5rem" }}>
               <div className="night-card" style={{ borderTop: "3px solid rgba(245,169,184,0.4)" }}>
                 <div className="night-card-night">Night One — Oct 23, 2026</div>
                 <h3>🎵 Opening Night</h3>
-                <p>DJ sets that hit hard, themed kink rooms, welcome cocktails, and an opening night energy that&apos;ll make your knees weak. Dress up, show up, and let go of everything.</p>
+                <p>DJ sets that hit hard, themed kink rooms, welcome cocktails, and an opening night energy that&apos;ll make your knees weak. Dress up, show up, and surrender to every filthy fantasy you&apos;ve been holding back.</p>
               </div>
               <div className="night-card" style={{ borderTop: "3px solid rgba(214,51,132,0.5)" }}>
                 <div className="night-card-night">Night Two — Oct 24, 2026</div>
                 <h3>🔥 The Main Event</h3>
-                <p>Live performances, exclusive VIP spaces, the kinkiest themed rooms, and an atmosphere so electric you&apos;ll feel it in your chest. The grand finale that ruins all other parties forever.</p>
+                <p>Live erotic performances, exclusive VIP play spaces, the kinkiest themed rooms, and an atmosphere so charged you&apos;ll feel it between your legs. The grand finale that ruins all other parties forever.</p>
               </div>
             </div>
 
             {/* Feature Grid */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
               {[
-                { icon: "🏳️⚧️", title: "Trans & Subs Welcome", desc: "Trans women, sissies, subs, doms, admirers — all welcome, all celebrated. This is your space, no exceptions." },
-                { icon: "🔒", title: "Private & Discreet", desc: "Venue drops 48hrs before. No photos without consent. What happens at the party is nobody else's business." },
-                { icon: "🛡️", title: "Consent First", desc: "Safe words enforced, trained staff on the floor, zero tolerance for creeps. Play hard, play safe." },
-                { icon: "✨", title: "Luxury Kink Experience", desc: "Premium venue, pro lighting, top-tier sound, themed rooms dripping in atmosphere. This isn't a house party." },
+                { icon: "🏳️⚧️", title: "Trans & Subs Welcome", desc: "Trans women, sissies, subs, doms, admirers — all welcome, all celebrated. Come as you are, play as you please." },
+                { icon: "🔒", title: "Private & Discreet", desc: "Venue drops 48hrs before. No photos without consent. What happens in the kink rooms stays in the kink rooms." },
+                { icon: "🛡️", title: "Consent First", desc: "Safe words enforced, trained staff on the floor, zero tolerance for creeps. Push limits — but only the ones you want pushed." },
+                { icon: "✨", title: "Luxury Kink Experience", desc: "Premium venue, pro lighting, top-tier sound, themed play rooms dripping in atmosphere. This isn't a house party — it's a sexual playground." },
               ].map(f => (
                 <div key={f.title} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 18, padding: "1.8rem", transition: "border-color 0.3s, transform 0.3s", cursor: "default" }} className="glass-card">
                   <div className="feature-icon">{f.icon}</div>
@@ -558,7 +561,7 @@ export default function Home() {
           <section className="section" id="tickets">
             <div style={{ textAlign: "center", marginBottom: "0.8rem" }}><span className="section-pill">🎟️ Pricing</span></div>
             <h2>Get Your Tickets</h2>
-            <p className="section-subtitle">Limited spots. No exceptions. Prices go up as we sell out — don&apos;t wait and cry about it later.</p>
+            <p className="section-subtitle">Limited spots. No exceptions. Every ticket gets you into the kink rooms, the performances, and the most sexually charged party in LA. Prices go up as we sell out — don&apos;t wait.</p>
 
           <div className="tickets-grid">
             {TICKETS.map(t => (
@@ -586,7 +589,7 @@ export default function Home() {
                 <div style={{ fontSize: "0.65rem", fontWeight: 800, textTransform: "uppercase", letterSpacing: 3, color: "#5bcefa", marginBottom: "0.6rem" }}>📺 Can&apos;t Make It to LA?</div>
                 <h3 style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.6rem" }}>Virtual Access — <span style={{ color: "#5bcefa" }}>$75</span></h3>
                 <p style={{ fontSize: "0.88rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.8, marginBottom: "1.2rem" }}>
-                  Get full remote access — HD live stream both nights, exclusive party content, photo sets, behind-the-scenes footage, and private gallery. Everything delivered to your inbox within 24hrs.
+                  Watch the filth unfold from anywhere — HD live stream both nights, uncensored party content, explicit photo sets, behind-the-scenes footage, and private gallery access. Everything delivered to your inbox within 24hrs.
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1.5rem" }}>
                   {VIRTUAL_TIER.perks.map(p => (
