@@ -4,7 +4,6 @@ import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
 import Link from "next/link";
 import ChatWidget from "./components/ChatWidget";
-
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const VIRTUAL_TIER = {
@@ -344,14 +343,14 @@ export default function Home() {
 
   return (
     <div className="page-wrap">
-      {/* Ambient background orbs */}
+      <a href="#main-content" className="skip-link">Skip to content</a>
       <div className="bg-animation">
         <div className="bg-orb bg-orb-1"></div>
         <div className="bg-orb bg-orb-2"></div>
         <div className="bg-orb bg-orb-3"></div>
       </div>
 
-      <div className="container" style={{ paddingBottom: "5rem" }}>
+      <div className="container" id="main-content" style={{ paddingBottom: "5rem" }}>
 
         {/* ── Announcement Ribbon ── */}
         {(cmsBanner ? cmsBanner.active : true) && (
@@ -510,27 +509,27 @@ export default function Home() {
             <h2>Get Your Tickets</h2>
             <p className="section-subtitle">Limited capacity. Once they&apos;re gone, they&apos;re gone. Don&apos;t wait.</p>
 
-            <div className="tickets-grid">
-              {TICKETS.map(t => (
-                <div key={t.name} className="ticket-card" style={{ borderTop: `4px solid ${t.color}` }}>
-                  {t.popular && <div className="popular-badge">🔥 MOST POPULAR</div>}
-                  <div className="ticket-emoji">{t.emoji}</div>
-                  <div style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: 2, marginBottom: "0.3rem", fontWeight: 700 }}>{t.night}</div>
-                  <h3>{t.name}</h3>
-                  <div className="price" style={{ color: t.color }}>${t.price}<span className="price-period"> / person</span></div>
-                  <ul className="perks">{t.perks.map(p => <li key={p}>{p}</li>)}</ul>
-                  <button className="buy-btn" style={{ background: `linear-gradient(135deg, ${t.color}, #6f42c1)`, borderRadius: 12 }} onClick={() => openPayModal(t.name, t.price)}>
-                    Get {t.name} — ${t.price}
-                  </button>
-                  <div className="payment-icons">
-                    <span className="btc-badge">₿ Bitcoin</span>
-                    <span className="btc-badge" style={{ background: "rgba(245,169,184,0.1)", borderColor: "rgba(245,169,184,0.25)", color: "#f5a9b8" }}>🎁 Gift Card</span>
-                  </div>
+          <div className="tickets-grid">
+            {TICKETS.map(t => (
+              <div key={t.name} className="ticket-card" style={{ borderTop: `4px solid ${t.color}` }}>
+                {t.popular && <div className="popular-badge">🔥 MOST POPULAR</div>}
+                <div className="ticket-emoji">{t.emoji}</div>
+                <h3>{t.name}</h3>
+                <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.4)", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: 1 }}>{t.night}</div>
+                <div className="price" style={{ color: t.color }}>${t.price}<span className="price-period"> per person</span></div>
+                <ul className="perks">{t.perks.map(p => <li key={p}>{p}</li>)}</ul>
+                <button className="buy-btn" style={{ background: `linear-gradient(135deg, ${t.color}, #6f42c1)` }} onClick={() => openPayModal(t.name, t.price)}>
+                  Get {t.name} — ${t.price}
+                </button>
+                <div className="payment-icons">
+                  <span className="btc-badge">₿ Bitcoin</span>
+                  <span className="btc-badge" style={{ background: "rgba(245,169,184,0.15)", borderColor: "rgba(245,169,184,0.3)", color: "#f5a9b8" }}>🎁 Gift Card</span>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
 
-            {/* Virtual Access */}
+          {/* Virtual Access */}
             <div style={{ marginTop: "2rem", background: "rgba(91,206,250,0.04)", border: "1px solid rgba(91,206,250,0.18)", borderRadius: 22, padding: "2.5rem", display: "flex", flexWrap: "wrap", gap: "2rem", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ flex: 1, minWidth: 280 }}>
                 <div style={{ fontSize: "0.65rem", fontWeight: 800, textTransform: "uppercase", letterSpacing: 3, color: "#5bcefa", marginBottom: "0.6rem" }}>📺 Can&apos;t Make It to LA?</div>
