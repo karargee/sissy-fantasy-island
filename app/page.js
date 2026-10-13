@@ -89,10 +89,7 @@ const FAQS = [
   { q: "What happens at the party?", a: "Music, dancing, themed rooms, performances, socializing, and a fully inclusive atmosphere for trans women, sissies, subs, doms, and admirers." },
 ];
 
-const FALLBACK_ACTIVITY = [
-  { name: "Anonymous", action: "purchased VIP Access — $250", time: "recently", emoji: "👑" },
-  { name: "Anonymous", action: "got General Admission — $150", time: "recently", emoji: "🎟️" },
-];
+const FALLBACK_ACTIVITY = [];
 
 const TESTIMONIALS = [
   { text: "Absolutely the most magical night of my life. I felt completely safe, seen, and celebrated from the moment I walked in. Already bought my 2026 ticket.", author: "Valentina R.", role: "VIP Attendee · 2025", stars: 5 },
@@ -151,7 +148,7 @@ function CountdownTimer() {
 }
 
 function LiveActivityFeed() {
-  const [events, setEvents] = useState(FALLBACK_ACTIVITY);
+  const [events, setEvents] = useState([]);
   const [idx, setIdx] = useState(0);
   const [animKey, setAnimKey] = useState(0);
 
@@ -171,7 +168,9 @@ function LiveActivityFeed() {
     return () => clearInterval(id);
   }, [events]);
 
-  const item = events[idx] || FALLBACK_ACTIVITY[0];
+  if (events.length === 0) return null;
+
+  const item = events[idx];
   return (
     <div className="live-feed-pill" key={animKey}>
       <span className="live-dot"></span>
