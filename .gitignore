@@ -3,3 +3,14 @@ node_modules/
 .env.local
 .env
 data/*.json
+
+# Junk files
+*.jpeg
+*.jpg
+*.png
+*.gif
+*.bundle
+*.txt
+Mobile Dungeon*
+encoded.txt
+dungeon.bundle
