@@ -1,20 +1,23 @@
 import { NextResponse } from "next/server";
-import redis from "@/lib/redis";
+import getSupabase from "@/lib/supabase";
 
 export async function GET() {
-  let redisTest = "not tested";
+  let supabaseTest = "not tested";
   try {
-    await redis.set("debug_ping", "ok");
-    const val = await redis.get("debug_ping");
-    redisTest = val === "ok" ? "connected" : "unexpected: " + val;
+    const supabase = getSupabase();
+    const { error } = await supabase.from("site_settings").select("key").limit(1);
+    supabaseTest = error ? "error: " + error.message : "connected";
   } catch (e) {
-    redisTest = "error: " + e.message;
+    supabaseTest = "error: " + e.message;
   }
 
   return NextResponse.json({
-    UPSTASH_REDIS_REST_URL: !!process.env.UPSTASH_REDIS_REST_URL,
-    UPSTASH_REDIS_REST_TOKEN: !!process.env.UPSTASH_REDIS_REST_TOKEN,
+    SUPABASE_URL: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    SUPABASE_SECRET_KEY: !!process.env.SUPABASE_SECRET_KEY,
     JWT_SECRET: !!process.env.JWT_SECRET,
-    redisTest,
+    GMAIL_USER: !!process.env.GMAIL_USER,
+    GMAIL_APP_PASSWORD: !!process.env.GMAIL_APP_PASSWORD,
+    STRIPE_SECRET_KEY: !!process.env.STRIPE_SECRET_KEY,
+    supabaseTest,
   });
 }
