@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import getSupabase from "@/lib/supabase";
 
-const ADMIN_PASS = "transparty2026";
+const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
 
 async function sendEmail(subject, html) {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import getSupabase from "@/lib/supabase";
 
-const ADMIN_PASS = "transparty2026";
+const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 
 export async function GET(req) {
   if (req.headers.get("x-admin-pass") !== ADMIN_PASS)

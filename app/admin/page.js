@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-const ADMIN_PASSWORD = "transparty2026";
+const ADMIN_PASSWORD = "";
 
 const TABS = [
   { key: "overview", label: "📊 Overview" },
@@ -216,9 +216,14 @@ export default function Admin() {
     } catch {}
   }
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
-    if (pass === ADMIN_PASSWORD) setAuthed(true);
+    const res = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: pass }),
+    });
+    if (res.ok) setAuthed(true);
     else alert("Wrong password");
   }
 
