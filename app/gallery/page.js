@@ -3,20 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const GALLERY = [
-  { img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80", caption: "Opening Night — LA 2025", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80", caption: "Trans Party — Miami", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80", caption: "Masked Gala — NYC", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80", caption: "Attendee Spotlight — VIP", tag: "Members" },
-  { img: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&q=80", caption: "Glam Night — Los Angeles", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=800&q=80", caption: "Community Meetup — London", tag: "Community" },
-  { img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80", caption: "Annual Gala — Chicago 2025", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1496440737103-cd596325d314?w=800&q=80", caption: "VIP Lounge — Las Vegas", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80", caption: "Fashion Shoot — NYC", tag: "Members" },
-  { img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80", caption: "Style Session — Miami", tag: "Members" },
-  { img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80", caption: "Community Portrait", tag: "Community" },
-  { img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80", caption: "Glam Portrait — Ultra VIP", tag: "Members" },
-];
+const GALLERY = [];
 
 const TAGS = ["All", "Events", "Members", "Community"];
 

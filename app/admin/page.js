@@ -76,14 +76,7 @@ export default function Admin() {
     { name: "Sissy Brunch & Social — Miami", date: "October 2026", location: "TBA — Private Venue", price: "From $150", status: "Coming Soon", emoji: "🥂", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80" },
     { name: "Masked Gala — New York", date: "December 2026", location: "TBA — Private Venue", price: "From $400", status: "Coming Soon", emoji: "🎭", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80" },
   ]);
-  const [gallery, setGallery] = useState([
-    { img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80", caption: "Community Night — Vegas 2025", tag: "Events" },
-    { img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80", caption: "Sissy Brunch — Miami", tag: "Events" },
-    { img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80", caption: "Masked Gala — NYC", tag: "Events" },
-    { img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80", caption: "Member Spotlight — Diamond Tier", tag: "Members" },
-    { img: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&q=80", caption: "Glam Night — Los Angeles", tag: "Events" },
-    { img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=800&q=80", caption: "Inner Circle Meetup — London", tag: "Community" },
-  ]);
+  const [gallery, setGallery] = useState([]);
   const [faqs, setFaqs] = useState([
     { q: "Is this 100% discreet?", a: "Yes. Billing shows as a discreet, non-descriptive name on all statements." },
   ]);

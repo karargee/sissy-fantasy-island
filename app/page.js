@@ -724,7 +724,7 @@ export default function Home() {
               <a href="mailto:sissyfantasyisland70@gmail.com" className="social-link"><span>📧</span> Email Us</a>
               <a href="https://wa.me/14153053689" target="_blank" rel="noopener" className="social-link"><span>💬</span> WhatsApp</a>
               <a href="tel:+14153053689" className="social-link"><span>📞</span> (415) 305-3689</a>
-              <a href="https://t.me/tshungkathy10" target="_blank" rel="noopener" className="social-link"><span>✈️</span> Telegram</a>
+
             </div>
             <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.82rem", color: "rgba(255,255,255,0.3)" }}>
               We typically respond within 2 hours. All inquiries are handled with complete discretion.

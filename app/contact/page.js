@@ -46,7 +46,6 @@ export default function ContactPage() {
             {[
               { icon: "📧", label: "Email", value: "sissyfantasyisland70@gmail.com", href: "mailto:sissyfantasyisland70@gmail.com", note: "Best for ticket & event questions" },
               { icon: "📞", label: "Phone / WhatsApp", value: "(415) 305-3689", href: "https://wa.me/14153053689", note: "WhatsApp preferred — fastest response" },
-              { icon: "✈️", label: "Telegram", value: "@tshungkathy10", href: "https://t.me/tshungkathy10", note: "For community & event questions" },
             ].map(c => (
               <a key={c.label} href={c.href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
                 <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "1.2rem 1.4rem", display: "flex", gap: "1rem", alignItems: "flex-start", transition: "border-color 0.2s" }}
