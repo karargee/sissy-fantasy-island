@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
 import Link from "next/link";
-import ChatWidget from "./components/ChatWidget";
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const VIRTUAL_TIER = {
@@ -385,7 +384,6 @@ export default function Home() {
             <a href="#dresscode" onClick={() => setMobileNav(false)}>Dress Code</a>
             <a href="#faq" onClick={() => setMobileNav(false)}>FAQ</a>
             <a href="#contact" onClick={() => setMobileNav(false)}>Contact</a>
-            <Link href="/chat" onClick={() => setMobileNav(false)} style={{ color: "#5bcefa", fontWeight: 600 }}>💬 Chat</Link>
             <Link href="/gallery" onClick={() => setMobileNav(false)}>Gallery</Link>
             <Link href="/community" onClick={() => setMobileNav(false)} style={{ color: "#f5a9b8" }}>Community</Link>
           </div>
@@ -416,7 +414,7 @@ export default function Home() {
             </h1>
 
             <p style={{ fontSize: "clamp(1rem, 2.2vw, 1.25rem)", color: "rgba(255,255,255,0.5)", maxWidth: 520, margin: "0 auto 2rem", lineHeight: 1.8 }}>
-              Two nights of music, freedom &amp; unapologetic self-expression. The most exclusive trans &amp; subs party in Los Angeles — Oct 23 &amp; 24, 2026.
+              Two wild nights of music, kink & pure liberation. Dress up, let go, and play — LA&apos;s most exclusive trans &amp; subs party is back. Oct 23 &amp; 24, 2026.
             </p>
 
             <div style={{ margin: "0 auto 2.5rem" }}><LiveActivityFeed /></div>
@@ -755,7 +753,6 @@ export default function Home() {
 
       <SocialProofBar />
       <NewsletterPopup />
-      <ChatWidget />
 
       {/* ── Payment Modal ── */}
       {payModal && (
