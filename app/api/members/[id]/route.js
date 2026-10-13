@@ -1,34 +1,41 @@
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
-import redis from "@/lib/redis";
+import getSupabase from "@/lib/supabase";
 
 export async function GET(req, { params }) {
   try {
     const { id } = await params;
+    const supabase = getSupabase();
 
-    // Find user by id
-    const keys = await redis.keys("user:*");
-    let member = null;
-    for (const k of keys) {
-      const raw = await redis.get(k);
-      const u = typeof raw === "string" ? JSON.parse(raw) : raw;
-      if (u?.id === id) { member = u; break; }
-    }
+    const { data: member, error: memberError } = await supabase
+      .from("users")
+      .select("id, sissy_name, tier, bio, member_since")
+      .eq("id", id)
+      .single();
 
-    if (!member) return NextResponse.json({ error: "Member not found" }, { status: 404 });
+    if (memberError || !member) return NextResponse.json({ error: "Member not found" }, { status: 404 });
 
-    // Get their posts
-    const postIds = await redis.lrange("posts", 0, 99);
-    const allPosts = await Promise.all(postIds.map(pid => redis.get(`post:${pid}`)));
-    const posts = allPosts
-      .filter(Boolean)
-      .map(p => typeof p === "string" ? JSON.parse(p) : p)
-      .filter(p => p.authorId === id)
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const { data: posts, error: postsError } = await supabase
+      .from("posts")
+      .select("id, content, likes, created_at")
+      .eq("user_id", id)
+      .order("created_at", { ascending: false });
+    if (postsError) throw postsError;
 
     return NextResponse.json({
-      member: { id: member.id, sissyName: member.sissyName, tier: member.tier, bio: member.bio, memberSince: member.memberSince },
-      posts,
+      member: {
+        id: member.id,
+        sissyName: member.sissy_name,
+        tier: member.tier,
+        bio: member.bio,
+        memberSince: member.member_since,
+      },
+      posts: (posts || []).map((p) => ({
+        id: p.id,
+        content: p.content,
+        likes: p.likes || 0,
+        createdAt: p.created_at,
+        comments: [],
+      })),
     });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });

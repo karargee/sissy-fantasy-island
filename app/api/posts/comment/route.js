@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import redis from "@/lib/redis";
+import getSupabase from "@/lib/supabase";
 
 export async function POST(req) {
   try {
@@ -10,30 +10,40 @@ export async function POST(req) {
     const { postId, content } = await req.json();
     if (!content?.trim()) return NextResponse.json({ error: "Comment cannot be empty" }, { status: 400 });
 
-    const raw = await redis.get(`post:${postId}`);
-    if (!raw) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    const supabase = getSupabase();
 
-    const post = typeof raw === "string" ? JSON.parse(raw) : raw;
-    const comment = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
+    const { data: post, error: postError } = await supabase
+      .from("posts")
+      .select("id, user_id")
+      .eq("id", postId)
+      .single();
+    if (postError || !post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+
+    const { data: comment, error } = await supabase
+      .from("comments")
+      .insert({ post_id: postId, user_id: session.id, content: content.trim() })
+      .select()
+      .single();
+    if (error) throw error;
+
+    // Send notification to post author (not self)
+    if (post.user_id !== session.id) {
+      await supabase.from("notifications").insert({
+        user_id: post.user_id,
+        type: "comment",
+        message: `${session.sissyName} commented on your post`,
+        read: false,
+      });
+    }
+
+    return NextResponse.json({
+      id: comment.id,
       authorId: session.id,
       authorName: session.sissyName,
       authorTier: session.tier,
-      content: content.trim(),
-      createdAt: new Date().toISOString(),
-    };
-
-    post.comments = [...(post.comments || []), comment];
-    await redis.set(`post:${postId}`, JSON.stringify(post));
-
-    // Send notification to post author (not self)
-    if (post.authorId !== session.id) {
-      const notif = { id: `${Date.now()}`, type: "comment", fromName: session.sissyName, postId, read: false, createdAt: new Date().toISOString() };
-      await redis.lpush(`notifs:${post.authorId}`, JSON.stringify(notif));
-      await redis.ltrim(`notifs:${post.authorId}`, 0, 49);
-    }
-
-    return NextResponse.json(comment);
+      content: comment.content,
+      createdAt: comment.created_at,
+    });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

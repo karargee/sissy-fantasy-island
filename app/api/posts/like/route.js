@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import redis from "@/lib/redis";
+import getSupabase from "@/lib/supabase";
 
 export async function POST(req) {
   try {
@@ -8,27 +8,55 @@ export async function POST(req) {
     if (!session) return NextResponse.json({ error: "Not logged in" }, { status: 401 });
 
     const { postId } = await req.json();
-    const raw = await redis.get(`post:${postId}`);
-    if (!raw) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    const supabase = getSupabase();
 
-    const post = typeof raw === "string" ? JSON.parse(raw) : raw;
-    const likes = post.likes || [];
-    const idx = likes.indexOf(session.id);
-    const liked = idx === -1;
-    if (liked) likes.push(session.id);
-    else likes.splice(idx, 1);
+    const { data: post, error: postError } = await supabase
+      .from("posts")
+      .select("id, user_id")
+      .eq("id", postId)
+      .single();
+    if (postError || !post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
 
-    post.likes = likes;
-    await redis.set(`post:${postId}`, JSON.stringify(post));
+    const { data: existing } = await supabase
+      .from("post_likes")
+      .select("user_id")
+      .eq("user_id", session.id)
+      .eq("post_id", postId)
+      .maybeSingle();
 
-    // Send notification to post author (not self)
-    if (liked && post.authorId !== session.id) {
-      const notif = { id: `${Date.now()}`, type: "like", fromName: session.sissyName, postId, read: false, createdAt: new Date().toISOString() };
-      await redis.lpush(`notifs:${post.authorId}`, JSON.stringify(notif));
-      await redis.ltrim(`notifs:${post.authorId}`, 0, 49);
+    const liked = !existing;
+    if (existing) {
+      const { error: delError } = await supabase
+        .from("post_likes")
+        .delete()
+        .eq("user_id", session.id)
+        .eq("post_id", postId);
+      if (delError) throw delError;
+    } else {
+      const { error: insError } = await supabase
+        .from("post_likes")
+        .insert({ user_id: session.id, post_id: postId });
+      if (insError) throw insError;
     }
 
-    return NextResponse.json({ likes });
+    const { count } = await supabase
+      .from("post_likes")
+      .select("*", { count: "exact", head: true })
+      .eq("post_id", postId);
+
+    await supabase.from("posts").update({ likes: count || 0 }).eq("id", postId);
+
+    // Send notification to post author (not self)
+    if (liked && post.user_id !== session.id) {
+      await supabase.from("notifications").insert({
+        user_id: post.user_id,
+        type: "like",
+        message: `${session.sissyName} liked your post`,
+        read: false,
+      });
+    }
+
+    return NextResponse.json({ likes: count || 0 });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
