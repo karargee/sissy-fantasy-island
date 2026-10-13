@@ -2,8 +2,6 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-const ADMIN_PASSWORD = "";
-
 const TABS = [
   { key: "overview", label: "📊 Overview" },
   { key: "members", label: "👥 Members" },
@@ -50,6 +48,7 @@ function SectionHead({ title }) {
 export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [pass, setPass] = useState("");
+  const adminPassRef = useRef("");
   const [tab, setTab] = useState("overview");
 
   const [members, setMembers] = useState([]);
@@ -123,7 +122,7 @@ export default function Admin() {
     if (!authed) return;
     if (tab === "members") {
       setMembersLoading(true);
-      fetch("/api/admin/members", { headers: { "x-admin-pass": ADMIN_PASSWORD } })
+      fetch("/api/admin/members", { headers: { "x-admin-pass": adminPassRef.current } })
         .then(r => r.json()).then(d => { setMembers(d.users || []); setMembersLoading(false); })
         .catch(() => setMembersLoading(false));
     }
@@ -149,7 +148,7 @@ export default function Admin() {
       fetch("/api/subscribe").then(r => r.json()).then(d => setSubscribers(d.subscribers || []));
     }
     if (tab === "overview") {
-      fetch("/api/admin/members", { headers: { "x-admin-pass": ADMIN_PASSWORD } }).then(r => r.json()).then(d => setMembers(d.users || []));
+      fetch("/api/admin/members", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => setMembers(d.users || []));
       fetch("/api/btc-confirm").then(r => r.json()).then(d => setBtcPayments(d.payments || []));
       fetch("/api/gift-submit").then(r => r.json()).then(d => setGiftSubs(d.submissions || []));
       fetch("/api/contact").then(r => r.json()).then(d => {
@@ -182,7 +181,7 @@ export default function Admin() {
   async function saveSetting(key, value) {
     await fetch("/api/settings", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD },
+      headers: { "Content-Type": "application/json", "x-admin-pass": adminPassRef.current },
       body: JSON.stringify({ key, value }),
     });
     setSavedMsg(key);
@@ -192,7 +191,7 @@ export default function Admin() {
   async function upgradeMember(userId, tier) {
     const res = await fetch("/api/admin/members", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD },
+      headers: { "Content-Type": "application/json", "x-admin-pass": adminPassRef.current },
       body: JSON.stringify({ userId, tier }),
     });
     const data = await res.json();
@@ -223,7 +222,7 @@ export default function Admin() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password: pass }),
     });
-    if (res.ok) setAuthed(true);
+    if (res.ok) { adminPassRef.current = pass; setAuthed(true); }
     else alert("Wrong password");
   }
 
@@ -415,8 +414,8 @@ export default function Admin() {
                         <td className="admin-actions">
                           {b.status === "pending" && (
                             <>
-                              <button className="admin-btn-approve" onClick={async () => { setBtcPayments(btcPayments.map(x => x.id === b.id ? { ...x, status: "verified" } : x)); await fetch("/api/btc-confirm", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: b.id, status: "verified" }) }); }}>✓</button>
-                              <button className="admin-btn-reject" onClick={async () => { setBtcPayments(btcPayments.map(x => x.id === b.id ? { ...x, status: "rejected" } : x)); await fetch("/api/btc-confirm", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: b.id, status: "rejected" }) }); }}>✕</button>
+                              <button className="admin-btn-approve" onClick={async () => { setBtcPayments(btcPayments.map(x => x.id === b.id ? { ...x, status: "verified" } : x)); await fetch("/api/btc-confirm", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": adminPassRef.current }, body: JSON.stringify({ id: b.id, status: "verified" }) }); }}>✓</button>
+                              <button className="admin-btn-reject" onClick={async () => { setBtcPayments(btcPayments.map(x => x.id === b.id ? { ...x, status: "rejected" } : x)); await fetch("/api/btc-confirm", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": adminPassRef.current }, body: JSON.stringify({ id: b.id, status: "rejected" }) }); }}>✕</button>
                             </>
                           )}
                         </td>
@@ -448,8 +447,8 @@ export default function Admin() {
                         <td className="admin-actions">
                           {g.status === "pending" && (
                             <>
-                              <button className="admin-btn-approve" onClick={async () => { setGiftSubs(giftSubs.map(x => x.id === g.id ? { ...x, status: "approved" } : x)); await fetch("/api/gift-submit", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: g.id, status: "approved" }) }); }}>✓</button>
-                              <button className="admin-btn-reject" onClick={async () => { setGiftSubs(giftSubs.map(x => x.id === g.id ? { ...x, status: "rejected" } : x)); await fetch("/api/gift-submit", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": ADMIN_PASSWORD }, body: JSON.stringify({ id: g.id, status: "rejected" }) }); }}>✕</button>
+                              <button className="admin-btn-approve" onClick={async () => { setGiftSubs(giftSubs.map(x => x.id === g.id ? { ...x, status: "approved" } : x)); await fetch("/api/gift-submit", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": adminPassRef.current }, body: JSON.stringify({ id: g.id, status: "approved" }) }); }}>✓</button>
+                              <button className="admin-btn-reject" onClick={async () => { setGiftSubs(giftSubs.map(x => x.id === g.id ? { ...x, status: "rejected" } : x)); await fetch("/api/gift-submit", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": adminPassRef.current }, body: JSON.stringify({ id: g.id, status: "rejected" }) }); }}>✕</button>
                             </>
                           )}
                         </td>
