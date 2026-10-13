@@ -1,72 +1,24 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-
-function getSessionId() {
-  if (typeof window === "undefined") return null;
-  let id = sessionStorage.getItem("chat_session");
-  if (!id) {
-    id = "user_" + Math.random().toString(36).slice(2, 10) + "_" + Date.now();
-    sessionStorage.setItem("chat_session", id);
-  }
-  return id;
-}
+import { useState } from "react";
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { id: 0, from: "admin", text: "Hey gorgeous 😈 Welcome to LA Trans Party — LA's kinkiest adults-only playground. Ask us anything — tickets, kink rooms, dress code, what to expect on the night, and more. We don't bite... unless you want us to. 😏" },
-  ]);
-  const [input, setInput] = useState("");
-  const [sessionId, setSessionId] = useState(null);
-  const bottomRef = useRef(null);
-  const pollRef = useRef(null);
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
-  useEffect(() => {
-    setSessionId(getSessionId());
-  }, []);
-
-  // Poll for new messages every 3 seconds when chat is open
-  useEffect(() => {
-    if (!open || !sessionId) return;
-
-    async function poll() {
-      try {
-        const res = await fetch(`/api/chat?sessionId=${sessionId}`);
-        const data = await res.json();
-        if (data.messages && data.messages.length > 0) {
-          setMessages([
-            { id: 0, from: "admin", text: "Hey gorgeous 😈 Welcome to LA Trans Party — LA's kinkiest adults-only playground. Ask us anything — tickets, kink rooms, dress code, what to expect on the night, and more. We don't bite... unless you want us to. 😏" },
-            ...data.messages.map((m) => ({ id: m.id, from: m.from === "admin" ? "bot" : "user", text: m.text })),
-          ]);
-        }
-      } catch {}
-    }
-
-    poll();
-    pollRef.current = setInterval(poll, 3000);
-    return () => clearInterval(pollRef.current);
-  }, [open, sessionId]);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  async function send(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!input.trim() || !sessionId) return;
-    const userMsg = input.trim();
-    setInput("");
-
-    // Optimistic update
-    setMessages((m) => [...m, { id: Date.now(), from: "user", text: userMsg }]);
-
+    setSending(true);
     try {
-      await fetch("/api/chat", {
+      await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId, text: userMsg, from: "user" }),
+        body: JSON.stringify({ ...form, subject: "Live Chat Message" }),
       });
     } catch {}
+    setSending(false);
+    setSent(true);
   }
 
   return (
@@ -78,27 +30,58 @@ export default function ChatWidget() {
       {open && (
         <div className="chat-window">
           <div className="chat-header">
-            <span>😈 LA Trans Party — Live Chat</span>
+            <span>😈 Message Us</span>
             <button className="chat-close" onClick={() => setOpen(false)}>✕</button>
           </div>
-          <div className="chat-messages">
-            {messages.map((m) => (
-              <div key={m.id} className={`chat-msg chat-msg-${m.from === "bot" || m.from === "admin" ? "bot" : "user"}`}>
-                {m.text}
+          <div style={{ padding: "1rem" }}>
+            {sent ? (
+              <div style={{ textAlign: "center", padding: "2rem 0" }}>
+                <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>✅</div>
+                <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.88rem" }}>Message received! We'll get back to you within 2 hours.</p>
+                <button onClick={() => { setSent(false); setForm({ name: "", email: "", message: "" }); }}
+                  style={{ marginTop: "1rem", background: "none", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)", borderRadius: 8, padding: "0.4rem 1rem", cursor: "pointer", fontSize: "0.8rem" }}>
+                  Send another
+                </button>
               </div>
-            ))}
-            <div ref={bottomRef} />
+            ) : (
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.4)", marginBottom: "0.2rem" }}>
+                  Ask us anything — tickets, kink rooms, dress code. We don't bite... unless you want us to. 😏
+                </p>
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  required
+                  value={form.name}
+                  onChange={e => setForm({ ...form, name: e.target.value })}
+                  className="chat-input"
+                  style={{ borderRadius: 8, padding: "0.6rem 0.8rem" }}
+                />
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  required
+                  value={form.email}
+                  onChange={e => setForm({ ...form, email: e.target.value })}
+                  className="chat-input"
+                  style={{ borderRadius: 8, padding: "0.6rem 0.8rem" }}
+                />
+                <textarea
+                  placeholder="Your message... 😈"
+                  required
+                  rows={4}
+                  value={form.message}
+                  onChange={e => setForm({ ...form, message: e.target.value })}
+                  className="chat-input"
+                  style={{ borderRadius: 8, padding: "0.6rem 0.8rem", resize: "none" }}
+                />
+                <button type="submit" className="chat-send" disabled={sending}
+                  style={{ borderRadius: 8, padding: "0.7rem", fontSize: "0.88rem", fontWeight: 700 }}>
+                  {sending ? "Sending..." : "Send Message →"}
+                </button>
+              </form>
+            )}
           </div>
-          <form className="chat-input-bar" onSubmit={send}>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask us anything... 😈"
-              className="chat-input"
-            />
-            <button type="submit" className="chat-send">→</button>
-          </form>
         </div>
       )}
     </>
