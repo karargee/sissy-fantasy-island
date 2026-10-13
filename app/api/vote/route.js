@@ -1,16 +1,16 @@
-import redis from "@/lib/redis";
 import { NextResponse } from "next/server";
+import getSupabase from "@/lib/supabase";
 
-// GET /api/vote — returns all vote counts
 export async function GET() {
   try {
-    const keys = await redis.keys("vote:*");
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("votes")
+      .select("contestant_id");
+    if (error) return NextResponse.json({ counts: {} });
     const counts = {};
-    if (keys.length) {
-      const vals = await Promise.all(keys.map((k) => redis.get(k)));
-      keys.forEach((k, i) => {
-        counts[k.replace("vote:", "")] = parseInt(vals[i] || 0);
-      });
+    for (const row of data || []) {
+      counts[row.contestant_id] = (counts[row.contestant_id] || 0) + 1;
     }
     return NextResponse.json({ counts });
   } catch {
@@ -18,13 +18,17 @@ export async function GET() {
   }
 }
 
-// POST /api/vote — body: { id }
 export async function POST(req) {
   try {
     const { id } = await req.json();
     if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
-    const count = await redis.incr(`vote:${id}`);
-    return NextResponse.json({ id, count });
+    const supabase = getSupabase();
+    await supabase.from("votes").insert({ contestant_id: id });
+    const { count } = await supabase
+      .from("votes")
+      .select("*", { count: "exact", head: true })
+      .eq("contestant_id", id);
+    return NextResponse.json({ id, count: count || 0 });
   } catch {
     return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
