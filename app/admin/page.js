@@ -60,11 +60,7 @@ export default function Admin() {
   const [contactMsgs, setContactMsgs] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
 
-  const [allChats, setAllChats] = useState({});
-  const [activeChat, setActiveChat] = useState(null);
-  const [adminReply, setAdminReply] = useState("");
-  const chatBottomRef = useRef(null);
-  const chatPollRef = useRef(null);
+  const [liveChats, setLiveChats] = useState([]);
 
   // Settings state
   const [savedMsg, setSavedMsg] = useState("");
@@ -155,21 +151,10 @@ export default function Admin() {
 
   useEffect(() => {
     if (!authed || tab !== "livechat") return;
-    async function fetchChats() {
-      try {
-        const res = await fetch("/api/chat?admin=true");
-        const data = await res.json();
-        setAllChats(data.chats || {});
-      } catch {}
-    }
-    fetchChats();
-    chatPollRef.current = setInterval(fetchChats, 2000);
-    return () => clearInterval(chatPollRef.current);
+    fetch("/api/contact").then(r => r.json()).then(d => {
+      setLiveChats((d.messages || []).filter(m => m.subject === "Live Chat Message"));
+    });
   }, [authed, tab]);
-
-  useEffect(() => {
-    chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [allChats, activeChat]);
 
   async function saveSetting(key, value) {
     await fetch("/api/settings", {
@@ -195,19 +180,6 @@ export default function Admin() {
     }
   }
 
-  async function sendAdminReply(e) {
-    e.preventDefault();
-    if (!adminReply.trim() || !activeChat) return;
-    try {
-      await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: activeChat, text: adminReply.trim(), from: "admin" }),
-      });
-      setAdminReply("");
-    } catch {}
-  }
-
   async function handleLogin(e) {
     e.preventDefault();
     const res = await fetch("/api/admin/login", {
@@ -219,7 +191,7 @@ export default function Admin() {
     else alert("Wrong password");
   }
 
-  const totalUnreadChats = Object.values(allChats).filter(c => c.unreadAdmin > 0).length;
+  const totalUnreadChats = liveChats.length;
   const pendingBtc = btcPayments.filter(p => p.status === "pending").length;
   const pendingGift = giftSubs.filter(g => g.status === "pending").length;
   const unreadContact = contactMsgs.filter(m => !m.read).length;
@@ -321,45 +293,21 @@ export default function Admin() {
 
         {tab === "livechat" && (
           <div>
-            <h1 className="admin-title">Live Chat</h1>
-            <div className="admin-chat-layout">
-              <div className="admin-chat-list">
-                {Object.keys(allChats).length === 0 && <p style={{ opacity: 0.4, padding: "1rem", textAlign: "center" }}>No active chats yet</p>}
-                {Object.entries(allChats).map(([sid, chat]) => (
-                  <button key={sid} className={`admin-chat-item ${activeChat === sid ? "admin-chat-item-active" : ""}`} onClick={() => setActiveChat(sid)}>
-                    <div className="admin-chat-item-top">
-                      <span className="admin-chat-item-name">{sid.slice(0, 15)}...</span>
-                      {chat.unreadAdmin > 0 && <span className="admin-badge">{chat.unreadAdmin}</span>}
+            <h1 className="admin-title">💬 Live Chat Messages ({liveChats.length})</h1>
+            {liveChats.length === 0 ? <Empty text="No chat messages yet. They appear here when visitors use the 💬 button." /> : (
+              <div className="admin-messages">
+                {liveChats.map(m => (
+                  <div key={m.id} className="admin-msg-card">
+                    <div className="admin-msg-header">
+                      <div><strong>{m.name}</strong><span style={{ opacity: 0.5, marginLeft: "0.5rem", fontSize: "0.85rem" }}>{m.email}</span></div>
+                      <span style={{ fontSize: "0.8rem", opacity: 0.4 }}>{new Date(m.created_at).toLocaleString()}</span>
                     </div>
-                    <span className="admin-chat-item-preview">
-                      {chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].text.slice(0, 40) + "..." : "No messages"}
-                    </span>
-                  </button>
+                    <p style={{ opacity: 0.8, lineHeight: 1.6, fontSize: "0.92rem", marginTop: "0.5rem" }}>{m.message}</p>
+                    <a href={`mailto:${m.email}`} style={{ display: "inline-block", marginTop: "0.8rem", fontSize: "0.78rem", color: "#f5a9b8", textDecoration: "none", background: "rgba(214,51,132,0.1)", border: "1px solid rgba(214,51,132,0.25)", borderRadius: 6, padding: "0.3rem 0.8rem" }}>Reply via Email →</a>
+                  </div>
                 ))}
               </div>
-              <div className="admin-chat-convo">
-                {!activeChat ? (
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", opacity: 0.3 }}>Select a conversation</div>
-                ) : (
-                  <>
-                    <div className="admin-chat-messages">
-                      {(allChats[activeChat]?.messages || []).map(m => (
-                        <div key={m.id} className={`admin-chat-bubble ${m.from_role === "admin" ? "admin-chat-bubble-admin" : "admin-chat-bubble-user"}`}>
-                          <div className="admin-chat-bubble-from">{m.from_role === "admin" ? "You" : "User"}</div>
-                          {m.text}
-                          <div className="admin-chat-bubble-time">{new Date(m.created_at).toLocaleTimeString()}</div>
-                        </div>
-                      ))}
-                      <div ref={chatBottomRef} />
-                    </div>
-                    <form className="admin-chat-input" onSubmit={sendAdminReply}>
-                      <input type="text" value={adminReply} onChange={e => setAdminReply(e.target.value)} placeholder="Type a reply..." className="chat-input" />
-                      <button type="submit" className="chat-send">↑</button>
-                    </form>
-                  </>
-                )}
-              </div>
-            </div>
+            )}
           </div>
         )}
 

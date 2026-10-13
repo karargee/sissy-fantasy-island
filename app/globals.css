@@ -2939,3 +2939,59 @@ html, body {
   .stat-item { padding: 1.2rem 0.8rem; }
   .stat-counter { font-size: 1.8rem; }
 }
+
+/* ══════════════════════════════
+   ADMIN MOBILE OVERRIDES
+══════════════════════════════ */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 100% !important;
+    min-height: auto !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.5rem !important;
+    gap: 0.3rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+    background: #0a0a0f !important;
+  }
+  .admin-sidebar::-webkit-scrollbar { display: none; }
+  .admin-logo { display: none !important; }
+  .admin-tab {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    padding: 0.5rem 0.8rem !important;
+    font-size: 0.73rem !important;
+    white-space: nowrap !important;
+    border-left: none !important;
+    border-radius: 8px !important;
+  }
+  .admin-tab-active {
+    border-left: none !important;
+    border-bottom: 2px solid #d63384 !important;
+  }
+  .admin-main { padding: 1rem 0.8rem 4rem !important; }
+  .admin-title { font-size: 1.2rem !important; margin-bottom: 1rem !important; }
+  .admin-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 0.6rem !important; }
+  .admin-stat-card { padding: 0.9rem 0.8rem !important; }
+  .admin-stat-num { font-size: 1.6rem !important; }
+  .admin-stat-label { font-size: 0.65rem !important; }
+  .admin-table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  .admin-table { min-width: 560px !important; font-size: 0.78rem !important; }
+  .admin-table th, .admin-table td { padding: 0.6rem 0.7rem !important; }
+  .admin-msg-card { padding: 1rem !important; }
+  .admin-msg-header { flex-direction: column !important; gap: 0.3rem !important; }
+  .admin-settings-group { padding: 1rem !important; }
+  .admin-chat-layout { grid-template-columns: 1fr !important; height: auto !important; min-height: unset !important; }
+  .admin-chat-list { max-height: 160px !important; border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.06) !important; }
+  .admin-chat-convo { min-height: 280px !important; }
+  .admin-chat-messages { padding: 1rem !important; }
+  .admin-chat-input { padding: 0.8rem !important; }
+}
