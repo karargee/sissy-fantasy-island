@@ -28,9 +28,9 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-box">
         <Link href="/" className="auth-back">← Back to site</Link>
-        <div className="auth-logo">SFI 💕</div>
+        <div className="auth-logo">LA TRANS PARTY 🏳️⚧️</div>
         <h1 className="auth-title">Create Account</h1>
-        <p className="auth-sub">Join Sissy Fantasy Island</p>
+        <p className="auth-sub">Join the LA Trans Party community</p>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-field">

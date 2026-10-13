@@ -134,7 +134,7 @@ export default function DungeonPage() {
 
       {/* NAV */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.1rem 2rem", background: "rgba(8,6,8,0.95)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 900, fontSize: "0.9rem", letterSpacing: 3, textTransform: "uppercase" }}>SFI ðŸ’•</Link>
+        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 900, fontSize: "0.9rem", letterSpacing: 3, textTransform: "uppercase" }}>LA Trans Party 🏳️⚧️</Link>
         <div style={{ display: "flex", gap: "1.8rem", alignItems: "center" }}>
           {[["#packages","Packages"],["#equipment","Equipment"],["#faq","FAQ"]].map(([href,label]) => (
             <a key={href} href={href} style={{ color: "rgba(255,255,255,0.45)", textDecoration: "none", fontSize: "0.8rem", letterSpacing: 1, textTransform: "uppercase" }}>{label}</a>

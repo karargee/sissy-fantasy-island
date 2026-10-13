@@ -42,16 +42,16 @@ export default function ShopPage() {
     <div style={{ minHeight: "100vh", background: "#060608", color: "#f0f0f0" }}>
       {/* Nav */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "1.2rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(6,6,8,0.92)", backdropFilter: "blur(20px)", zIndex: 100 }}>
-        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← SFI 💕</Link>
+        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← LA Trans Party</Link>
         <span style={{ fontSize: "1rem", fontWeight: 800, letterSpacing: 1 }}>🛍️ Shop</span>
-        <Link href="/register" style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.45rem 1rem", borderRadius: 6, color: "white", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>Join</Link>
+        <Link href="/#tickets" style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.45rem 1rem", borderRadius: 6, color: "white", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>🎟️ Tickets</Link>
       </div>
 
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "3rem 1.5rem" }}>
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
           <div style={{ display: "inline-block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, padding: "0.3rem 1rem", borderRadius: 50, background: "rgba(214,51,132,0.12)", border: "1px solid rgba(214,51,132,0.25)", color: "#f5a9b8", marginBottom: "1rem" }}>Curated Picks</div>
-          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 900, letterSpacing: -1, marginBottom: "0.8rem" }}>Sissy Shop</h1>
+          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 900, letterSpacing: -1, marginBottom: "0.8rem" }}>Party Shop</h1>
           <p style={{ color: "rgba(255,255,255,0.4)", maxWidth: 480, margin: "0 auto", lineHeight: 1.7, fontSize: "0.95rem" }}>Curated products from trusted retailers. Click any item to shop directly — all links are discreet and safe.</p>
         </div>
 
@@ -104,9 +104,9 @@ export default function ShopPage() {
         {/* CTA */}
         <div style={{ background: "rgba(214,51,132,0.04)", border: "1px solid rgba(214,51,132,0.12)", borderRadius: 16, padding: "2rem", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>💳</div>
-          <h3 style={{ marginBottom: "0.5rem" }}>Members Get Exclusive Deals</h3>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: "1.2rem" }}>Card holders get access to member-only discount codes and early access to new product drops.</p>
-          <Link href="/#cards" style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: 8, background: "linear-gradient(135deg, #d63384, #7c3aed)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>Get Your Card →</Link>
+          <h3 style={{ marginBottom: "0.5rem" }}>Attending the Party?</h3>
+          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: "1.2rem" }}>Get your outfit sorted before Oct 23. Secure your ticket and arrive dressed to impress.</p>
+          <Link href="/#tickets" style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: 8, background: "linear-gradient(135deg, #d63384, #7c3aed)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>Get Your Card →</Link>
         </div>
       </div>
     </div>

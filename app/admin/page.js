@@ -86,9 +86,7 @@ export default function Admin() {
     { img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=800&q=80", caption: "Inner Circle Meetup — London", tag: "Community" },
   ]);
   const [faqs, setFaqs] = useState([
-    { q: "What is a Sissy Card?", a: "Your official membership card for Sissy Fantasy Island." },
-    { q: "How do I receive my card?", a: "Email delivery, anonymous code, or physical card." },
-    { q: "Is this 100% discreet?", a: "Yes. Billing shows as SFI Digital Services." },
+    { q: "Is this 100% discreet?", a: "Yes. Billing shows as a discreet, non-descriptive name on all statements." },
   ]);
   const [testimonials, setTestimonials] = useState([
     { name: "Sissy Bella", tier: "Gold", stars: 5, text: "The card arrived in a plain envelope, totally discreet. The community is amazing." },

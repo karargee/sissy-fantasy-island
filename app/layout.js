@@ -1,7 +1,4 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 const SITE_URL = "https://sissyfantasyisland.com";
 
@@ -18,13 +15,13 @@ export const metadata = {
     url: SITE_URL,
     siteName: "LA Trans Party",
     type: "website",
-    images: [{ url: "/hero.jpg", width: 1200, height: 630, alt: "LA Trans Party 2026" }],
+    images: [{ url: "/photo_2026-04-29_15-56-22.jpg", width: 1200, height: 630, alt: "LA Trans Party 2026" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "LA Trans Party 2026 — Los Angeles · Oct 23–24",
     description: "The most exclusive trans & subs party in Los Angeles. October 23–24, 2026. Limited tickets.",
-    images: ["/hero.jpg"],
+    images: ["/photo_2026-04-29_15-56-22.jpg"],
   },
   robots: { index: true, follow: true },
 };
@@ -49,7 +46,7 @@ const eventSchema = {
       addressCountry: "US",
     },
   },
-  image: [`${SITE_URL}/hero.jpg`],
+  image: [`${SITE_URL}/photo_2026-04-29_15-56-22.jpg`],
   organizer: {
     "@type": "Organization",
     name: "LA Trans Party",
@@ -117,8 +114,14 @@ const faqSchema = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }}

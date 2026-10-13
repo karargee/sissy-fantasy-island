@@ -28,7 +28,7 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-box">
         <Link href="/" className="auth-back">← Back to site</Link>
-        <div className="auth-logo">SFI 💕</div>
+        <div className="auth-logo">LA TRANS PARTY 🏳️⚧️</div>
         <h1 className="auth-title">Welcome Back</h1>
         <p className="auth-sub">Sign in to your account</p>
 

@@ -4,13 +4,13 @@ node_modules/
 .env
 data/*.json
 
-# Junk files
-*.jpeg
-*.jpg
-*.png
-*.gif
-*.bundle
-*.txt
-Mobile Dungeon*
-encoded.txt
-dungeon.bundle
+# Junk files in repo root only (public/ images must stay tracked)
+/*.jpeg
+/*.jpg
+/*.png
+/*.gif
+/*.bundle
+/*.txt
+/Mobile Dungeon*
+/encoded.txt
+/dungeon.bundle

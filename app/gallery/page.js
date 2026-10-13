@@ -4,18 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 
 const GALLERY = [
-  { img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80", caption: "Community Night — Vegas 2025", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80", caption: "Sissy Brunch — Miami", tag: "Events" },
+  { img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80", caption: "Opening Night — LA 2025", tag: "Events" },
+  { img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80", caption: "Trans Party — Miami", tag: "Events" },
   { img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80", caption: "Masked Gala — NYC", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80", caption: "Member Spotlight — Diamond Tier", tag: "Members" },
+  { img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80", caption: "Attendee Spotlight — VIP", tag: "Members" },
   { img: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&q=80", caption: "Glam Night — Los Angeles", tag: "Events" },
-  { img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=800&q=80", caption: "Inner Circle Meetup — London", tag: "Community" },
+  { img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=800&q=80", caption: "Community Meetup — London", tag: "Community" },
   { img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80", caption: "Annual Gala — Chicago 2025", tag: "Events" },
   { img: "https://images.unsplash.com/photo-1496440737103-cd596325d314?w=800&q=80", caption: "VIP Lounge — Las Vegas", tag: "Events" },
   { img: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80", caption: "Fashion Shoot — NYC", tag: "Members" },
   { img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80", caption: "Style Session — Miami", tag: "Members" },
   { img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80", caption: "Community Portrait", tag: "Community" },
-  { img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80", caption: "Glam Portrait — Diamond Member", tag: "Members" },
+  { img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80", caption: "Glam Portrait — Ultra VIP", tag: "Members" },
 ];
 
 const TAGS = ["All", "Events", "Members", "Community"];
@@ -48,7 +48,7 @@ export default function GalleryPage() {
     <div style={{ minHeight: "100vh", background: "#060608", color: "#f0f0f0" }}>
       {/* Nav */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "1.2rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(6,6,8,0.92)", backdropFilter: "blur(20px)", zIndex: 100 }}>
-        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← SFI 💕</Link>
+        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← LA Trans Party</Link>
         <span style={{ fontSize: "1rem", fontWeight: 800, letterSpacing: 1 }}>📸 Gallery</span>
         <Link href="/register" style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.45rem 1rem", borderRadius: 6, color: "white", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>Join</Link>
       </div>
@@ -56,7 +56,7 @@ export default function GalleryPage() {
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "3rem 1.5rem" }}>
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <div style={{ display: "inline-block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, padding: "0.3rem 1rem", borderRadius: 50, background: "rgba(214,51,132,0.12)", border: "1px solid rgba(214,51,132,0.25)", color: "#f5a9b8", marginBottom: "1rem" }}>Community Lookbook</div>
+          <div style={{ display: "inline-block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, padding: "0.3rem 1rem", borderRadius: 50, background: "rgba(214,51,132,0.12)", border: "1px solid rgba(214,51,132,0.25)", color: "#f5a9b8", marginBottom: "1rem" }}>Event Lookbook</div>
           <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 900, letterSpacing: -1, marginBottom: "0.8rem" }}>Photo Gallery</h1>
           <p style={{ color: "rgba(255,255,255,0.4)", maxWidth: 480, margin: "0 auto", lineHeight: 1.7, fontSize: "0.95rem" }}>Real moments from our events and community. Click any photo to view full size.</p>
         </div>
@@ -100,7 +100,7 @@ export default function GalleryPage() {
           <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>📸</div>
           <h3 style={{ marginBottom: "0.5rem" }}>Share Your Look</h3>
           <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: "1.2rem" }}>Join the community and share your photos with thousands of members. Your story belongs here.</p>
-          <Link href="/community" style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: 8, background: "linear-gradient(135deg, #d63384, #7c3aed)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>Join Community →</Link>
+          <Link href="/community" style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: 8, background: "linear-gradient(135deg, #d63384, #7c3aed)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>Join the Community →</Link>
         </div>
       </div>
 

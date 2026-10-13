@@ -8,28 +8,28 @@ const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const EVENTS = [
   {
-    name: "Trans & Sex Party — Las Vegas",
-    date: "August 15–16, 2026",
-    location: "The Venetian Resort, Las Vegas, NV",
-    emoji: "🎉",
+    name: "LA Trans Party 2026 — Los Angeles",
+    date: "October 23–24, 2026",
+    location: "Private Venue — Los Angeles, CA (disclosed 48hrs prior)",
+    emoji: "🏳️⚧️",
     img: "https://images.unsplash.com/photo-1605723517503-3cadb5818a0c?w=800&q=80",
     status: "Tickets Available",
-    desc: "The biggest trans & sissy party of the year. Two nights of music, dancing, and community in the heart of Las Vegas. Theme: Glam & Glitter.",
+    desc: "The most exclusive trans & subs party in Los Angeles. Two nights of music, freedom, and unapologetic self-expression. Private venue, limited capacity.",
     rules: ["18+ only — ID required", "Dress code enforced — femme/glam attire", "Consent is mandatory — zero tolerance policy", "No photography without consent", "Safe word: RED"],
     tickets: [
-      { name: "General Admission", price: 300, perks: ["Entry to both nights", "Welcome drink", "Community access"] },
-      { name: "VIP", price: 500, perks: ["Priority entry", "VIP lounge access", "Open bar", "Meet & greet with hosts", "Exclusive gift bag"] },
-      { name: "Diamond Table", price: 1000, perks: ["Private table for 4", "Bottle service", "All VIP perks", "Personal host", "After-party access"] },
+      { name: "General Admission", price: 150, perks: ["Entry both nights — Oct 23 & 24", "Welcome cocktail on arrival", "Full access to main floor & themed rooms"] },
+      { name: "VIP Access", price: 250, perks: ["Priority entry, no waiting", "Exclusive VIP lounge both nights", "3 premium drinks per night", "Curated gift bag ($80+ value)"] },
+      { name: "Ultra VIP", price: 500, perks: ["Private suite both nights", "Unlimited open bar", "Personal host assigned", "Limo pickup — LA area", "Professional photo session"] },
     ],
   },
   {
-    name: "Sissy Brunch & Social — Miami",
-    date: "October 2026",
-    location: "TBA — Private Venue, Miami, FL",
+    name: "Trans Party — Miami",
+    date: "Early 2027 — TBA",
+    location: "Private Venue — Miami, FL",
     emoji: "🥂",
     img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80",
     status: "Coming Soon",
-    desc: "A daytime social brunch for the community. Elegant, intimate, and fabulous. Perfect for first-timers and veterans alike.",
+    desc: "Following the success of LA 2026, we're bringing the party to Miami. Elegant, intimate, and fabulous. Join the waitlist to be first in line.",
     rules: ["18+ only", "Smart casual to femme attire", "Consent and respect required at all times"],
     tickets: [
       { name: "Brunch Ticket", price: 150, perks: ["3-course brunch", "Welcome mimosa", "Community meetup"] },
@@ -99,9 +99,9 @@ export default function EventsPage() {
     <div style={{ minHeight: "100vh", background: "#060608", color: "#f0f0f0" }}>
       {/* Nav */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "1.2rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(6,6,8,0.92)", backdropFilter: "blur(20px)", zIndex: 100 }}>
-        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← SFI 💕</Link>
+        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← LA Trans Party</Link>
         <span style={{ fontSize: "1rem", fontWeight: 800, letterSpacing: 1 }}>🎉 Events</span>
-        <Link href="/register" style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.45rem 1rem", borderRadius: 6, color: "white", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>Join</Link>
+        <Link href="/#tickets" style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.45rem 1rem", borderRadius: 6, color: "white", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>🎟️ Tickets</Link>
       </div>
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "3rem 1.5rem" }}>
@@ -109,12 +109,12 @@ export default function EventsPage() {
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
           <div style={{ display: "inline-block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, padding: "0.3rem 1rem", borderRadius: 50, background: "rgba(214,51,132,0.12)", border: "1px solid rgba(214,51,132,0.25)", color: "#f5a9b8", marginBottom: "1rem" }}>Exclusive Events</div>
           <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 900, letterSpacing: -1, marginBottom: "0.8rem" }}>Upcoming Events</h1>
-          <p style={{ color: "rgba(255,255,255,0.4)", maxWidth: 480, margin: "0 auto", lineHeight: 1.7, fontSize: "0.95rem" }}>Private, adults-only events for the trans & sissy community. Card holders get priority access and discounts.</p>
+          <p style={{ color: "rgba(255,255,255,0.4)", maxWidth: 480, margin: "0 auto", lineHeight: 1.7, fontSize: "0.95rem" }}>Private, adults-only events for the trans community. Ticket holders get priority access and exclusive perks.</p>
         </div>
 
         {/* Countdown */}
         <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "2rem", textAlign: "center", marginBottom: "3rem" }}>
-          <p style={{ opacity: 0.5, fontSize: "0.85rem", marginBottom: "1rem" }}>🎰 Trans & Sex Party Las Vegas — Starts In:</p>
+          <p style={{ opacity: 0.5, fontSize: "0.85rem", marginBottom: "1rem" }}>🎉 LA Trans Party — Main Event Starts In:</p>
           <CountdownTimer targetDate="2026-08-15T20:00:00" />
         </div>
 
@@ -187,9 +187,9 @@ export default function EventsPage() {
         {/* Card holder CTA */}
         <div style={{ marginTop: "3rem", background: "rgba(214,51,132,0.04)", border: "1px solid rgba(214,51,132,0.12)", borderRadius: 16, padding: "2rem", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>💳</div>
-          <h3 style={{ marginBottom: "0.5rem" }}>Card Holders Get Priority Access</h3>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: "1.2rem" }}>Gold, Platinum & Diamond card holders get priority seating, discounts, and early access to all events.</p>
-          <Link href="/#cards" style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: 8, background: "linear-gradient(135deg, #d63384, #7c3aed)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>Get Your Card →</Link>
+          <h3 style={{ marginBottom: "0.5rem" }}>Secure Your Ticket Now</h3>
+          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: "1.2rem" }}>Limited capacity. Once tickets are gone, they&apos;re gone. Don&apos;t miss LA Trans Party 2026.</p>
+          <Link href="/#tickets" style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: 8, background: "linear-gradient(135deg, #d63384, #7c3aed)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>🎟️ Get Tickets →</Link>
         </div>
       </div>
 

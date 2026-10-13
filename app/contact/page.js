@@ -25,9 +25,9 @@ export default function ContactPage() {
     <div style={{ minHeight: "100vh", background: "#060608", color: "#f0f0f0" }}>
       {/* Nav */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "1.2rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(6,6,8,0.92)", backdropFilter: "blur(20px)", zIndex: 100 }}>
-        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← SFI 💕</Link>
+        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← LA Trans Party</Link>
         <span style={{ fontSize: "1rem", fontWeight: 800, letterSpacing: 1 }}>📬 Contact</span>
-        <Link href="/register" style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.45rem 1rem", borderRadius: 6, color: "white", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>Join</Link>
+        <Link href="/#tickets" style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.45rem 1rem", borderRadius: 6, color: "white", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>🎟️ Tickets</Link>
       </div>
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "3rem 1.5rem" }}>
@@ -44,7 +44,7 @@ export default function ContactPage() {
             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.5rem" }}>Reach Us Directly</h2>
 
             {[
-              { icon: "📧", label: "Email", value: "comeandsee@gmail.com", href: "mailto:comeandsee@gmail.com", note: "Best for orders & card delivery" },
+              { icon: "📧", label: "Email", value: "sissyfantasyisland70@gmail.com", href: "mailto:sissyfantasyisland70@gmail.com", note: "Best for ticket & event questions" },
               { icon: "📞", label: "Phone / WhatsApp", value: "(415) 305-3689", href: "https://wa.me/14153053689", note: "WhatsApp preferred — fastest response" },
               { icon: "✈️", label: "Telegram", value: "@tshungkathy10", href: "https://t.me/tshungkathy10", note: "For community & event questions" },
             ].map(c => (

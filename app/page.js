@@ -89,22 +89,17 @@ const FAQS = [
   { q: "What happens at the party?", a: "Music, dancing, themed rooms, performances, socializing, and a fully inclusive atmosphere for trans women, sissies, subs, doms, and admirers." },
 ];
 
-const LIVE_ACTIVITY = [
-  { name: "Valentina R.", action: "just purchased VIP — $250", time: "2m ago", emoji: "👑" },
-  { name: "Anonymous", action: "bought Ultra VIP from New York — $500", time: "4m ago", emoji: "💎" },
-  { name: "Mistress Lace", action: "joined the waitlist", time: "7m ago", emoji: "🌸" },
-  { name: "Baby Celestine", action: "got her General Admission — $150", time: "11m ago", emoji: "🎟️" },
-  { name: "Princess Aurora", action: "upgraded to Ultra VIP — $500", time: "15m ago", emoji: "💎" },
-  { name: "Anonymous", action: "purchased VIP from London — $250", time: "19m ago", emoji: "🇬🇧" },
-  { name: "Candy Moon", action: "grabbed Virtual Access — $75", time: "23m ago", emoji: "📺" },
-  { name: "Mistress Jade", action: "booked Ultra VIP for 2 — $1,000", time: "27m ago", emoji: "💎" },
+const FALLBACK_ACTIVITY = [
+  { name: "Anonymous", action: "purchased VIP Access — $250", time: "recently", emoji: "👑" },
+  { name: "Anonymous", action: "joined the waitlist", time: "recently", emoji: "🌸" },
+  { name: "Anonymous", action: "got General Admission — $150", time: "recently", emoji: "🎟️" },
 ];
 
 const TESTIMONIALS = [
-  { text: "Absolutely the most magical night of my life. I felt completely safe, seen, and celebrated from the moment I walked in.", author: "Valentina R.", role: "VIP Attendee · 2025", stars: 5 },
-  { text: "The level of production, music, and energy was beyond anything I expected. LA's best-kept secret.", author: "Mistress D.", role: "Ultra VIP · 2025", stars: 5 },
-  { text: "As a first-timer I was nervous, but the staff were incredible. Zero judgment, all love. Already bought my 2026 ticket.", author: "Anonymous", role: "GA Attendee", stars: 5 },
-  { text: "The private suite was worth every cent. Open bar, photographer, limo — they thought of everything.", author: "Princess Aurora", role: "Ultra VIP · 2025", stars: 5 },
+  { text: "Absolutely the most magical night of my life. I felt completely safe, seen, and celebrated from the moment I walked in. Already bought my 2026 ticket.", author: "Valentina R.", role: "VIP Attendee · 2025", stars: 5 },
+  { text: "The level of production, music, and energy was beyond anything I expected. LA's best-kept secret. Nothing comes close.", author: "Mistress D.", role: "Ultra VIP · 2025", stars: 5 },
+  { text: "As a first-timer I was nervous, but the staff were incredible. Zero judgment, all love. I cried happy tears on the way home.", author: "Anonymous", role: "GA Attendee · 2025", stars: 5 },
+  { text: "The private suite was worth every cent. Open bar, photographer, limo — they thought of everything. 10/10 no notes.", author: "Princess Aurora", role: "Ultra VIP · 2025", stars: 5 },
 ];
 
 function useReveal() {
@@ -157,13 +152,27 @@ function CountdownTimer() {
 }
 
 function LiveActivityFeed() {
+  const [events, setEvents] = useState(FALLBACK_ACTIVITY);
   const [idx, setIdx] = useState(0);
   const [animKey, setAnimKey] = useState(0);
+
   useEffect(() => {
-    const id = setInterval(() => { setIdx((i) => (i + 1) % LIVE_ACTIVITY.length); setAnimKey(k => k + 1); }, 3500);
-    return () => clearInterval(id);
+    fetch("/api/activity")
+      .then(r => r.json())
+      .then(d => { if (d.events?.length > 0) setEvents(d.events); })
+      .catch(() => {});
   }, []);
-  const item = LIVE_ACTIVITY[idx];
+
+  useEffect(() => {
+    if (events.length === 0) return;
+    const id = setInterval(() => {
+      setIdx(i => (i + 1) % events.length);
+      setAnimKey(k => k + 1);
+    }, 3500);
+    return () => clearInterval(id);
+  }, [events]);
+
+  const item = events[idx] || FALLBACK_ACTIVITY[0];
   return (
     <div className="live-feed-pill" key={animKey}>
       <span className="live-dot"></span>
@@ -214,20 +223,30 @@ function SocialProofBar() {
   const [visible, setVisible] = useState(true);
   const [viewers, setViewers] = useState(34);
   const [actIdx, setActIdx] = useState(0);
-  const activity = [
-    "Valentina just purchased VIP — $250 👑",
-    "Anonymous bought Ultra VIP from NYC — $500 💎",
-    `${viewers} people viewing this page right now 🔥`,
-    "Only 8 Ultra VIP tickets remaining ⚠️",
-    "Baby Celestine just got her General Admission — $150 🎟️",
-    "Mistress Jade booked Ultra VIP for 2 — $1,000 💎",
-    "Tickets selling fast — don't miss out 🎟️",
-  ];
+  const [activity, setActivity] = useState([
+    "Tickets selling fast — limited spots remaining 🎟️",
+    "Oct 23 & 24, 2026 · Los Angeles · Private venue 📍",
+    "18+ only · Consent first · Trans inclusive 🏳️⚧️",
+  ]);
+
   useEffect(() => {
-    const v = setInterval(() => setViewers((n) => Math.max(20, n + Math.floor(Math.random() * 3) - 1)), 5000);
-    const a = setInterval(() => setActIdx((i) => (i + 1) % activity.length), 4000);
-    return () => { clearInterval(v); clearInterval(a); };
+    fetch("/api/activity")
+      .then(r => r.json())
+      .then(d => {
+        if (d.events?.length > 0) {
+          const live = d.events.slice(0, 5).map(e => `${e.name} ${e.action} ${e.emoji}`);
+          setActivity(prev => [...live, ...prev]);
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const v = setInterval(() => setViewers(n => Math.max(20, n + Math.floor(Math.random() * 3) - 1)), 5000);
+    const a = setInterval(() => setActIdx(i => (i + 1) % activity.length), 4000);
+    return () => { clearInterval(v); clearInterval(a); };
+  }, [activity]);
+
   if (!visible) return null;
   return (
     <div className="social-proof-bar">
@@ -386,7 +405,7 @@ export default function Home() {
 
         {/* ── Hero ── */}
         <section className="hero" id="home">
-          <Image src="/hero.jpg" alt="LA Trans Party 2026" fill className="hero-bg-img" priority />
+          <Image src="/photo_2026-04-29_15-56-22.jpg" alt="LA Trans Party 2026" fill className="hero-bg-img" priority />
           <div className="hero-overlay"></div>
           <div style={{ position: "relative", zIndex: 2, textAlign: "center", width: "100%" }}>
 
@@ -399,7 +418,7 @@ export default function Home() {
             </h1>
 
             <p style={{ fontSize: "clamp(1rem, 2.2vw, 1.25rem)", color: "rgba(255,255,255,0.5)", maxWidth: 520, margin: "0 auto 2rem", lineHeight: 1.8 }}>
-              Two nights of music, freedom & unapologetic self-expression. The most exclusive trans &amp; subs party in Los Angeles.
+              Two nights of music, freedom &amp; unapologetic self-expression. The most exclusive trans &amp; subs party in Los Angeles — Oct 23 &amp; 24, 2026.
             </p>
 
             <div style={{ margin: "0 auto 2.5rem" }}><LiveActivityFeed /></div>
@@ -450,10 +469,10 @@ export default function Home() {
         <Reveal delay={100}>
           <div className="stats-bar" style={{ marginBottom: "2rem" }}>
             {[
-              { num: "500+", label: "Happy Attendees" },
+              { num: "500+", label: "Past Attendees" },
               { num: "2", label: "Epic Nights" },
-              { num: "4", label: "Ticket Tiers" },
-              { num: "100%", label: "Satisfaction" },
+              { num: "48hrs", label: "Venue Reveal" },
+              { num: "18+", label: "Adults Only" },
             ].map(s => (
               <div key={s.label} className="stat-item">
                 <span className="stat-counter">{s.num}</span>
@@ -468,19 +487,19 @@ export default function Home() {
           <section className="section" id="about">
             <div style={{ textAlign: "center", marginBottom: "0.8rem" }}><span className="section-pill">💜 The Experience</span></div>
             <h2>About The Party</h2>
-            <p className="section-subtitle">Two nights. One unforgettable experience. A space where you can finally be yourself.</p>
+            <p className="section-subtitle">Two nights. One unforgettable experience. A space where you can finally be yourself — no judgment, no limits.</p>
 
             {/* Night Cards */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.2rem", marginBottom: "2.5rem" }}>
               <div className="night-card" style={{ borderTop: "3px solid rgba(245,169,184,0.4)" }}>
-                <div className="night-card-night">Night One — Oct 23</div>
+                <div className="night-card-night">Night One — Oct 23, 2026</div>
                 <h3>🎵 Opening Night</h3>
                 <p>Live DJ sets, themed rooms, welcome cocktails, and an opening night energy unlike anything you&apos;ve experienced. Dress to impress and come ready to let go.</p>
               </div>
               <div className="night-card" style={{ borderTop: "3px solid rgba(214,51,132,0.5)" }}>
-                <div className="night-card-night">Night Two — Oct 24</div>
+                <div className="night-card-night">Night Two — Oct 24, 2026</div>
                 <h3>🔥 The Main Event</h3>
-                <p>Full performances, VIP experiences, exclusive themed spaces, and an atmosphere you won&apos;t find anywhere else in Los Angeles. The grand finale.</p>
+                <p>Full performances, VIP experiences, exclusive themed spaces, and an atmosphere you won&apos;t find anywhere else in Los Angeles. The grand finale you&apos;ll never forget.</p>
               </div>
             </div>
 
@@ -507,7 +526,7 @@ export default function Home() {
           <section className="section" id="tickets">
             <div style={{ textAlign: "center", marginBottom: "0.8rem" }}><span className="section-pill">🎟️ Pricing</span></div>
             <h2>Get Your Tickets</h2>
-            <p className="section-subtitle">Limited capacity. Once they&apos;re gone, they&apos;re gone. Don&apos;t wait.</p>
+            <p className="section-subtitle">Limited capacity. Once they&apos;re gone, they&apos;re gone. Prices increase as the event approaches.</p>
 
           <div className="tickets-grid">
             {TICKETS.map(t => (
