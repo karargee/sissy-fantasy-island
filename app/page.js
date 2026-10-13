@@ -333,6 +333,7 @@ export default function Home() {
   const [payModal, setPayModal] = useState(null);
   const [payMethod, setPayMethod] = useState(null);
   const [giftCode, setGiftCode] = useState("");
+  const [giftEmail, setGiftEmail] = useState("");
   const [giftImage, setGiftImage] = useState(null);
   const [giftSubmitted, setGiftSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
@@ -355,13 +356,13 @@ export default function Home() {
     return () => { clearTimeout(t); window.removeEventListener("scroll", onScroll); };
   }, []);
 
-  function openPayModal(name, price) { setPayModal({ tier: name, price }); setPayMethod(null); setGiftSubmitted(false); setGiftCode(""); setGiftImage(null); }
+  function openPayModal(name, price) { setPayModal({ tier: name, price }); setPayMethod(null); setGiftSubmitted(false); setGiftCode(""); setGiftEmail(""); setGiftImage(null); }
 
   function handleGiftSubmit(e) {
     e.preventDefault();
     if (!giftCode && !giftImage) return;
     const fd = new FormData();
-    fd.append("tier", payModal?.tier || ""); fd.append("price", payModal?.price || ""); fd.append("code", giftCode);
+    fd.append("tier", payModal?.tier || ""); fd.append("price", payModal?.price || ""); fd.append("code", giftCode); fd.append("email", giftEmail);
     if (giftImage) fd.append("image", giftImage);
     fetch("/api/gift-submit", { method: "POST", body: fd }).catch(() => {});
     setGiftSubmitted(true);
@@ -819,6 +820,7 @@ export default function Home() {
                   <form onSubmit={handleGiftSubmit} className="gift-form">
                     <h3 style={{ textAlign: "center", marginBottom: "0.3rem" }}>Redeem Gift Card</h3>
                     <p style={{ textAlign: "center", fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", marginBottom: "0.5rem" }}>Enter your gift card code or upload an image</p>
+                    <input type="email" placeholder="Your email (venue details sent here)" value={giftEmail} onChange={(e) => setGiftEmail(e.target.value)} className="form-input" required />
                     <input type="text" placeholder="Gift card code" value={giftCode} onChange={(e) => setGiftCode(e.target.value)} className="form-input" />
                     <label className="gift-upload-label">
                       <span>{giftImage ? `📎 ${giftImage.name}` : "📷 Upload gift card image"}</span>
