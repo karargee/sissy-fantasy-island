@@ -24,7 +24,6 @@ export default function ChatPage() {
   const pollRef = useRef(null);
   const lastIdRef = useRef(0);
 
-  // Restore nickname from sessionStorage
   useEffect(() => {
     const saved = sessionStorage.getItem("chatroom_nick");
     const savedColor = sessionStorage.getItem("chatroom_color");
@@ -39,6 +38,10 @@ export default function ChatPage() {
         setMessages(data.messages);
         if (data.messages.length > 0) {
           lastIdRef.current = data.messages[data.messages.length - 1].id;
+          // Count unique nicknames active in last 5 mins
+          const cutoff = Date.now() - 5 * 60 * 1000;
+          const active = new Set(data.messages.filter(m => new Date(m.created_at) > cutoff).map(m => m.nickname));
+          setOnlineCount(Math.max(1, active.size));
         }
       }
     } catch {}
@@ -47,8 +50,6 @@ export default function ChatPage() {
   useEffect(() => {
     if (!joined) return;
     fetchMessages();
-    // Simulate online count fluctuation
-    setOnlineCount(Math.floor(Math.random() * 18) + 4);
     pollRef.current = setInterval(fetchMessages, 3000);
     return () => clearInterval(pollRef.current);
   }, [joined]);
