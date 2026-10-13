@@ -7,6 +7,22 @@ import ChatWidget from "./components/ChatWidget";
 
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
+const VIRTUAL_TIER = {
+  name: "Virtual Access",
+  emoji: "📺",
+  price: 25,
+  color: "#5bcefa",
+  night: "Both Nights — Remote",
+  perks: [
+    "Live stream access both nights",
+    "Exclusive party content & photos",
+    "Private members-only gallery",
+    "Behind-the-scenes footage",
+    "Chat with attendees in real time",
+    "Can't make it to LA? We got you",
+  ],
+};
+
 const TICKETS = [
   {
     name: "General Admission",
@@ -66,6 +82,7 @@ const FAQS = [
   { q: "Can I attend just one night?", a: "All tickets cover both nights. Single-night tickets may be available closer to the date — join the waitlist to be notified." },
   { q: "Is this 18+ only?", a: "Yes. This is a strictly 18+ adult event. Valid ID required at the door." },
   { q: "How do I pay?", a: "We accept Bitcoin and gift cards for maximum privacy. All transactions are discreet." },
+  { q: "Can I watch remotely if I can't attend?", a: "Yes! Purchase Virtual Access ($25) to get live stream access, exclusive party content, photos, and behind-the-scenes footage delivered to your email. Perfect if you're outside LA or can't make it in person." },
   { q: "Can I bring a guest?", a: "Yes. Each ticket is for one person. Purchase separate tickets for guests. Group discounts available — contact us." },
   { q: "What happens at the party?", a: "Music, dancing, themed rooms, performances, socializing, and a fully inclusive atmosphere for trans women, sissies, subs, doms, and admirers." },
 ];
@@ -167,6 +184,7 @@ function BtcConfirmForm({ wallet }) {
         <option value="General Admission">🎟️ General Admission — $80</option>
         <option value="VIP Access">👑 VIP Access — $150</option>
         <option value="Ultra VIP">💎 Ultra VIP — $300</option>
+        <option value="Virtual Access">📺 Virtual Access — $25</option>
       </select>
       <input type="email" placeholder="Your email for ticket delivery" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="form-input" />
       <input type="text" placeholder="BTC Transaction ID (optional)" value={form.txid} onChange={(e) => setForm({ ...form, txid: e.target.value })} className="form-input" />
@@ -410,6 +428,28 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          {/* Virtual Access */}
+          <div style={{ marginTop: "2rem", background: "rgba(91,206,250,0.05)", border: "1px solid rgba(91,206,250,0.2)", borderRadius: 20, padding: "2rem", display: "flex", flexWrap: "wrap", gap: "2rem", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ flex: 1, minWidth: 260 }}>
+              <div style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: 3, color: "#5bcefa", marginBottom: "0.5rem" }}>📺 Can&apos;t Make It to LA?</div>
+              <h3 style={{ fontSize: "1.4rem", fontWeight: 900, marginBottom: "0.5rem" }}>Virtual Access — <span style={{ color: "#5bcefa" }}>$25</span></h3>
+              <p style={{ fontSize: "0.88rem", color: "rgba(255,255,255,0.55)", lineHeight: 1.7, marginBottom: "1rem" }}>Tip to get full remote access — live stream both nights, exclusive party content, photos, behind-the-scenes footage, and private gallery. Delivered to your email.</p>
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1.5rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                {VIRTUAL_TIER.perks.map(p => (
+                  <li key={p} style={{ fontSize: "0.78rem", background: "rgba(91,206,250,0.08)", border: "1px solid rgba(91,206,250,0.15)", borderRadius: 50, padding: "0.3rem 0.8rem", color: "rgba(255,255,255,0.7)" }}>✓ {p}</li>
+                ))}
+              </ul>
+              <button className="buy-btn" style={{ background: "linear-gradient(135deg, #5bcefa, #0077b6)", maxWidth: 260 }} onClick={() => openPayModal(VIRTUAL_TIER.name, VIRTUAL_TIER.price)}>
+                📺 Get Virtual Access — $25
+              </button>
+              <div style={{ marginTop: "0.8rem", display: "flex", gap: "0.5rem" }}>
+                <span className="btc-badge">₿ Bitcoin</span>
+                <span className="btc-badge" style={{ background: "rgba(245,169,184,0.15)", borderColor: "rgba(245,169,184,0.3)", color: "#f5a9b8" }}>🎁 Gift Card</span>
+              </div>
+            </div>
+            <div style={{ textAlign: "center", opacity: 0.15, fontSize: "8rem", lineHeight: 1, userSelect: "none" }}>📺</div>
+          </div>
         </section></Reveal>
 
         {/* Dress Code */}
@@ -522,7 +562,7 @@ export default function Home() {
           <div className="pay-modal" onClick={(e) => e.stopPropagation()}>
             <button className="pay-modal-close" onClick={() => setPayModal(null)}>✕</button>
             <h2>{payModal.tier}</h2>
-            <div className="pay-modal-total">${payModal.price} · Oct 23–24, 2026 · Los Angeles</div>
+            <div className="pay-modal-total">${payModal.price} · {payModal.tier === "Virtual Access" ? "Remote Access — Both Nights" : "Oct 23–24, 2026 · Los Angeles"}</div>
             {!payMethod && (
               <div className="pay-options">
                 <button className="pay-option" onClick={() => setPayMethod("btc")}><span>₿</span> Pay with Bitcoin</button>
