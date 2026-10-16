@@ -1,11 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "https://peprvnxgxxpbewmqjgjf.supabase.co";
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  return createClient(url, key);
-}
+import { readStore, appendStore } from "@/lib/store";
 
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
 
@@ -18,20 +12,11 @@ async function sendEmail(subject, html) {
       auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
     });
     await transporter.sendMail({ from: process.env.GMAIL_USER, to: TO_EMAIL, subject, html });
-  } catch (e) {
-    console.error("Email error:", e.message);
-  }
+  } catch (e) { console.error("Email error:", e.message); }
 }
 
 export async function GET() {
-  const supabase = getSupabase();
-  const { data, error } = await supabase
-    .from("contact_messages")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(200);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ messages: data });
+  return NextResponse.json({ messages: readStore("contact_messages", []) });
 }
 
 export async function POST(req) {
@@ -43,42 +28,24 @@ export async function POST(req) {
     if (!isDungeon && (!name || !email || !subject || !message))
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
 
-    const supabase = getSupabase();
-    const { error } = await supabase.from("contact_messages").insert({
-      name: name || "N/A",
-      email: email || "N/A",
-      subject: subject || "Contact",
-      message: message || notes || "N/A",
-      phone: phone || "",
-      location: location || "",
-      pkg: pkg || "",
-      date: date || "",
-      notes: notes || "",
-      read: false,
+    appendStore("contact_messages", {
+      name: name || "N/A", email: email || "N/A", subject: subject || "Contact",
+      message: message || notes || "N/A", phone: phone || "", location: location || "",
+      pkg: pkg || "", date: date || "", notes: notes || "", read: false,
     });
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     if (isDungeon) {
-      await sendEmail(
-        `🚚 New Dungeon Booking — ${pkg}`,
-        `<h2>New Dungeon Booking Request</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone || "N/A"}</p>
-        <p><strong>Location:</strong> ${location}</p>
-        <p><strong>Package:</strong> ${pkg}</p>
-        <p><strong>Date:</strong> ${date || "Not specified"}</p>
-        <p><strong>Notes:</strong> ${notes || "None"}</p>`
-      );
+      await sendEmail(`🚚 New Dungeon Booking — ${pkg}`,
+        `<h2>New Dungeon Booking</h2>
+        <p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || "N/A"}</p><p><strong>Location:</strong> ${location}</p>
+        <p><strong>Package:</strong> ${pkg}</p><p><strong>Date:</strong> ${date || "Not specified"}</p>
+        <p><strong>Notes:</strong> ${notes || "None"}</p>`);
     } else {
-      await sendEmail(
-        `📬 New Contact Message — ${subject}`,
+      await sendEmail(`📬 New Message — ${subject}`,
         `<h2>New Contact Message</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        <p><strong>Message:</strong></p><p>${message}</p>`
-      );
+        <p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p>
+        <p><strong>Subject:</strong> ${subject}</p><p><strong>Message:</strong></p><p>${message}</p>`);
     }
 
     return NextResponse.json({ message: "Sent successfully" });

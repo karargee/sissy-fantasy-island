@@ -1,15 +1,10 @@
 import { NextResponse } from "next/server";
-import getSupabase from "@/lib/supabase";
+import { readStore, writeStore } from "@/lib/store";
 
 const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 
 export async function GET() {
-  const supabase = getSupabase();
-  const { data, error } = await supabase.from("site_settings").select("key, value");
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  const settings = {};
-  for (const row of data || []) settings[row.key] = row.value;
-  return NextResponse.json({ settings });
+  return NextResponse.json({ settings: readStore("site_settings", {}) });
 }
 
 export async function POST(req) {
@@ -17,11 +12,9 @@ export async function POST(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { key, value } = await req.json();
-    const supabase = getSupabase();
-    const { error } = await supabase
-      .from("site_settings")
-      .upsert({ key, value }, { onConflict: "key" });
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    const settings = readStore("site_settings", {});
+    settings[key] = value;
+    writeStore("site_settings", settings);
     return NextResponse.json({ success: true });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });

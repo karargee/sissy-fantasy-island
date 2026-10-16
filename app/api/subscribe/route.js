@@ -1,14 +1,8 @@
 import { NextResponse } from "next/server";
-import getSupabase from "@/lib/supabase";
+import { readStore, writeStore } from "@/lib/store";
 
 export async function GET() {
-  const supabase = getSupabase();
-  const { data, error } = await supabase
-    .from("subscribers")
-    .select("email, created_at")
-    .order("created_at", { ascending: false });
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ subscribers: data });
+  return NextResponse.json({ subscribers: readStore("subscribers", []) });
 }
 
 export async function POST(req) {
@@ -17,11 +11,12 @@ export async function POST(req) {
     if (!email || !email.includes("@"))
       return NextResponse.json({ error: "Invalid email" }, { status: 400 });
 
-    const supabase = getSupabase();
-    const { error } = await supabase
-      .from("subscribers")
-      .upsert({ email: email.toLowerCase().trim() }, { onConflict: "email" });
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    const clean = email.toLowerCase().trim();
+    const subs = readStore("subscribers", []);
+    if (!subs.find(s => s.email === clean)) {
+      subs.unshift({ email: clean, created_at: new Date().toISOString() });
+      writeStore("subscribers", subs);
+    }
     return NextResponse.json({ message: "Subscribed successfully" });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });

@@ -425,6 +425,7 @@ export default function Home() {
             <a href="#faq" onClick={() => setMobileNav(false)}>FAQ</a>
             <a href="#contact" onClick={() => setMobileNav(false)}>Contact</a>
             <Link href="/gallery" onClick={() => setMobileNav(false)}>Gallery</Link>
+            <a href="#contact" onClick={() => setMobileNav(false)}>Contact</a>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
             <button
@@ -667,10 +668,6 @@ export default function Home() {
           </section>
         </Reveal>
 
-        {/* ── Venue Reveal Teaser ── */}
-        <Reveal delay={100}>
-          <VenueTeaser />
-        </Reveal>
 
         {/* ── FAQ ── */}
         <Reveal>

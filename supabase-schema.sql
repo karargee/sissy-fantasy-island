@@ -3,7 +3,78 @@
 -- Run this entire file in your Supabase SQL Editor
 -- ============================================================
 
--- USERS
+-- USERSSkip to content
+Environment Variables
+Environment Variables
+Store API keys, tokens, and config securely. Learn more about environment variables · Separate Production Secret Values
+
+Project
+Shared
+Search variables…
+
+All Types
+All Environments
+All Editors
+
+All Variables
+
+Last Updated
+
+JWT_SECRET
+Needs Attention
+
+•••••••••••••••
+Production
+Updated 
+just now
+
+
+NEXT_PUBLIC_URL
+
+•••••••••••••••
+Production
+Added 
+39m ago
+
+
+GMAIL_USER
+
+•••••••••••••••
+Production
+Added 
+39m ago
+
+
+ADMIN_PASSWORD
+Needs Attention
+
+•••••••••••••••
+Production
+Added 
+39m ago
+
+
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+•••••••••••••••
+Production
+Added 
+39m ago
+
+
+SUPABASE…OLE_KEY
+Needs Attention
+
+•••••••••••••••
+Production
+Added 
+39m ago
+
+
+Enable access to System Environment Variables
+Deployments
+success:
+Deployment created
 create table if not exists users (
   id text primary key,
   email text unique not null,
