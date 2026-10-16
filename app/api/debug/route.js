@@ -12,7 +12,7 @@ export async function GET() {
   }
 
   return NextResponse.json({
-    SUPABASE_URL: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || "missing",
     SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
     JWT_SECRET: !!process.env.JWT_SECRET,
     GMAIL_USER: !!process.env.GMAIL_USER,
