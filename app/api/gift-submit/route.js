@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readStore, appendStore, writeStore } from "@/lib/store";
+import getSupabase from "@/lib/supabase";
 
 const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
@@ -16,7 +16,13 @@ const VENUE_HTML = `<div style="font-family:sans-serif;max-width:600px;margin:0 
 </div>`;
 
 export async function GET() {
-  return NextResponse.json({ submissions: readStore("gift_submissions", []) });
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from("gift_submissions")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ submissions: data });
 }
 
 export async function POST(req) {
@@ -30,7 +36,11 @@ export async function POST(req) {
     const hasImage = !!(image && image.size > 0);
     const imageName = image?.name || null;
 
-    appendStore("gift_submissions", { tier, price, code: code || "No code", has_image: hasImage, image_name: imageName, status: "pending", email });
+    const supabase = getSupabase();
+    const { error } = await supabase.from("gift_submissions").insert({
+      tier, price, code: code || "No code", has_image: hasImage, image_name: imageName, status: "pending", email,
+    });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
       try {
@@ -64,13 +74,16 @@ export async function PATCH(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { id, status } = await req.json();
-    const subs = readStore("gift_submissions", []);
-    const idx = subs.findIndex(s => s.id === id);
-    if (idx === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    subs[idx].status = status;
-    writeStore("gift_submissions", subs);
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("gift_submissions")
+      .update({ status })
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    if (status === "approved" && subs[idx].email && process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+    if (status === "approved" && data.email && process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
       try {
         const nodemailer = (await import("nodemailer")).default;
         const transporter = nodemailer.createTransport({
@@ -78,8 +91,8 @@ export async function PATCH(req) {
           auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
         });
         await transporter.sendMail({
-          from: process.env.GMAIL_USER, to: subs[idx].email,
-          subject: `✅ Your ${subs[idx].tier} ticket is confirmed — Venue Details Inside`,
+          from: process.env.GMAIL_USER, to: data.email,
+          subject: `✅ Your ${data.tier} ticket is confirmed — Venue Details Inside`,
           html: VENUE_HTML,
         });
       } catch (e) { console.error("Email error:", e.message); }

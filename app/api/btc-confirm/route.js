@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readStore, appendStore, writeStore } from "@/lib/store";
+import getSupabase from "@/lib/supabase";
 
 const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
@@ -28,7 +28,13 @@ const VENUE_HTML = `<div style="font-family:sans-serif;max-width:600px;margin:0 
 </div>`;
 
 export async function GET() {
-  return NextResponse.json({ payments: readStore("btc_payments", []) });
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from("btc_payments")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ payments: data });
 }
 
 export async function POST(req) {
@@ -36,7 +42,11 @@ export async function POST(req) {
     const { email, tier, txid, delivery } = await req.json();
     if (!tier) return NextResponse.json({ error: "Tier required" }, { status: 400 });
 
-    appendStore("btc_payments", { email: email || "anonymous", tier, txid: txid || "", delivery: delivery || "email", status: "pending" });
+    const supabase = getSupabase();
+    const { error } = await supabase.from("btc_payments").insert({
+      email: email || "anonymous", tier, txid: txid || "", delivery: delivery || "email", status: "pending",
+    });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     await sendEmail(`₿ New BTC Payment — ${tier}`,
       `<h2>New Bitcoin Payment</h2>
@@ -54,14 +64,17 @@ export async function PATCH(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { id, status } = await req.json();
-    const payments = readStore("btc_payments", []);
-    const idx = payments.findIndex(p => p.id === id);
-    if (idx === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    payments[idx].status = status;
-    writeStore("btc_payments", payments);
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("btc_payments")
+      .update({ status })
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    if (status === "verified" && payments[idx].email && payments[idx].email !== "anonymous") {
-      await sendEmail(`✅ Your ${payments[idx].tier} ticket is confirmed — Venue Details Inside`, VENUE_HTML, payments[idx].email);
+    if (status === "verified" && data.email && data.email !== "anonymous") {
+      await sendEmail(`✅ Your ${data.tier} ticket is confirmed — Venue Details Inside`, VENUE_HTML, data.email);
     }
     return NextResponse.json({ success: true });
   } catch (e) {

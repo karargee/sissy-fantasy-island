@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readStore, appendStore } from "@/lib/store";
+import getSupabase from "@/lib/supabase";
 
 const TO_EMAIL = "sissyfantasyisland70@gmail.com";
 
@@ -16,7 +16,13 @@ async function sendEmail(subject, html) {
 }
 
 export async function GET() {
-  return NextResponse.json({ messages: readStore("contact_messages", []) });
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from("contact_messages")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ messages: data });
 }
 
 export async function POST(req) {
@@ -28,11 +34,13 @@ export async function POST(req) {
     if (!isDungeon && (!name || !email || !subject || !message))
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
 
-    appendStore("contact_messages", {
+    const supabase = getSupabase();
+    const { error } = await supabase.from("contact_messages").insert({
       name: name || "N/A", email: email || "N/A", subject: subject || "Contact",
       message: message || notes || "N/A", phone: phone || "", location: location || "",
       pkg: pkg || "", date: date || "", notes: notes || "", read: false,
     });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     if (isDungeon) {
       await sendEmail(`🚚 New Dungeon Booking — ${pkg}`,
