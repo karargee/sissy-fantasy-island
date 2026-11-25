@@ -17,36 +17,60 @@ const TIER_IMAGES = {
 };
 
 const ROOMS = [
-  { src: "/dungeon-7.jpg", alt: "Brick-walled room with a St. Andrew's cross under purple light", caption: "The Cross Room", wide: true },
-  { src: "/dungeon-3.jpg", alt: "Ornate mirror lit in violet", caption: "Vanity" },
-  { src: "/dungeon-8.jpg", alt: "Padded leather bench in a brick room", caption: "The Bench Room" },
-  { src: "/dungeon-2.jpeg", alt: "Steel cage set into a dark cabinet", caption: "The Cage" },
-  { src: "/dungeon-9.jpg", alt: "Lounge with leather seating under a starlit ceiling", caption: "VIP Lounge", wide: true },
+  { src: "/dungeon-7.jpg", alt: "Brick-walled room with a St. Andrew's cross under purple light", caption: "The Cross Room", note: "Bondage and impact, with a monitor on the door", wide: true },
+  { src: "/dungeon-3.jpg", alt: "Ornate mirror lit in violet", caption: "The Vanity", note: "Sissy makeovers, wigs and lashes" },
+  { src: "/dungeon-8.jpg", alt: "Padded leather bench in a brick room", caption: "The Bench Room", note: "Spanking, paddles and discipline" },
+  { src: "/dungeon-2.jpeg", alt: "Steel cage set into a dark cabinet", caption: "The Cage", note: "Pet play, kennels and keyholders" },
+  { src: "/dungeon-9.jpg", alt: "Lounge with leather seating under a starlit ceiling", caption: "The Lounge", note: "Aftercare, water and somewhere soft to land", wide: true },
+];
+
+const PLAY_MENU = [
+  ["Rope & shibari", "A live demo at 10:30, then open rope frames for tying with your partner."],
+  ["Sissy makeover station", "Hair, makeup, lashes and wardrobe. Come in one way, leave another."],
+  ["Impact play", "Floggers, paddles and canes, with spotters on hand if you're new."],
+  ["Latex & PVC lounge", "Polishing station, shine bar and a room for the rubber crowd."],
+  ["Domme hour", "Mistresses and dommes take the main stage at midnight."],
+  ["Pet play corner", "Collars, leads and a kennel for pups, kittens and their handlers."],
+  ["Chastity check-in", "Keyholders can lodge keys at the front desk for the night."],
+  ["Aftercare lounge", "Blankets, water, snacks and quiet. Open all night, staffed by our care team."],
+];
+
+const LOOKBOOK = [
+  { src: "https://images.unsplash.com/photo-1537736445933-ad5b54d84f80?w=900&q=75", alt: "Model in a glossy black latex top and trousers against an orange backdrop", caption: "Latex" },
+  { src: "https://images.unsplash.com/photo-1675434704191-9e956445f301?w=900&q=75", alt: "Shirtless man wearing a black leather chest harness", caption: "Harness" },
+  { src: "https://images.unsplash.com/photo-1610241519159-8a62634bac9a?w=900&q=75", alt: "Black strappy lingerie laid on white sheets", caption: "Lingerie" },
+  { src: "https://images.unsplash.com/photo-1743905030872-22d2970831af?w=900&q=75", alt: "Drag performer in neon green with a holographic fan", caption: "Drag" },
 ];
 
 const SCHEDULE = [
   { time: "8:00 PM", title: "Ultra VIP arrivals", desc: "Early entry, suite check-in and a quiet first drink before the doors open." },
   { time: "9:00 PM", title: "Doors open", desc: "Welcome drinks, coat check and the first DJ set on the main floor." },
-  { time: "10:30 PM", title: "Themed rooms open", desc: "Each room has its own host, its own lighting and its own house rules, posted at the door." },
-  { time: "12:00 AM", title: "Main-stage performances", desc: "A run of live performances from trans artists, hosts and invited guests." },
+  { time: "10:00 PM", title: "Makeover station opens", desc: "Our artists turn sissies and first-timers out in lashes, lipstick and heels." },
+  { time: "10:30 PM", title: "Play rooms open", desc: "The Cross Room, Bench Room and Cage open, alongside a live shibari demo on the rope frames." },
+  { time: "12:00 AM", title: "Domme hour", desc: "Mistresses, dommes and trans performers take the main stage for the night's headline show." },
   { time: "1:00 AM", title: "Late floor", desc: "The music picks up and the floor stays open until close." },
   { time: "4:00 AM", title: "Close", desc: "Last call is at 3:30. Rides are arranged for Ultra VIP guests." },
 ];
 
 const DRESS = [
-  ["Lingerie & heels", "Always welcome."],
-  ["Latex, leather, PVC", "Fetish wear encouraged."],
-  ["Gowns & evening wear", "Dress for the occasion."],
+  ["Latex, PVC & rubber", "The shinier the better."],
+  ["Leather & harnesses", "Chest, thigh or full body."],
+  ["Lingerie, corsets & heels", "Stockings, garters, the works."],
+  ["Collars, cuffs & gear", "Wear your rank: owned, owning or open."],
+  ["Maid & sissy uniforms", "Frills, aprons and petticoats welcome."],
+  ["Drag & costume", "Go as far as you like."],
   ["Tailoring", "Sharp suits for doms and admirers."],
-  ["Costume & drag", "Go as far as you like."],
 ];
 
 const RULES = [
-  ["Consent, every time", "Ask first, accept the answer. A no, a safe word or silence means stop."],
-  ["No photos on the floor", "Phones stay in your pocket outside the lounge. Our photographer only shoots people who opt in."],
-  ["Respect everyone's identity", "Use people's names and pronouns. Misgendering or fetishising remarks will get you removed."],
-  ["Look after each other", "Staff in black are trained to help. Find one, or come to the front desk, at any time."],
-  ["18+ with photo ID", "Checked at the door, no exceptions."],
+  ["Negotiate before you play", "Agree limits, safe words and aftercare before anything starts. If it wasn't agreed, it doesn't happen."],
+  ["Green, yellow, red", "Our house safe words. Yellow means slow down and check in. Red means stop immediately, no questions asked."],
+  ["Consent, every time", "Ask before you touch, join or watch up close. A no, a safe word or silence means stop."],
+  ["Dungeon monitors have the final say", "Monitors in red armbands watch every play room. If they stop a scene, it stops."],
+  ["No photos in play areas", "Phones stay in your pocket. Our photographer only shoots guests who opt in, in the lounge."],
+  ["Respect everyone's identity", "Use people's names and pronouns. Misgendering or treating trans guests as a fetish object gets you removed."],
+  ["Clean up after play", "Wipe down equipment after your scene. Supplies are in every room."],
+  ["18+ with photo ID", "Checked at the door, no exceptions. Anyone visibly intoxicated can't play."],
 ];
 
 const FAQS = [
@@ -54,7 +78,11 @@ const FAQS = [
   { q: "Who is this for?", a: "Trans women, sissies, subs, doms, admirers and anyone who supports them. Everyone is expected to follow the house rules." },
   { q: "How do I pay?", a: "By card through Stripe, our payment processor. You'll get a receipt by email straight away. Bitcoin is also accepted." },
   { q: "Can I get a refund?", a: "Card purchases can be refunded up to 7 days before the event. After that, tickets can be transferred to a friend instead. Email us and we'll sort it out." },
-  { q: "Is there a dress code?", a: "Yes, and it's enforced at the door. No street clothes. If you're not sure, dress up." },
+  { q: "Is there a dress code?", a: "Yes, and it's enforced at the door. Fetish wear, lingerie, latex, leather, drag or formal. No street clothes. Changing rooms are available, so you can arrive covered up and change inside." },
+  { q: "I'm new to kink. Will I fit in?", a: "Yes. Plenty of guests are on their first night out. Watch, ask questions and play only when you're ready. Our hosts can walk you round the rooms and introduce you." },
+  { q: "Do I have to play?", a: "Not at all. Many guests come to dance, dress up, socialise and watch. Watching is welcome, but give scenes space and never join without being invited." },
+  { q: "Can I bring my own toys and gear?", a: "Yes, personal floggers, paddles, rope, restraints and cuffs are welcome. Bring your own lube and barriers. Blades, fire, breath play and anything that breaks skin are not allowed." },
+  { q: "Is there somewhere private to play?", a: "Ultra VIP suites are private. The other play rooms are semi-public and watched by dungeon monitors for everyone's safety." },
   { q: "Can I bring a guest?", a: "Each guest needs their own ticket. You can buy up to 10 in one checkout." },
   { q: "Is there a group rate?", a: "For groups of six or more, email us before you buy." },
 ];
@@ -306,8 +334,8 @@ export default function Home() {
             <div className={s.heroGrid}>
               <div>
                 <p className={s.heroLede}>
-                  A private, after-dark party for trans women, sissies, subs, doms and the people who adore them.
-                  Live performance, themed rooms and a dance floor that runs until four.
+                  A private fetish party for trans women, sissies, subs, dommes and the people who adore them.
+                  Play rooms, rope, latex, live domme performances and a dance floor that runs until four.
                 </p>
                 <div className={s.heroCtas}>
                   <a href="#tickets" className={`${s.btn} ${s.btnPrimary}`}>Get tickets — from ${TIERS[0].price}</a>
@@ -376,9 +404,21 @@ export default function Home() {
                     <div className={s.galleryMedia}>
                       <Image src={r.src} alt={r.alt} fill sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 600px" className={s.coverImg} />
                     </div>
-                    <figcaption>{r.caption}</figcaption>
+                    <figcaption>{r.caption}<span className={s.captionNote}>{r.note}</span></figcaption>
                   </figure>
                 ))}
+              </div>
+
+              <div className={s.playMenu}>
+                <div className={s.subhead}>On the play menu</div>
+                <ul className={s.playGrid}>
+                  {PLAY_MENU.map(([title, desc]) => (
+                    <li key={title}>
+                      <strong>{title}</strong>
+                      <p>{desc}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </Reveal>
           </div>
@@ -463,6 +503,16 @@ export default function Home() {
                 index="04 — Guest Guide"
                 title={<>Dress up. <em>Look after each other.</em></>}
               />
+              <div className={s.lookbook}>
+                {LOOKBOOK.map((l) => (
+                  <figure key={l.src} className={s.galleryItem}>
+                    <div className={s.lookMedia}>
+                      <Image src={l.src} alt={l.alt} fill sizes="(max-width: 760px) 50vw, 300px" className={s.coverImg} />
+                    </div>
+                    <figcaption>{l.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
               <div className={`${s.twoCol} ${s.body}`}>
                 <div>
                   <div className={s.subhead}>Dress code</div>

@@ -618,6 +618,13 @@
 @media (max-width: 980px) {
   .gallery { grid-template-columns: 1fr 1fr; }
   .pastGrid { grid-template-columns: repeat(3, 1fr); }
+  .playGrid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .playGrid { grid-template-columns: 1fr; }
+  .playGrid li { padding-right: 0; }
+  .lookbook { grid-template-columns: 1fr 1fr; margin-bottom: 56px; }
+  .playMenu { margin-top: 56px; }
 }
 @media (max-width: 760px) {
   .heroImg { opacity: 0.4; }
@@ -627,6 +634,51 @@
   .galleryMedia, .galleryWide .galleryMedia { aspect-ratio: 4 / 3; min-height: 0; flex: none; }
   .pastGrid { grid-template-columns: 1fr 1fr; }
   .tierMedia { margin: -28px -24px 24px; }
+}
+
+/* ── Kink content: captions, play menu, lookbook ── */
+.captionNote {
+  display: block;
+  margin-top: 4px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.playMenu { margin-top: 80px; }
+.playGrid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+}
+.playGrid li {
+  padding: 24px 24px 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+.playGrid strong {
+  display: block;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.playGrid p { color: var(--muted); font-size: 0.9rem; }
+
+.lookbook {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 72px;
+}
+.lookMedia {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-raised);
 }
 
 /* ── Reveal ── */
