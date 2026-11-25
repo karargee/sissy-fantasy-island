@@ -1,33 +1,12 @@
 import { NextResponse } from "next/server";
+import { isAdmin, unauthorized } from "@/lib/admin";
 import getSupabase from "@/lib/supabase";
+import { sendEmail } from "@/lib/email";
+import { ticketConfirmationHtml } from "@/lib/event";
 
-const ADMIN_PASS = process.env.ADMIN_PASSWORD;
-const TO_EMAIL = "sissyfantasyisland70@gmail.com";
 
-async function sendEmail(subject, html, to = TO_EMAIL) {
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) return;
-  try {
-    const nodemailer = (await import("nodemailer")).default;
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
-    });
-    await transporter.sendMail({ from: process.env.GMAIL_USER, to, subject, html });
-  } catch (e) { console.error("Email error:", e.message); }
-}
-
-const VENUE_HTML = `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#0a0a0f;color:#fff;padding:2rem;border-radius:12px">
-  <h1 style="color:#f5a9b8;text-align:center">🏳️⚧️ LA Trans Party 2026</h1>
-  <p style="text-align:center;color:rgba(255,255,255,0.5)">Oct 23–24, 2026 · Venue Details</p>
-  <div style="background:rgba(214,51,132,0.1);border:1px solid rgba(214,51,132,0.3);border-radius:10px;padding:1.5rem;margin:1.5rem 0">
-    <h2 style="color:#f5a9b8;margin:0 0 1rem">📍 Venue Details</h2>
-    <p><strong>Address:</strong> 1234 Sunset Blvd, West Hollywood, CA 90028</p>
-    <p><strong>Doors Open:</strong> 9PM both nights</p>
-  </div>
-  <p style="text-align:center;color:rgba(255,255,255,0.3);font-size:0.8rem">Questions? Email sissyfantasyisland70@gmail.com</p>
-</div>`;
-
-export async function GET() {
+export async function GET(req) {
+  if (!isAdmin(req)) return unauthorized();
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from("btc_payments")
@@ -60,8 +39,7 @@ export async function POST(req) {
 }
 
 export async function PATCH(req) {
-  if (req.headers.get("x-admin-pass") !== ADMIN_PASS)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!isAdmin(req)) return unauthorized();
   try {
     const { id, status } = await req.json();
     const supabase = getSupabase();
@@ -74,7 +52,7 @@ export async function PATCH(req) {
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     if (status === "verified" && data.email && data.email !== "anonymous") {
-      await sendEmail(`✅ Your ${data.tier} ticket is confirmed — Venue Details Inside`, VENUE_HTML, data.email);
+      await sendEmail(`✅ Your ${data.tier} ticket is confirmed — Venue Details Inside`, ticketConfirmationHtml({ tier: data.tier }), data.email);
     }
     return NextResponse.json({ success: true });
   } catch (e) {

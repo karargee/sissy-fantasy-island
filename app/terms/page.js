@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Terms of Service — LA Trans Party 2026",
-  description: "Terms of Service and Event Rules for LA Trans Party 2026, October 23–24 in Los Angeles.",
+  description: "Terms of Service and Event Rules for LA Trans Party, Sunday, December 13, 2026 in Los Angeles.",
 };
 
 export default function TermsPage() {
@@ -11,7 +11,7 @@ export default function TermsPage() {
       <div className="container" style={{ maxWidth: 800, padding: "3rem 1.5rem" }}>
         <Link href="/" className="back-link">← Back to Home</Link>
         <h1>Terms of Service</h1>
-        <p className="terms-updated">Last updated: October 1, 2026</p>
+        <p className="terms-updated">Last updated: November 25, 2026</p>
 
         <div className="terms-section">
           <h2>1. Acceptance of Terms</h2>
@@ -20,19 +20,20 @@ export default function TermsPage() {
 
         <div className="terms-section">
           <h2>2. Event Tickets</h2>
-          <p>LA Trans Party tickets are digital and/or physical products that grant entry to the event taking place October 23–24, 2026 in Los Angeles, CA. All ticket purchases are:</p>
+          <p>LA Trans Party tickets are digital and/or physical products that grant entry to the event taking place on Sunday, December 13, 2026 in Los Angeles, CA. All ticket purchases are:</p>
           <ul>
             <li>One-time payments — no recurring subscriptions or hidden fees</li>
-            <li>Non-transferable — tickets are issued to the purchasing attendee only</li>
-            <li>Valid for the dates and access tier purchased</li>
+            <li>Transferable — email us the new attendee&apos;s name up to 48 hours before the event</li>
+            <li>Valid for the date and access tier purchased</li>
             <li>Subject to event rules — violations may result in revocation without refund</li>
           </ul>
         </div>
 
         <div className="terms-section">
           <h2>3. Payments & Refunds</h2>
-          <p>We accept Bitcoin (BTC) and gift cards as payment methods. All sales are final with the following exceptions:</p>
+          <p>We accept card payments through Stripe, and Bitcoin (BTC). Refunds are available as follows:</p>
           <ul>
+            <li>Card purchases: full refund on request up to 7 days before the event</li>
             <li>Event cancelled by us: Full refund of the ticket price</li>
             <li>Event date changed by us: Full refund offered if you cannot attend the new date</li>
             <li>Event moved outside Los Angeles: Full refund offered</li>
@@ -111,7 +112,7 @@ export default function TermsPage() {
         </div>
 
         <div style={{ marginTop: "3rem", paddingTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.06)", textAlign: "center", opacity: 0.4, fontSize: "0.85rem" }}>
-          <p>🏳️⚧️ LA Trans Party 2026 — October 23–24 · Los Angeles 🏳️⚧️</p>
+          <p>🏳️⚧️ LA Trans Party — December 13, 2026 · Los Angeles 🏳️⚧️</p>
         </div>
       </div>
     </div>

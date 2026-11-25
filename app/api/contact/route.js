@@ -1,21 +1,10 @@
 import { NextResponse } from "next/server";
+import { isAdmin, unauthorized } from "@/lib/admin";
 import getSupabase from "@/lib/supabase";
+import { sendEmail } from "@/lib/email";
 
-const TO_EMAIL = "sissyfantasyisland70@gmail.com";
-
-async function sendEmail(subject, html) {
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) return;
-  try {
-    const nodemailer = (await import("nodemailer")).default;
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
-    });
-    await transporter.sendMail({ from: process.env.GMAIL_USER, to: TO_EMAIL, subject, html });
-  } catch (e) { console.error("Email error:", e.message); }
-}
-
-export async function GET() {
+export async function GET(req) {
+  if (!isAdmin(req)) return unauthorized();
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from("contact_messages")

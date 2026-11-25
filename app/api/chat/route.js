@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isAdmin, unauthorized } from "@/lib/admin";
 import getSupabase from "@/lib/supabase";
 
 export async function GET(req) {
@@ -9,6 +10,7 @@ export async function GET(req) {
   try {
     const supabase = getSupabase();
     if (admin === "true") {
+      if (!isAdmin(req)) return unauthorized();
       const { data: sessions } = await supabase
         .from("chat_sessions")
         .select("session_id, unread_admin, started_at")

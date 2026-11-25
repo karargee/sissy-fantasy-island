@@ -1,68 +1,46 @@
 import "./globals.css";
+import { Instrument_Serif, Inter_Tight } from "next/font/google";
+import { EVENT, ALL_TIERS } from "@/lib/event";
+
+const display = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-display", display: "swap" });
+const sans = Inter_Tight({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 const SITE_URL = "https://sissyfantasyisland.com";
+const TITLE = "LA Trans Party — Sunday, December 13, 2026 · Los Angeles";
+const DESC = "A private, after-dark trans party in Los Angeles. Live performance, themed rooms and a dance floor until 4AM. Sunday, December 13, 2026. Strictly 18+.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "LA Trans Party 2026 — Los Angeles · Oct 23–24",
-  description: "The most exclusive trans & subs party in Los Angeles. October 23–24, 2026. Limited tickets. Private venue. Unforgettable.",
-  keywords: "trans party los angeles, LA trans party 2026, trans event LA, subs party, LGBTQ party LA",
+  title: TITLE,
+  description: DESC,
+  keywords: "trans party los angeles, LA trans party, trans event LA, December 2026, LGBTQ party LA",
   authors: [{ name: "LA Trans Party" }],
   creator: "LA Trans Party",
-  openGraph: {
-    title: "LA Trans Party 2026 — Los Angeles · Oct 23–24",
-    description: "The most exclusive trans & subs party in Los Angeles. October 23–24, 2026. Limited tickets.",
-    url: SITE_URL,
-    siteName: "LA Trans Party",
-    type: "website",
-    images: [{ url: "/photo_2026-04-29_15-56-22.jpg", width: 1200, height: 630, alt: "LA Trans Party 2026" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "LA Trans Party 2026 — Los Angeles · Oct 23–24",
-    description: "The most exclusive trans & subs party in Los Angeles. October 23–24, 2026. Limited tickets.",
-    images: ["/photo_2026-04-29_15-56-22.jpg"],
-  },
+  openGraph: { title: TITLE, description: DESC, url: SITE_URL, siteName: "LA Trans Party", type: "website" },
+  twitter: { card: "summary", title: TITLE, description: DESC },
   robots: { index: true, follow: true },
 };
 
 const eventSchema = {
   "@context": "https://schema.org",
   "@type": "Event",
-  name: "LA Trans Party 2026",
-  description:
-    "Two nights of the most exclusive trans & subs party in Los Angeles. Music, freedom, and unapologetic self-expression. Private venue disclosed 48 hours before the event.",
-  startDate: "2026-10-23T21:00:00-07:00",
-  endDate: "2026-10-25T04:00:00-07:00",
+  name: "LA Trans Party — Winter 2026",
+  description: DESC,
+  startDate: EVENT.startISO,
+  endDate: EVENT.endISO,
   eventStatus: "https://schema.org/EventScheduled",
-  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
   location: {
     "@type": "Place",
-    name: "Private Venue (disclosed to ticket holders)",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Los Angeles",
-      addressRegion: "CA",
-      addressCountry: "US",
-    },
+    name: "Private venue (disclosed to ticket holders)",
+    address: { "@type": "PostalAddress", addressLocality: "Los Angeles", addressRegion: "CA", addressCountry: "US" },
   },
-  image: [`${SITE_URL}/photo_2026-04-29_15-56-22.jpg`],
-  organizer: {
-    "@type": "Organization",
-    name: "LA Trans Party",
-    url: SITE_URL,
-  },
-  offers: [
-    { "@type": "Offer", name: "General Admission", price: "150", priceCurrency: "USD", availability: "https://schema.org/LimitedAvailability", url: `${SITE_URL}/#tickets` },
-    { "@type": "Offer", name: "VIP Access", price: "250", priceCurrency: "USD", availability: "https://schema.org/LimitedAvailability", url: `${SITE_URL}/#tickets` },
-    { "@type": "Offer", name: "Ultra VIP", price: "500", priceCurrency: "USD", availability: "https://schema.org/LimitedAvailability", url: `${SITE_URL}/#tickets` },
-    { "@type": "Offer", name: "Virtual Access", price: "75", priceCurrency: "USD", availability: "https://schema.org/InStock", url: `${SITE_URL}/#tickets` },
-  ],
-  audience: {
-    "@type": "Audience",
-    audienceType: "Adults 18+",
-    suggestedMinAge: 18,
-  },
+  organizer: { "@type": "Organization", name: "LA Trans Party", url: SITE_URL },
+  offers: ALL_TIERS.map((t) => ({
+    "@type": "Offer", name: t.name, price: String(t.price), priceCurrency: "USD",
+    availability: "https://schema.org/InStock", url: `${SITE_URL}/#tickets`,
+  })),
+  audience: { "@type": "PeopleAudience", suggestedMinAge: 18 },
 };
 
 const faqSchema = {
@@ -74,7 +52,7 @@ const faqSchema = {
       name: "Where is the venue?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The venue is private and disclosed only to ticket holders 48 hours before the event via email. It is located in Los Angeles, CA.",
+        text: "The venue is private and disclosed only to ticket holders 48 hours before the event via email. It is in Los Angeles, CA.",
       },
     },
     {
@@ -98,7 +76,7 @@ const faqSchema = {
       name: "What are the ticket prices?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "General Admission is $150 per person (both nights). VIP is $250 and includes lounge access, priority entry, drinks, and a gift bag. Ultra VIP is $500 and includes a private suite, open bar, limo pickup, and a personal host. Virtual Access (remote) is $75.",
+        text: "General Admission is $150, VIP is $250 and Ultra VIP is $500, each for the night of December 13, 2026. Virtual Access (live stream) is $75. Pay by card via Stripe or with Bitcoin.",
       },
     },
     {
@@ -114,14 +92,8 @@ const faqSchema = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${sans.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }}

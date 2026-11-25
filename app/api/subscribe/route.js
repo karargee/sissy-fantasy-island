@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { isAdmin, unauthorized } from "@/lib/admin";
 import getSupabase from "@/lib/supabase";
 
-export async function GET() {
+export async function GET(req) {
+  if (!isAdmin(req)) return unauthorized();
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from("subscribers")

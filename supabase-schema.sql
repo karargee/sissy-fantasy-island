@@ -3,78 +3,7 @@
 -- Run this entire file in your Supabase SQL Editor
 -- ============================================================
 
--- USERSSkip to content
-Environment Variables
-Environment Variables
-Store API keys, tokens, and config securely. Learn more about environment variables · Separate Production Secret Values
-
-Project
-Shared
-Search variables…
-
-All Types
-All Environments
-All Editors
-
-All Variables
-
-Last Updated
-
-JWT_SECRET
-Needs Attention
-
-•••••••••••••••
-Production
-Updated 
-just now
-
-
-NEXT_PUBLIC_URL
-
-•••••••••••••••
-Production
-Added 
-39m ago
-
-
-GMAIL_USER
-
-•••••••••••••••
-Production
-Added 
-39m ago
-
-
-ADMIN_PASSWORD
-Needs Attention
-
-•••••••••••••••
-Production
-Added 
-39m ago
-
-
-NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-•••••••••••••••
-Production
-Added 
-39m ago
-
-
-SUPABASE…OLE_KEY
-Needs Attention
-
-•••••••••••••••
-Production
-Added 
-39m ago
-
-
-Enable access to System Environment Variables
-Deployments
-success:
-Deployment created
+-- USERS
 create table if not exists users (
   id text primary key,
   email text unique not null,
@@ -110,6 +39,20 @@ create table if not exists btc_payments (
   txid text,
   delivery text default 'email',
   status text default 'pending',
+  created_at timestamptz default now()
+);
+
+-- CARD PAYMENTS (written by the Stripe webhook)
+create table if not exists card_payments (
+  id bigint generated always as identity primary key,
+  stripe_session_id text unique not null,
+  email text,
+  name text,
+  tier text not null,
+  quantity int default 1,
+  amount_cents int not null,
+  currency text default 'usd',
+  status text default 'paid',
   created_at timestamptz default now()
 );
 
@@ -235,6 +178,7 @@ $$;
 alter table users enable row level security;
 alter table contact_messages enable row level security;
 alter table btc_payments enable row level security;
+alter table card_payments enable row level security;
 alter table gift_submissions enable row level security;
 alter table subscribers enable row level security;
 alter table chat_sessions enable row level security;

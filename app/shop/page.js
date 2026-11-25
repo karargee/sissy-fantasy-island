@@ -105,7 +105,7 @@ export default function ShopPage() {
         <div style={{ background: "rgba(214,51,132,0.04)", border: "1px solid rgba(214,51,132,0.12)", borderRadius: 16, padding: "2rem", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>💳</div>
           <h3 style={{ marginBottom: "0.5rem" }}>Attending the Party?</h3>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: "1.2rem" }}>Get your outfit sorted before Oct 23. Secure your ticket and arrive dressed to impress.</p>
+          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: "1.2rem" }}>Get your outfit sorted before December 13. Secure your ticket and arrive dressed to impress.</p>
           <Link href="/#tickets" style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: 8, background: "linear-gradient(135deg, #d63384, #7c3aed)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>Get Your Card →</Link>
         </div>
       </div>

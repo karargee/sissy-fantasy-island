@@ -7,6 +7,7 @@ const TABS = [
   { key: "members", label: "👥 Members" },
   { key: "dungeon", label: "🚚 Dungeon Bookings" },
   { key: "livechat", label: "💬 Live Chat" },
+  { key: "card", label: "Card Sales" },
   { key: "btc", label: "₿ BTC Payments" },
   { key: "giftcards", label: "🎁 Gift Cards" },
   { key: "contact", label: "✉️ Contact Forms" },
@@ -56,6 +57,8 @@ export default function Admin() {
   const [upgradeMsg, setUpgradeMsg] = useState("");
   const [dungeonBookings, setDungeonBookings] = useState([]);
   const [btcPayments, setBtcPayments] = useState([]);
+  const [cardPayments, setCardPayments] = useState([]);
+  const [cardError, setCardError] = useState("");
   const [giftSubs, setGiftSubs] = useState([]);
   const [contactMsgs, setContactMsgs] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
@@ -116,42 +119,49 @@ export default function Admin() {
         .catch(() => setMembersLoading(false));
     }
     if (tab === "dungeon") {
-      fetch("/api/contact").then(r => r.json()).then(d => {
+      fetch("/api/contact", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => {
         setDungeonBookings((d.messages || []).filter(m => m.subject === "Dungeon Booking Request"));
       });
     }
+    if (tab === "card") {
+      setCardError("");
+      fetch("/api/card-payments", { headers: { "x-admin-pass": adminPassRef.current } })
+        .then(r => r.json())
+        .then(d => { if (d.error) setCardError(d.error); setCardPayments(d.payments || []); })
+        .catch(e => setCardError(e.message));
+    }
     if (tab === "btc") {
-      fetch("/api/btc-confirm").then(r => r.json()).then(d => setBtcPayments(d.payments || []));
+      fetch("/api/btc-confirm", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => setBtcPayments(d.payments || []));
     }
     if (tab === "giftcards") {
-      fetch("/api/gift-submit").then(r => r.json()).then(d => setGiftSubs(d.submissions || []));
+      fetch("/api/gift-submit", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => setGiftSubs(d.submissions || []));
     }
     if (tab === "contact") {
-      fetch("/api/contact").then(r => r.json()).then(d => {
+      fetch("/api/contact", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => {
         const all = d.messages || [];
         setContactMsgs(all.filter(m => m.subject !== "Dungeon Booking Request"));
         setDungeonBookings(all.filter(m => m.subject === "Dungeon Booking Request"));
       });
     }
     if (tab === "subscribers") {
-      fetch("/api/subscribe").then(r => r.json()).then(d => setSubscribers(d.subscribers || []));
+      fetch("/api/subscribe", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => setSubscribers(d.subscribers || []));
     }
     if (tab === "overview") {
       fetch("/api/admin/members", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => setMembers(d.users || []));
-      fetch("/api/btc-confirm").then(r => r.json()).then(d => setBtcPayments(d.payments || []));
-      fetch("/api/gift-submit").then(r => r.json()).then(d => setGiftSubs(d.submissions || []));
-      fetch("/api/contact").then(r => r.json()).then(d => {
+      fetch("/api/btc-confirm", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => setBtcPayments(d.payments || []));
+      fetch("/api/gift-submit", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => setGiftSubs(d.submissions || []));
+      fetch("/api/contact", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => {
         const all = d.messages || [];
         setContactMsgs(all.filter(m => m.subject !== "Dungeon Booking Request"));
         setDungeonBookings(all.filter(m => m.subject === "Dungeon Booking Request"));
       });
-      fetch("/api/subscribe").then(r => r.json()).then(d => setSubscribers(d.subscribers || []));
+      fetch("/api/subscribe", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => setSubscribers(d.subscribers || []));
     }
   }, [authed, tab]);
 
   useEffect(() => {
     if (!authed || tab !== "livechat") return;
-    fetch("/api/contact").then(r => r.json()).then(d => {
+    fetch("/api/contact", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => {
       setLiveChats((d.messages || []).filter(m => m.subject === "Live Chat Message"));
     });
   }, [authed, tab]);
@@ -331,6 +341,37 @@ export default function Admin() {
                     {m.notes && <p style={{ opacity: 0.6, fontSize: "0.88rem", lineHeight: 1.6, borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "0.8rem" }}>{m.notes}</p>}
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tab === "card" && (
+          <div>
+            <h1 className="admin-title">Card Sales ({cardPayments.length})</h1>
+            {cardPayments.length > 0 && (
+              <p style={{ opacity: 0.6, marginBottom: "1rem" }}>
+                {cardPayments.reduce((n, p) => n + (p.quantity || 1), 0)} tickets · ${(cardPayments.reduce((n, p) => n + (p.amount_cents || 0), 0) / 100).toLocaleString()} total
+              </p>
+            )}
+            {cardError && <p style={{ color: "#ff6b6b", marginBottom: "1rem" }}>{cardError}</p>}
+            {cardPayments.length === 0 ? <Empty text="No card sales yet." /> : (
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead><tr><th>Name</th><th>Email</th><th>Tier</th><th>Qty</th><th>Amount</th><th>Date</th></tr></thead>
+                  <tbody>
+                    {cardPayments.map(p => (
+                      <tr key={p.id}>
+                        <td>{p.name || "—"}</td>
+                        <td>{p.email || "—"}</td>
+                        <td>{p.tier}</td>
+                        <td>{p.quantity}</td>
+                        <td>${(p.amount_cents / 100).toFixed(2)}</td>
+                        <td style={{ fontSize: "0.8rem" }}>{new Date(p.created_at).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>

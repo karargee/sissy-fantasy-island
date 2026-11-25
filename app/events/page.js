@@ -8,18 +8,18 @@ const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
 const EVENTS = [
   {
-    name: "LA Trans Party 2026 — Los Angeles",
-    date: "October 23–24, 2026",
+    name: "LA Trans Party — Winter 2026",
+    date: "Sunday, December 13, 2026 · 9PM–4AM",
     location: "Private Venue — Los Angeles, CA (disclosed 48hrs prior)",
     emoji: "🏳️⚧️",
     img: "https://images.unsplash.com/photo-1605723517503-3cadb5818a0c?w=800&q=80",
     status: "Tickets Available",
-    desc: "The most exclusive trans & subs party in Los Angeles. Two nights of music, freedom, and unapologetic self-expression. Private venue, limited capacity.",
+    desc: "The most exclusive trans & subs party in Los Angeles. One night of live performance, themed rooms and a dance floor until 4AM. Private venue, limited capacity.",
     rules: ["18+ only — ID required", "Dress code enforced — femme/glam attire", "Consent is mandatory — zero tolerance policy", "No photography without consent", "Safe word: RED"],
     tickets: [
-      { name: "General Admission", price: 150, perks: ["Entry both nights — Oct 23 & 24", "Welcome cocktail on arrival", "Full access to main floor & themed rooms"] },
-      { name: "VIP Access", price: 250, perks: ["Priority entry, no waiting", "Exclusive VIP lounge both nights", "3 premium drinks per night", "Curated gift bag ($80+ value)"] },
-      { name: "Ultra VIP", price: 500, perks: ["Private suite both nights", "Unlimited open bar", "Personal host assigned", "Limo pickup — LA area", "Professional photo session"] },
+      { name: "General Admission", price: 150, perks: ["Entry from 9:00 PM", "Welcome cocktail on arrival", "Full access to main floor & themed rooms"] },
+      { name: "VIP Access", price: 250, perks: ["Priority entry, no waiting", "Private VIP lounge", "Three premium drinks included", "Curated gift bag ($80+ value)"] },
+      { name: "Ultra VIP", price: 500, perks: ["Private suite for the night", "Unlimited open bar", "Personal host assigned", "Limo pickup — LA area", "Professional photo session"] },
     ],
   },
   {
@@ -115,7 +115,7 @@ export default function EventsPage() {
         {/* Countdown */}
         <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "2rem", textAlign: "center", marginBottom: "3rem" }}>
           <p style={{ opacity: 0.5, fontSize: "0.85rem", marginBottom: "1rem" }}>🎉 LA Trans Party — Main Event Starts In:</p>
-          <CountdownTimer targetDate="2026-08-15T20:00:00" />
+          <CountdownTimer targetDate="2026-12-13T21:00:00-08:00" />
         </div>
 
         {/* Events list */}
@@ -171,7 +171,7 @@ export default function EventsPage() {
                         ))}
                       </ul>
                       <button
-                        onClick={() => ev.status === "Tickets Available" && openModal(ev, t)}
+                        onClick={() => { if (ev.status === "Tickets Available") window.location.href = "/#tickets"; }}
                         style={{ padding: "0.65rem", borderRadius: 8, border: "none", background: ev.status === "Tickets Available" ? "linear-gradient(135deg, #d63384, #7c3aed)" : "rgba(255,255,255,0.05)", color: ev.status === "Tickets Available" ? "white" : "rgba(255,255,255,0.25)", fontWeight: 700, fontSize: "0.8rem", cursor: ev.status === "Tickets Available" ? "pointer" : "not-allowed", fontFamily: "inherit", textTransform: "uppercase", letterSpacing: "0.5px" }}
                       >
                         {ev.status === "Tickets Available" ? `Get Ticket — $${t.price}` : "Coming Soon"}
