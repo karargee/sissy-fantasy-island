@@ -56,6 +56,19 @@ create table if not exists card_payments (
   created_at timestamptz default now()
 );
 
+-- BOUTIQUE ORDERS (written by the Stripe webhook)
+create table if not exists shop_orders (
+  id bigint generated always as identity primary key,
+  stripe_session_id text unique not null,
+  email text,
+  name text,
+  items jsonb not null default '[]',
+  amount_cents int not null,
+  shipping_address text,
+  status text default 'paid',
+  created_at timestamptz default now()
+);
+
 -- GIFT CARD SUBMISSIONS
 create table if not exists gift_submissions (
   id bigint generated always as identity primary key,
@@ -179,6 +192,7 @@ alter table users enable row level security;
 alter table contact_messages enable row level security;
 alter table btc_payments enable row level security;
 alter table card_payments enable row level security;
+alter table shop_orders enable row level security;
 alter table gift_submissions enable row level security;
 alter table subscribers enable row level security;
 alter table chat_sessions enable row level security;

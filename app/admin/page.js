@@ -8,6 +8,7 @@ const TABS = [
   { key: "dungeon", label: "🚚 Dungeon Bookings" },
   { key: "livechat", label: "💬 Live Chat" },
   { key: "card", label: "Card Sales" },
+  { key: "shop", label: "Boutique Orders" },
   { key: "btc", label: "₿ BTC Payments" },
   { key: "giftcards", label: "🎁 Gift Cards" },
   { key: "contact", label: "✉️ Contact Forms" },
@@ -21,6 +22,8 @@ function StatusBadge({ status }) {
     pending: { bg: "rgba(255,193,7,0.15)", color: "#ffc107" },
     rejected: { bg: "rgba(220,53,69,0.15)", color: "#dc3545" },
     approved: { bg: "rgba(40,167,69,0.15)", color: "#28a745" },
+    paid: { bg: "rgba(255,193,7,0.15)", color: "#ffc107" },
+    shipped: { bg: "rgba(40,167,69,0.15)", color: "#28a745" },
   };
   const c = colors[status] || colors.pending;
   return (
@@ -59,6 +62,8 @@ export default function Admin() {
   const [btcPayments, setBtcPayments] = useState([]);
   const [cardPayments, setCardPayments] = useState([]);
   const [cardError, setCardError] = useState("");
+  const [shopOrders, setShopOrders] = useState([]);
+  const [shopError, setShopError] = useState("");
   const [giftSubs, setGiftSubs] = useState([]);
   const [contactMsgs, setContactMsgs] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
@@ -122,6 +127,13 @@ export default function Admin() {
       fetch("/api/contact", { headers: { "x-admin-pass": adminPassRef.current } }).then(r => r.json()).then(d => {
         setDungeonBookings((d.messages || []).filter(m => m.subject === "Dungeon Booking Request"));
       });
+    }
+    if (tab === "shop") {
+      setShopError("");
+      fetch("/api/shop-orders", { headers: { "x-admin-pass": adminPassRef.current } })
+        .then(r => r.json())
+        .then(d => { if (d.error) setShopError(d.error); setShopOrders(d.orders || []); })
+        .catch(e => setShopError(e.message));
     }
     if (tab === "card") {
       setCardError("");
@@ -341,6 +353,40 @@ export default function Admin() {
                     {m.notes && <p style={{ opacity: 0.6, fontSize: "0.88rem", lineHeight: 1.6, borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "0.8rem" }}>{m.notes}</p>}
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tab === "shop" && (
+          <div>
+            <h1 className="admin-title">Boutique Orders ({shopOrders.length})</h1>
+            {shopError && <p style={{ color: "#ff6b6b", marginBottom: "1rem" }}>{shopError}</p>}
+            {shopOrders.length === 0 ? <Empty text="No boutique orders yet." /> : (
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead><tr><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Ship to</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody>
+                    {shopOrders.map(o => (
+                      <tr key={o.id}>
+                        <td style={{ fontSize: "0.8rem" }}>{new Date(o.created_at).toLocaleDateString()}</td>
+                        <td>{o.name || "—"}<br /><span style={{ opacity: 0.6, fontSize: "0.8rem" }}>{o.email}</span></td>
+                        <td style={{ fontSize: "0.85rem" }}>{(o.items || []).map(i => `${i.name} × ${i.qty}`).join(", ")}</td>
+                        <td>${(o.amount_cents / 100).toFixed(2)}</td>
+                        <td style={{ fontSize: "0.8rem", maxWidth: 220 }}>{o.shipping_address}</td>
+                        <td><StatusBadge status={o.status} /></td>
+                        <td className="admin-actions">
+                          {o.status === "paid" && (
+                            <button className="admin-btn-approve" title="Mark shipped" onClick={async () => {
+                              setShopOrders(shopOrders.map(x => x.id === o.id ? { ...x, status: "shipped" } : x));
+                              await fetch("/api/shop-orders", { method: "PATCH", headers: { "Content-Type": "application/json", "x-admin-pass": adminPassRef.current }, body: JSON.stringify({ id: o.id, status: "shipped" }) });
+                            }}>✓</button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>

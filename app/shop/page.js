@@ -1,114 +1,199 @@
 "use client";
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { PRODUCTS, SHOP_CATEGORIES, SHIPPING } from "@/lib/shop";
+import { AgeGate, FlagRule, SiteHeader, SiteFooter, PageHero } from "@/app/components/SiteChrome";
+import s from "../home.module.css";
 
-const SHOPS = [
-  { name: "Lovense", emoji: "💜", desc: "Remote-controlled toys, vibrators, and interactive devices", url: "https://www.lovense.com", category: "Toys & Devices" },
-  { name: "Amazon — Sissy Costumes", emoji: "👗", desc: "Maid outfits, lingerie, wigs, stockings, and accessories", url: "https://www.amazon.com/s?k=sissy+costume", category: "Costumes" },
-  { name: "Amazon — Chastity", emoji: "🔒", desc: "Cages, locks, and chastity devices for beginners and advanced", url: "https://www.amazon.com/s?k=chastity+cage", category: "Chastity" },
-  { name: "Amazon — Wigs & Makeup", emoji: "💄", desc: "Feminine wigs, makeup kits, and beauty essentials", url: "https://www.amazon.com/s?k=crossdresser+wig", category: "Beauty" },
-  { name: "Amazon — Heels & Boots", emoji: "👠", desc: "High heels, thigh-high boots, and platform shoes in all sizes", url: "https://www.amazon.com/s?k=crossdresser+heels", category: "Footwear" },
-  { name: "Amazon — Corsets & Shapewear", emoji: "🩱", desc: "Waist trainers, corsets, hip pads, and body shaping", url: "https://www.amazon.com/s?k=crossdresser+shapewear", category: "Shapewear" },
-  { name: "Amazon — Lingerie", emoji: "🌸", desc: "Bras, panties, bodysuits, and sexy lingerie sets", url: "https://www.amazon.com/s?k=sissy+lingerie", category: "Costumes" },
-  { name: "Amazon — Stockings", emoji: "🦵", desc: "Thigh-highs, fishnet stockings, and hold-ups", url: "https://www.amazon.com/s?k=thigh+high+stockings", category: "Costumes" },
-  { name: "Amazon — Dresses", emoji: "💃", desc: "Mini dresses, bodycon, and feminine styles in all sizes", url: "https://www.amazon.com/s?k=crossdresser+dress", category: "Costumes" },
-  { name: "Amazon — Accessories", emoji: "💍", desc: "Chokers, earrings, bracelets, and feminine jewelry", url: "https://www.amazon.com/s?k=feminine+accessories", category: "Beauty" },
-  { name: "Amazon — Skincare", emoji: "✨", desc: "Moisturizers, exfoliants, and feminine skincare routines", url: "https://www.amazon.com/s?k=feminine+skincare", category: "Beauty" },
-  { name: "Amazon — Butt Plugs", emoji: "🍑", desc: "Beginner to advanced anal toys and training kits", url: "https://www.amazon.com/s?k=butt+plug", category: "Toys & Devices" },
+const SHOP_OPEN = process.env.NEXT_PUBLIC_SHOP_OPEN === "true";
+const BAG_KEY = "ltp_bag";
+
+const PROMISES = [
+  ["Discreet packaging", "Plain box, no logos. The sender name on the label is neutral."],
+  ["Private billing", "Card payments are processed by Stripe. We never see or store your card number."],
+  ["Size help", "Unsure about fit? Email us your measurements and we'll recommend a size."],
+  ["Easy returns", "Unworn clothing and footwear can be returned within 14 days. Intimate items and toys can't, for hygiene."],
 ];
 
-const CATEGORIES = ["All", "Toys & Devices", "Costumes", "Chastity", "Beauty", "Footwear", "Shapewear"];
+function useBag() {
+  const [bag, setBag] = useState({});
+  useEffect(() => {
+    try { setBag(JSON.parse(localStorage.getItem(BAG_KEY) || "{}")); } catch {}
+  }, []);
+  function save(next) {
+    setBag(next);
+    try { localStorage.setItem(BAG_KEY, JSON.stringify(next)); } catch {}
+  }
+  return {
+    bag,
+    add: (id) => save({ ...bag, [id]: Math.min((bag[id] || 0) + 1, 10) }),
+    setQty: (id, q) => {
+      const next = { ...bag };
+      if (q <= 0) delete next[id]; else next[id] = Math.min(q, 10);
+      save(next);
+    },
+  };
+}
 
-const TIPS = [
-  { emoji: "📦", title: "Discreet Shipping", desc: "Always select 'gift packaging' on Amazon. Items ship in plain brown boxes with no product description on the label." },
-  { emoji: "💳", title: "Private Payment", desc: "Use Amazon gift cards or a prepaid Visa to keep purchases off your main bank statement." },
-  { emoji: "📏", title: "Sizing Tips", desc: "Always size up for corsets and shapewear. For heels, go half a size up. Check reviews for sizing notes." },
-  { emoji: "🔒", title: "Account Privacy", desc: "Create a separate Amazon account with a private email for all sissy purchases. Use a PO box or Amazon locker for delivery." },
-];
-
-export default function ShopPage() {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [shops, setShops] = useState(SHOPS);
+function Bag({ bag, setQty, onClose }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const lines = Object.entries(bag)
+    .map(([id, qty]) => ({ product: PRODUCTS.find((p) => p.id === id), qty }))
+    .filter((l) => l.product);
+  const subtotal = lines.reduce((n, l) => n + l.product.price * l.qty, 0);
+  const shipping = subtotal === 0 || subtotal >= SHIPPING.freeOver ? 0 : SHIPPING.flat;
 
   useEffect(() => {
-    fetch("/api/settings").then(r => r.json()).then(d => {
-      if (d.settings?.shopLinks) setShops(d.settings.shopLinks);
-    }).catch(() => {});
-  }, []);
+    const onKey = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
-  const filtered = activeCategory === "All" ? shops : shops.filter(s => s.category === activeCategory);
+  async function checkout() {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/shop-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: lines.map((l) => ({ id: l.product.id, qty: l.qty })) }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) throw new Error(data.error || "Could not start checkout.");
+      window.location.href = data.url;
+    } catch (e) {
+      setError(e.message);
+      setLoading(false);
+    }
+  }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#060608", color: "#f0f0f0" }}>
-      {/* Nav */}
-      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "1.2rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "rgba(6,6,8,0.92)", backdropFilter: "blur(20px)", zIndex: 100 }}>
-        <Link href="/" style={{ color: "#f5a9b8", textDecoration: "none", fontWeight: 700, fontSize: "0.9rem" }}>← LA Trans Party</Link>
-        <span style={{ fontSize: "1rem", fontWeight: 800, letterSpacing: 1 }}>🛍️ Shop</span>
-        <Link href="/#tickets" style={{ background: "linear-gradient(135deg, #d63384, #7c3aed)", padding: "0.45rem 1rem", borderRadius: 6, color: "white", textDecoration: "none", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>🎟️ Tickets</Link>
-      </div>
-
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "3rem 1.5rem" }}>
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <div style={{ display: "inline-block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, padding: "0.3rem 1rem", borderRadius: 50, background: "rgba(214,51,132,0.12)", border: "1px solid rgba(214,51,132,0.25)", color: "#f5a9b8", marginBottom: "1rem" }}>Curated Picks</div>
-          <h1 style={{ fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 900, letterSpacing: -1, marginBottom: "0.8rem" }}>Party Shop</h1>
-          <p style={{ color: "rgba(255,255,255,0.4)", maxWidth: 480, margin: "0 auto", lineHeight: 1.7, fontSize: "0.95rem" }}>Curated products from trusted retailers. Click any item to shop directly — all links are discreet and safe.</p>
+    <>
+      <div className={s.overlay} onClick={onClose} />
+      <aside className={s.drawer} role="dialog" aria-modal="true" aria-label="Your bag">
+        <div className={s.drawerHead}>
+          <h2 className={s.drawerTitle}>Your bag</h2>
+          <button className={s.modalClose} style={{ position: "static" }} onClick={onClose} aria-label="Close">×</button>
         </div>
-
-        {/* Category Filter */}
-        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", justifyContent: "center", marginBottom: "2.5rem" }}>
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              style={{ padding: "0.5rem 1.2rem", borderRadius: 6, border: `1px solid ${activeCategory === cat ? "rgba(214,51,132,0.4)" : "rgba(255,255,255,0.08)"}`, background: activeCategory === cat ? "rgba(214,51,132,0.12)" : "transparent", color: activeCategory === cat ? "#f5a9b8" : "rgba(255,255,255,0.45)", fontSize: "0.82rem", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s" }}
-            >
-              {cat}
+        <div className={s.drawerBody}>
+          {lines.length === 0 ? (
+            <p style={{ color: "var(--muted)", padding: "24px 0" }}>Your bag is empty.</p>
+          ) : lines.map(({ product: p, qty }) => (
+            <div key={p.id} className={s.bagItem}>
+              <div className={s.bagThumb}><Image src={p.image} alt="" fill sizes="72px" className={s.coverImg} /></div>
+              <div>
+                <div className={s.bagName}>{p.name}</div>
+                <div className={s.bagSub}>${p.price} each</div>
+                <button className={s.linkBtn} onClick={() => setQty(p.id, 0)}>Remove</button>
+              </div>
+              <div className={s.qty}>
+                <button onClick={() => setQty(p.id, qty - 1)} aria-label={`Fewer ${p.name}`}>−</button>
+                <span>{qty}</span>
+                <button onClick={() => setQty(p.id, qty + 1)} disabled={qty >= 10} aria-label={`More ${p.name}`}>+</button>
+              </div>
+            </div>
+          ))}
+        </div>
+        {lines.length > 0 && (
+          <div className={s.drawerFoot}>
+            <div className={s.sumRow}><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
+            <div className={s.sumRow}><span>Shipping</span><span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span></div>
+            <div className={s.sumTotal}><span>Total</span><span>${(subtotal + shipping).toFixed(2)}</span></div>
+            {error && <p className={s.error}>{error}</p>}
+            <button className={`${s.btn} ${s.btnPrimary} ${s.btnBlock}`} onClick={checkout} disabled={loading}>
+              {loading ? "Opening secure checkout…" : "Checkout"}
             </button>
-          ))}
-        </div>
-
-        {/* Products Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.2rem", marginBottom: "4rem" }}>
-          {filtered.map(item => (
-            <a key={item.name} href={item.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
-              <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "1.8rem", textAlign: "center", height: "100%", display: "flex", flexDirection: "column", gap: "0.6rem", transition: "transform 0.25s, border-color 0.25s", cursor: "pointer" }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.borderColor = "rgba(245,169,184,0.3)"; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; }}
-              >
-                <div style={{ fontSize: "2.2rem" }}>{item.emoji}</div>
-                <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: 1.5, color: "rgba(255,255,255,0.3)", fontWeight: 700 }}>{item.category}</div>
-                <h3 style={{ fontSize: "0.95rem", fontWeight: 700 }}>{item.name}</h3>
-                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", lineHeight: 1.5, flex: 1 }}>{item.desc}</p>
-                <div style={{ color: "#f5a9b8", fontWeight: 700, fontSize: "0.85rem", marginTop: "0.5rem" }}>Shop Now →</div>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        {/* Privacy Tips */}
-        <div style={{ marginBottom: "3rem" }}>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: 800, textAlign: "center", marginBottom: "0.5rem" }}>🔒 Shopping Discreetly</h2>
-          <p style={{ textAlign: "center", color: "rgba(255,255,255,0.4)", fontSize: "0.88rem", marginBottom: "2rem" }}>Tips to keep your purchases private.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
-            {TIPS.map(tip => (
-              <div key={tip.title} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, padding: "1.4rem" }}>
-                <div style={{ fontSize: "1.6rem", marginBottom: "0.6rem" }}>{tip.emoji}</div>
-                <h3 style={{ fontSize: "0.92rem", fontWeight: 700, marginBottom: "0.4rem" }}>{tip.title}</h3>
-                <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>{tip.desc}</p>
-              </div>
-            ))}
+            <p className={s.fine}>Free US shipping over ${SHIPPING.freeOver}. Secure checkout by Stripe.</p>
           </div>
-        </div>
+        )}
+      </aside>
+    </>
+  );
+}
 
-        {/* CTA */}
-        <div style={{ background: "rgba(214,51,132,0.04)", border: "1px solid rgba(214,51,132,0.12)", borderRadius: 16, padding: "2rem", textAlign: "center" }}>
-          <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>💳</div>
-          <h3 style={{ marginBottom: "0.5rem" }}>Attending the Party?</h3>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: "1.2rem" }}>Get your outfit sorted before December 13. Secure your ticket and arrive dressed to impress.</p>
-          <Link href="/#tickets" style={{ display: "inline-block", padding: "0.7rem 1.8rem", borderRadius: 8, background: "linear-gradient(135deg, #d63384, #7c3aed)", color: "white", textDecoration: "none", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>Get Your Card →</Link>
-        </div>
-      </div>
+function Shop() {
+  const [cat, setCat] = useState("All");
+  const [bagOpen, setBagOpen] = useState(false);
+  const { bag, add, setQty } = useBag();
+  const count = Object.values(bag).reduce((n, q) => n + q, 0);
+  const list = useMemo(() => (cat === "All" ? PRODUCTS : PRODUCTS.filter((p) => p.category === cat)), [cat]);
+
+  return (
+    <div className={s.page}>
+      <FlagRule />
+      <SiteHeader
+        extra={SHOP_OPEN ? (
+          <button className={s.bagBtn} onClick={() => setBagOpen(true)}>Bag{count > 0 ? ` (${count})` : ""}</button>
+        ) : null}
+      />
+      <main>
+        <PageHero
+          eyebrow="The Boutique"
+          title={<>Dressed for <em>the night.</em></>}
+          intro="Latex, leather, lingerie, heels, rope, restraints and makeover kits, picked by our hosts and shipped in plain packaging."
+        />
+        <section className={s.section}>
+          <div className={s.wrap}>
+            {!SHOP_OPEN && (
+              <p className={s.shopNotice}>
+                Online ordering opens soon. In the meantime, each piece links to a retailer that carries it.
+              </p>
+            )}
+            <div className={s.chips} role="tablist" aria-label="Categories">
+              {["All", ...SHOP_CATEGORIES].map((c) => (
+                <button
+                  key={c}
+                  role="tab"
+                  aria-selected={cat === c}
+                  className={`${s.chip} ${cat === c ? s.chipActive : ""}`}
+                  onClick={() => setCat(c)}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+            <div className={s.productGrid}>
+              {list.map((p) => (
+                <article key={p.id} id={p.id} className={s.productCard}>
+                  <div className={s.productMedia}>
+                    <Image src={p.image} alt={p.alt} fill sizes="(max-width: 760px) 50vw, (max-width: 980px) 33vw, 280px" className={s.coverImg} />
+                  </div>
+                  <div className={s.productMeta}>
+                    <span className={s.productCat}>{p.category}</span>
+                    <h3 className={s.productName} style={{ fontWeight: 400 }}>{p.name}</h3>
+                    <span className={s.productPrice}>${p.price}</span>
+                  </div>
+                  <p className={s.productDesc}>{p.desc}</p>
+                  <div className={s.productActions}>
+                    {SHOP_OPEN ? (
+                      <button className={`${s.btn} ${s.btnGhost} ${s.btnSmall} ${s.btnBlock}`} onClick={() => { add(p.id); setBagOpen(true); }}>
+                        Add to bag
+                      </button>
+                    ) : (
+                      <a className={`${s.btn} ${s.btnGhost} ${s.btnSmall} ${s.btnBlock}`} href={p.retailerUrl} target="_blank" rel="noopener noreferrer sponsored">
+                        Shop at retailer
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className={s.promises}>
+              {PROMISES.map(([t, d]) => (
+                <div key={t}><strong>{t}</strong><p>{d}</p></div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+      <SiteFooter />
+      {bagOpen && SHOP_OPEN && <Bag bag={bag} setQty={setQty} onClose={() => setBagOpen(false)} />}
     </div>
   );
+}
+
+export default function ShopPage() {
+  return <AgeGate><Shop /></AgeGate>;
 }

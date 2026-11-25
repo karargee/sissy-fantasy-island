@@ -6,7 +6,13 @@ import { QRCodeSVG } from "qrcode.react";
 import ChatWidget from "@/app/components/ChatWidget";
 import { EVENT, TIERS, VIRTUAL_TIER } from "@/lib/event";
 import { PAST_PARTY_PHOTOS } from "@/lib/past-parties";
+import { PRODUCTS } from "@/lib/shop";
+import { FlagRule, SiteHeader, SiteFooter } from "@/app/components/SiteChrome";
 import s from "./home.module.css";
+
+const FEATURED_PRODUCTS = ["latex-top", "o-ring-collar", "red-stilettos", "jute-rope-kit"]
+  .map((id) => PRODUCTS.find((p) => p.id === id))
+  .filter(Boolean);
 
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
 
@@ -131,9 +137,6 @@ function SectionHead({ index, title, intro }) {
   );
 }
 
-function FlagRule() {
-  return <div className={s.flagRule} aria-hidden="true"><span /><span /><span /><span /><span /></div>;
-}
 
 function CheckoutModal({ tier, wallet, onClose }) {
   const [qty, setQty] = useState(1);
@@ -241,8 +244,6 @@ function CheckoutModal({ tier, wallet, onClose }) {
 
 export default function Home() {
   const [verified, setVerified] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [checkoutTier, setCheckoutTier] = useState(null);
   const [wallet, setWallet] = useState(BTC_WALLET);
   const [email, setEmail] = useState("");
@@ -256,10 +257,6 @@ export default function Home() {
     fetch("/api/settings").then((r) => r.json()).then((d) => {
       if (d.settings?.btcWallet) setWallet(d.settings.btcWallet);
     }).catch(() => {});
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   function confirmAge() {
@@ -296,31 +293,11 @@ export default function Home() {
     );
   }
 
-  const nav = [["#night", "The Night"], ["#rooms", "Rooms"], ...(PAST_PARTY_PHOTOS.length ? [["#past", "Past Parties"]] : []), ["#tickets", "Tickets"], ["#guide", "Guide"], ["#faq", "FAQ"], ["#contact", "Contact"]];
-
   return (
     <div className={s.page}>
       <a href="#main" className="skip-link">Skip to content</a>
       <FlagRule />
-
-      <header className={`${s.header} ${scrolled ? s.headerScrolled : ""}`}>
-        <div className={`${s.wrap} ${s.headerInner}`}>
-          <a href="#top" className={s.brand}>{EVENT.name}</a>
-          <nav aria-label="Main">
-            <ul className={`${s.navLinks} ${menuOpen ? s.navOpen : ""}`}>
-              {nav.map(([href, label]) => (
-                <li key={href}><a href={href} onClick={() => setMenuOpen(false)}>{label}</a></li>
-              ))}
-            </ul>
-          </nav>
-          <div className={s.headerActions}>
-            <a href="#tickets" className={`${s.btn} ${s.btnPrimary} ${s.btnSmall}`}>Tickets</a>
-            <button className={s.menuBtn} onClick={() => setMenuOpen((o) => !o)} aria-expanded={menuOpen}>
-              {menuOpen ? "Close" : "Menu"}
-            </button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader onHome />
 
       <main id="main">
         {/* Hero */}
@@ -376,6 +353,15 @@ export default function Home() {
                 title={<>Eight hours, <em>planned properly.</em></>}
                 intro="We keep the guest list small and the production tight: proper sound and lighting, trained floor staff, and rooms that are designed rather than improvised."
               />
+              <div className={s.bandMedia}>
+                <Image
+                  src="https://images.unsplash.com/photo-1744313930610-1649242d1fcd?w=2000&q=75"
+                  alt="A packed dance floor under disco balls and coloured lights"
+                  fill
+                  sizes="(max-width: 1200px) 100vw, 1152px"
+                  className={s.coverImg}
+                />
+              </div>
               <ol className={`${s.schedule} ${s.body}`}>
                 {SCHEDULE.map((r) => (
                   <li className={s.scheduleRow} key={r.time}>
@@ -428,7 +414,7 @@ export default function Home() {
           <section className={s.section} id="past">
             <div className={s.wrap}>
               <Reveal>
-                <SectionHead index="— Past Parties" title={<>From <em>previous nights.</em></>} />
+                <SectionHead index="— Past Parties" title={<>From <em>previous nights.</em></>} intro={<Link href="/past-parties" className={s.textLink}>Browse the full archive →</Link>} />
                 <div className={s.pastGrid}>
                   {PAST_PARTY_PHOTOS.map((ph) => (
                     <figure key={ph.src} className={s.galleryItem}>
@@ -532,6 +518,36 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Boutique teaser */}
+        <section className={s.section} id="boutique">
+          <div className={s.wrap}>
+            <Reveal>
+              <SectionHead
+                index="— The Boutique"
+                title={<>Arrive <em>dressed for it.</em></>}
+                intro="Latex, leather, lingerie, heels, rope and restraints, picked by our hosts. Shipped discreetly in plain packaging."
+              />
+              <div className={s.productGrid}>
+                {FEATURED_PRODUCTS.map((p) => (
+                  <Link key={p.id} href={`/shop#${p.id}`} className={s.productCard}>
+                    <div className={s.productMedia}>
+                      <Image src={p.image} alt={p.alt} fill sizes="(max-width: 760px) 50vw, 280px" className={s.coverImg} />
+                    </div>
+                    <div className={s.productMeta}>
+                      <span className={s.productCat}>{p.category}</span>
+                      <span className={s.productName}>{p.name}</span>
+                      <span className={s.productPrice}>${p.price}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div style={{ marginTop: 32 }}>
+                <Link href="/shop" className={`${s.btn} ${s.btnGhost}`}>Shop the full boutique</Link>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* FAQ */}
         <section className={s.section} id="faq">
           <div className={s.wrap}>
@@ -581,24 +597,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className={s.footer}>
-        <div className={s.wrap}>
-          <div className={s.footerTop}>
-            <div className={s.footerBrand}>{EVENT.name}</div>
-            <ul className={s.footerLinks}>
-              <li><a href="#tickets">Tickets</a></li>
-              <li><Link href="/gallery">Gallery</Link></li>
-              <li><Link href="/events">Events</Link></li>
-              <li><Link href="/terms">Terms</Link></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-          <div className={s.footerBottom}>
-            <span>© 2026 {EVENT.name}. Strictly 18+.</span>
-            <span>{EVENT.dateLabel} · {EVENT.city}</span>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
       <ChatWidget />
       {checkoutTier && <CheckoutModal tier={checkoutTier} wallet={wallet} onClose={() => setCheckoutTier(null)} />}
