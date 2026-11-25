@@ -1,12 +1,28 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
 import ChatWidget from "@/app/components/ChatWidget";
 import { EVENT, TIERS, VIRTUAL_TIER } from "@/lib/event";
+import { PAST_PARTY_PHOTOS } from "@/lib/past-parties";
 import s from "./home.module.css";
 
 const BTC_WALLET = "bc1q6k7lmj5jruuk0tq28c03pc5ae2jv0wnthdpxpn";
+
+const TIER_IMAGES = {
+  ga: { src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=75", alt: "Confetti falling over a crowd under stage lights" },
+  vip: { src: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&q=75", alt: "A cocktail on a wooden bar in low light" },
+  ultra: { src: "/dungeon-5.jpg", alt: "Private suite with a tufted purple headboard" },
+};
+
+const ROOMS = [
+  { src: "/dungeon-7.jpg", alt: "Brick-walled room with a St. Andrew's cross under purple light", caption: "The Cross Room", wide: true },
+  { src: "/dungeon-3.jpg", alt: "Ornate mirror lit in violet", caption: "Vanity" },
+  { src: "/dungeon-8.jpg", alt: "Padded leather bench in a brick room", caption: "The Bench Room" },
+  { src: "/dungeon-2.jpeg", alt: "Steel cage set into a dark cabinet", caption: "The Cage" },
+  { src: "/dungeon-9.jpg", alt: "Lounge with leather seating under a starlit ceiling", caption: "VIP Lounge", wide: true },
+];
 
 const SCHEDULE = [
   { time: "8:00 PM", title: "Ultra VIP arrivals", desc: "Early entry, suite check-in and a quiet first drink before the doors open." },
@@ -252,7 +268,7 @@ export default function Home() {
     );
   }
 
-  const nav = [["#night", "The Night"], ["#tickets", "Tickets"], ["#guide", "Guide"], ["#faq", "FAQ"], ["#contact", "Contact"]];
+  const nav = [["#night", "The Night"], ["#rooms", "Rooms"], ...(PAST_PARTY_PHOTOS.length ? [["#past", "Past Parties"]] : []), ["#tickets", "Tickets"], ["#guide", "Guide"], ["#faq", "FAQ"], ["#contact", "Contact"]];
 
   return (
     <div className={s.page}>
@@ -280,8 +296,11 @@ export default function Home() {
 
       <main id="main">
         {/* Hero */}
-        <section className={s.hero} id="top">
-          <div className={s.wrap}>
+        <section className={`${s.hero} ${s.heroWithImage}`} id="top">
+          <div className={s.heroMedia} aria-hidden="true">
+            <Image src="/dungeon-9.jpg" alt="" fill priority sizes="100vw" className={s.heroImg} />
+          </div>
+          <div className={`${s.wrap} ${s.heroContent}`}>
             <div className={s.eyebrow}>{EVENT.edition} · Los Angeles</div>
             <h1 className={s.heroTitle}>One night.<br /><em>Come as you are.</em></h1>
             <div className={s.heroGrid}>
@@ -342,18 +361,66 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Rooms */}
+        <section className={s.section} id="rooms">
+          <div className={s.wrap}>
+            <Reveal>
+              <SectionHead
+                index="02 — The Rooms"
+                title={<>Spaces built <em>for play.</em></>}
+                intro="Beyond the main floor, each room is lit, furnished and hosted with a purpose. Every room's rules are posted at the door."
+              />
+              <div className={s.gallery}>
+                {ROOMS.map((r) => (
+                  <figure key={r.src} className={`${s.galleryItem} ${r.wide ? s.galleryWide : ""}`}>
+                    <div className={s.galleryMedia}>
+                      <Image src={r.src} alt={r.alt} fill sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 600px" className={s.coverImg} />
+                    </div>
+                    <figcaption>{r.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {PAST_PARTY_PHOTOS.length > 0 && (
+          <section className={s.section} id="past">
+            <div className={s.wrap}>
+              <Reveal>
+                <SectionHead index="— Past Parties" title={<>From <em>previous nights.</em></>} />
+                <div className={s.pastGrid}>
+                  {PAST_PARTY_PHOTOS.map((ph) => (
+                    <figure key={ph.src} className={s.galleryItem}>
+                      <div className={s.pastMedia}>
+                        <Image src={ph.src} alt={ph.alt || ""} fill sizes="(max-width: 760px) 50vw, 300px" className={s.coverImg} />
+                      </div>
+                      {ph.caption && <figcaption>{ph.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              </Reveal>
+            </div>
+          </section>
+        )}
+
         {/* Tickets */}
         <section className={s.section} id="tickets">
           <div className={s.wrap}>
             <Reveal>
               <SectionHead
-                index="02 — Tickets"
+                index="03 — Tickets"
                 title={<>Choose how you&apos;d <em>like to arrive.</em></>}
                 intro={`All tickets are for ${EVENT.dateLabel}. Capacity is limited and we don't sell at the door.`}
               />
               <div className={s.tiers}>
                 {TIERS.map((t) => (
                   <article key={t.id} className={`${s.tier} ${t.featured ? s.tierFeatured : ""}`}>
+                    {TIER_IMAGES[t.id] && (
+                      <div className={s.tierMedia}>
+                        <Image src={TIER_IMAGES[t.id].src} alt={TIER_IMAGES[t.id].alt} fill sizes="(max-width: 980px) 100vw, 400px" className={s.coverImg} />
+                      </div>
+                    )}
                     {t.featured && <span className={s.tierTag}>Most chosen</span>}
                     <h3 className={s.tierName}>{t.name}</h3>
                     <div className={s.tierPrice}>${t.price}<small>per person</small></div>
@@ -393,7 +460,7 @@ export default function Home() {
           <div className={s.wrap}>
             <Reveal>
               <SectionHead
-                index="03 — Guest Guide"
+                index="04 — Guest Guide"
                 title={<>Dress up. <em>Look after each other.</em></>}
               />
               <div className={`${s.twoCol} ${s.body}`}>
@@ -419,7 +486,7 @@ export default function Home() {
         <section className={s.section} id="faq">
           <div className={s.wrap}>
             <Reveal>
-              <SectionHead index="04 — Questions" title="Before you come." />
+              <SectionHead index="05 — Questions" title="Before you come." />
               <div className={`${s.faq} ${s.body}`}>
                 {FAQS.map((f) => (
                   <details key={f.q}>
@@ -436,7 +503,7 @@ export default function Home() {
         <section className={s.section} id="contact">
           <div className={s.wrap}>
             <Reveal>
-              <SectionHead index="05 — Contact" title={<>Questions, groups, <em>access needs.</em></>} />
+              <SectionHead index="06 — Contact" title={<>Questions, groups, <em>access needs.</em></>} />
               <div className={`${s.twoCol} ${s.body}`}>
                 <div>
                   <div className={s.subhead}>Get in touch</div>
