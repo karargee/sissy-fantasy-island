@@ -132,6 +132,9 @@ function Shop() {
           eyebrow="The Boutique"
           title={<>Dressed for <em>the night.</em></>}
           intro="Latex, leather, lingerie, heels, rope, restraints and makeover kits, picked by our hosts and shipped in plain packaging."
+          image="https://images.unsplash.com/photo-1514689832698-319d3bcac5d5?w=2000&q=75"
+          imageAlt="Portrait of a model in a harness under pink and blue neon light"
+          imagePosition="center 35%"
         />
         <section className={s.section}>
           <div className={s.wrap}>

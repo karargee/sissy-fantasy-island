@@ -21,6 +21,8 @@ export default function PastParties() {
             eyebrow="The Archive"
             title={<>Past <em>parties.</em></>}
             intro="Highlights from previous nights. Every guest pictured agreed to be photographed and shared."
+            image="https://images.unsplash.com/photo-1516980907201-943c13a8d03c?w=2000&q=75"
+            imageAlt="A pink LOVE neon sign glowing in the dark"
           />
           <section className={s.section}>
             <div className={s.wrap}>

@@ -681,6 +681,141 @@
   background: var(--bg-raised);
 }
 
+.galleryFull { grid-column: 1 / -1; }
+.galleryFull .galleryMedia { aspect-ratio: 21 / 8; }
+@media (max-width: 980px) {
+  .galleryFull .galleryMedia { aspect-ratio: 16 / 9; }
+}
+@media (max-width: 760px) {
+  .galleryFull .galleryMedia { aspect-ratio: 4 / 3; }
+}
+
+/* ── Scrolling photo strip ── */
+.strip {
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  padding: 24px 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.stripTrack {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: stripScroll 70s linear infinite;
+}
+.strip:hover .stripTrack { animation-play-state: paused; }
+.stripItem {
+  position: relative;
+  width: 240px;
+  height: 300px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-raised);
+}
+@keyframes stripScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 6px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stripTrack { animation: none; }
+  .strip { overflow-x: auto; }
+}
+@media (max-width: 760px) {
+  .stripItem { width: 160px; height: 200px; }
+  .strip { padding: 16px 0; }
+}
+
+/* ── On stage ── */
+.stageGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.stageMedia {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-raised);
+}
+@media (max-width: 980px) { .stageGrid { grid-template-columns: 1fr 1fr; } }
+
+/* ── Virtual card with image ── */
+.virtualWithImage { grid-template-columns: 280px 1fr auto; padding: 0; overflow: hidden; }
+.virtualWithImage > div:nth-child(2) { padding: 32px 0; }
+.virtualWithImage > button { margin-right: 32px; }
+.virtualMedia { position: relative; align-self: stretch; min-height: 220px; background: var(--bg-raised); }
+@media (max-width: 760px) {
+  .virtualWithImage { grid-template-columns: 1fr; }
+  .virtualMedia { min-height: 200px; }
+  .virtualWithImage > div:nth-child(2) { padding: 0 24px; }
+  .virtualWithImage > button { margin: 0 24px 24px; }
+}
+
+/* ── Payment tabs ── */
+.payTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+.payTab {
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.payTab:hover { color: var(--text); }
+.payTabActive { background: var(--text); color: var(--bg); }
+.payTabActive:hover { color: var(--bg); }
+
+/* ── Dommes & subs mosaic ── */
+.mosaic {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+}
+.mosaicTall { grid-row: span 2; display: flex; flex-direction: column; }
+.mosaicMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg-raised);
+}
+.mosaicTall .mosaicMedia { aspect-ratio: auto; flex: 1; min-height: 420px; }
+.mosaicMedia img, .playMedia img { transition: transform 0.6s ease; }
+.galleryItem:hover .mosaicMedia img, .playGrid li:hover .playMedia img { transform: scale(1.03); }
+
+.playMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  background: var(--bg-raised);
+}
+
+@media (max-width: 980px) {
+  .mosaic { grid-template-columns: 1fr 1fr; }
+  .mosaicTall { grid-row: auto; grid-column: span 2; }
+  .mosaicTall .mosaicMedia { aspect-ratio: 16 / 10; min-height: 0; flex: none; }
+}
+@media (max-width: 760px) {
+  .mosaic { grid-template-columns: 1fr; }
+  .mosaicTall { grid-column: auto; }
+}
+
 /* ── Shared page parts ── */
 .textLink { color: var(--accent); text-decoration: none; }
 .textLink:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -908,4 +1043,19 @@
   .faq details p { padding-right: 0; }
   .signup { flex-direction: column; }
   .modal { padding: 24px; }
+}
+
+/* ── Final responsive overrides (must stay last so they beat the base rules above) ── */
+.tierMedia { width: calc(100% + 64px); max-width: none; }
+@media (max-width: 980px) {
+  .playGrid { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  .playGrid li { padding-right: 0; }
+  .lookbook { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .playGrid { grid-template-columns: 1fr; }
+  .tierMedia { width: calc(100% + 48px); margin: -28px -24px 24px; }
+  .playMenu { margin-top: 56px; }
+  .lookbook { margin-bottom: 56px; }
+  .stageGrid { gap: 12px; }
 }

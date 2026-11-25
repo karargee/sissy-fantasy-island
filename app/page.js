@@ -27,18 +27,50 @@ const ROOMS = [
   { src: "/dungeon-3.jpg", alt: "Ornate mirror lit in violet", caption: "The Vanity", note: "Sissy makeovers, wigs and lashes" },
   { src: "/dungeon-8.jpg", alt: "Padded leather bench in a brick room", caption: "The Bench Room", note: "Spanking, paddles and discipline" },
   { src: "/dungeon-2.jpeg", alt: "Steel cage set into a dark cabinet", caption: "The Cage", note: "Pet play, kennels and keyholders" },
-  { src: "/dungeon-9.jpg", alt: "Lounge with leather seating under a starlit ceiling", caption: "The Lounge", note: "Aftercare, water and somewhere soft to land", wide: true },
+  { src: "/dungeon-11.jpg", alt: "Padded examination table under purple light", caption: "The Exam Room", note: "Medical play, inspections and role play" },
+  { src: "/dungeon-9.jpg", alt: "Lounge with leather seating under a starlit ceiling", caption: "The Lounge", note: "Aftercare, water and somewhere soft to land", full: true },
 ];
 
+const ux = (id, w = 900) => `https://images.unsplash.com/photo-${id}?w=${w}&q=75`;
+
 const PLAY_MENU = [
-  ["Rope & shibari", "A live demo at 10:30, then open rope frames for tying with your partner."],
-  ["Sissy makeover station", "Hair, makeup, lashes and wardrobe. Come in one way, leave another."],
-  ["Impact play", "Floggers, paddles and canes, with spotters on hand if you're new."],
-  ["Latex & PVC lounge", "Polishing station, shine bar and a room for the rubber crowd."],
-  ["Domme hour", "Mistresses and dommes take the main stage at midnight."],
-  ["Pet play corner", "Collars, leads and a kennel for pups, kittens and their handlers."],
-  ["Chastity check-in", "Keyholders can lodge keys at the front desk for the night."],
-  ["Aftercare lounge", "Blankets, water, snacks and quiet. Open all night, staffed by our care team."],
+  ["Rope & shibari", "A live demo at 10:30, then open rope frames for tying with your partner.", ux("1704919261572-2202be82fdc5"), "A person in a rope suspension under pink and purple light"],
+  ["Sissy makeover station", "Hair, makeup, lashes and wardrobe. Come in one way, leave another.", ux("1583209814683-c023dd293cc6"), "Pink cosmetics and a makeup brush"],
+  ["Impact play", "Floggers, paddles, crops and canes, with spotters on hand if you're new.", ux("1621354694227-b6aee8a614e5"), "A sub in red lace lingerie holding a riding crop"],
+  ["Latex & rubber lounge", "Polishing station, shine bar and a room for the rubber crowd.", ux("1778954729399-12b5f868f60f"), "A figure in black latex and a gas mask"],
+  ["Domme hour", "Mistresses and dommes take the main stage at midnight. Subs kneel.", ux("1763542994347-c8eddd093304"), "A domme in a black corset holding a riding crop"],
+  ["Pet play corner", "Collars, leads and a kennel for pups, kittens and their handlers.", ux("1778954729609-aebd96c7d002"), "A pup in a black hood and latex shirt"],
+  ["Restraint & chastity", "Cuff stations, and keyholders can lodge keys at the front desk for the night.", ux("1579071072964-395e8239d579"), "Wrists in padded leather cuffs"],
+  ["Aftercare lounge", "Blankets, water, snacks and quiet. Open all night, staffed by our care team.", "/dungeon-9.jpg", "A lounge with soft seating under a starlit ceiling"],
+];
+
+const STRIP = [
+  [ux("1514689832698-319d3bcac5d5", 700), "Portrait in a neon-lit harness"],
+  [ux("1763446364826-1f7534669fe5", 900), "Cabaret performer on a lit stage"],
+  [ux("1636930245053-a5503c411cd8", 700), "DJ decks under neon signs"],
+  [ux("1573347904855-aab97d367eab", 700), "Drag performer in pink latex"],
+  [ux("1676113462018-d4452266813b", 900), "A packed crowd around the DJ booth"],
+  [ux("1516980907201-943c13a8d03c", 900), "Pink LOVE neon sign"],
+  [ux("1611699082439-a8de44ba565f", 700), "Model in a glossy latex catsuit on pink"],
+  [ux("1562061000-5be8fb06a0c7", 700), "A rubber pup in a full latex suit and hood"],
+  [ux("1779906923802-b4b443c3c02e", 900), "Drag queen handed flowers on stage"],
+  [ux("1781717510235-8434a44074df", 900), "Red lips under red light"],
+  [ux("1576231976954-ac82b45bbe6d", 700), "Black latex thigh boots with platform heels"],
+];
+
+const STAGE = [
+  { src: ux("1573347904855-aab97d367eab"), alt: "Drag performer in pink latex with chains", caption: "Drag", note: "Trans and drag headliners all night." },
+  { src: ux("1763446364826-1f7534669fe5"), alt: "Cabaret performer on stage with dancers", caption: "Cabaret & burlesque", note: "Tease, comedy and costume changes." },
+  { src: ux("1779906923802-b4b443c3c02e"), alt: "A drag queen handed flowers on stage", caption: "Crowning", note: "The night's best-dressed sub is crowned at 1:30." },
+  { src: ux("1560195183-570e72bb6fd8"), alt: "A performer in red under a single spotlight", caption: "Domme hour", note: "The midnight headline. Subs kneel." },
+];
+
+const DOM_SUB = [
+  { src: ux("1763542994347-c8eddd093304", 1200), alt: "A domme in a black corset holding a riding crop", caption: "Dommes", note: "Mistresses, dommes and switches who came to take charge.", tall: true },
+  { src: ux("1621354694227-b6aee8a614e5"), alt: "A sub in red lace lingerie on her knees", caption: "Subs", note: "Sissies, subs and bottoms who came to give it up." },
+  { src: ux("1581794236300-acd130bf0035"), alt: "A black collar with a chain lead", caption: "Owned", note: "Collared pairs welcome. Leads stay on all night if you like." },
+  { src: ux("1760476406421-84e41744026f"), alt: "A person in a blindfold and leather jacket kneeling", caption: "Sensation", note: "Blindfolds, wax-free sensation play and slow tease." },
+  { src: ux("1579071072955-6304ab5da48b"), alt: "Wrists cuffed behind the back over fishnet stockings", caption: "Restraint", note: "Cuff stations and crosses in every play room." },
 ];
 
 const LOOKBOOK = [
@@ -53,8 +85,9 @@ const SCHEDULE = [
   { time: "9:00 PM", title: "Doors open", desc: "Welcome drinks, coat check and the first DJ set on the main floor." },
   { time: "10:00 PM", title: "Makeover station opens", desc: "Our artists turn sissies and first-timers out in lashes, lipstick and heels." },
   { time: "10:30 PM", title: "Play rooms open", desc: "The Cross Room, Bench Room and Cage open, alongside a live shibari demo on the rope frames." },
+  { time: "11:00 PM", title: "Main stage opens", desc: "Trans and drag headliners, burlesque and cabaret. The stage runs until close." },
   { time: "12:00 AM", title: "Domme hour", desc: "Mistresses, dommes and trans performers take the main stage for the night's headline show." },
-  { time: "1:00 AM", title: "Late floor", desc: "The music picks up and the floor stays open until close." },
+  { time: "1:30 AM", title: "Crowning & late floor", desc: "The best-dressed sub is crowned, then the music picks up until close." },
   { time: "4:00 AM", title: "Close", desc: "Last call is at 3:30. Rides are arranged for Ultra VIP guests." },
 ];
 
@@ -202,6 +235,20 @@ function CheckoutModal({ tier, wallet, onClose }) {
         </div>
         <div className={s.total}><span>Total</span><span>${(tier.price * qty).toLocaleString()}</span></div>
 
+        <div className={s.payTabs} role="tablist" aria-label="Payment method">
+          {[["card", "Card"], ["btc", "Bitcoin"]].map(([key, label]) => (
+            <button
+              key={key}
+              role="tab"
+              aria-selected={method === key}
+              className={`${s.payTab} ${method === key ? s.payTabActive : ""}`}
+              onClick={() => setMethod(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         {method === "card" && (
           <>
             {error && <p className={s.error}>{error}</p>}
@@ -209,7 +256,6 @@ function CheckoutModal({ tier, wallet, onClose }) {
               {loading ? "Opening secure checkout…" : "Continue to payment"}
             </button>
             <p className={s.fine}>Secure card checkout by Stripe. Receipt emailed instantly.</p>
-            <button className={s.altPay} onClick={() => setMethod("btc")}>Pay with Bitcoin instead</button>
           </>
         )}
 
@@ -234,7 +280,6 @@ function CheckoutModal({ tier, wallet, onClose }) {
                 <p className={s.fine}>Send the USD equivalent of ${(tier.price * qty).toLocaleString()} at the current rate.</p>
               </>
             )}
-            <button className={s.altPay} onClick={() => setMethod("card")}>Pay by card instead</button>
           </div>
         )}
       </div>
@@ -344,12 +389,46 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Photo strip */}
+        <div className={s.strip} aria-label="Photos of the kind of night to expect">
+          <div className={s.stripTrack}>
+            {[...STRIP, ...STRIP].map(([src, alt], i) => (
+              <div key={i} className={s.stripItem} aria-hidden={i >= STRIP.length}>
+                <Image src={src} alt={i >= STRIP.length ? "" : alt} fill sizes="300px" className={s.coverImg} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dommes & subs */}
+        <section className={s.section} id="who">
+          <div className={s.wrap}>
+            <Reveal>
+              <SectionHead
+                index="01 — Who comes"
+                title={<>Trans dommes. <em>Devoted subs.</em></>}
+                intro="The night belongs to trans women and the subs, sissies, pups and admirers who worship them. Come to lead, come to kneel, or come to watch."
+              />
+              <div className={s.mosaic}>
+                {DOM_SUB.map((d) => (
+                  <figure key={d.caption} className={`${s.galleryItem} ${d.tall ? s.mosaicTall : ""}`}>
+                    <div className={s.mosaicMedia}>
+                      <Image src={d.src} alt={d.alt} fill sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 600px" className={s.coverImg} />
+                    </div>
+                    <figcaption>{d.caption}<span className={s.captionNote}>{d.note}</span></figcaption>
+                  </figure>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* The Night */}
         <section className={s.section} id="night">
           <div className={s.wrap}>
             <Reveal>
               <SectionHead
-                index="01 — The Night"
+                index="02 — The Night"
                 title={<>Eight hours, <em>planned properly.</em></>}
                 intro="We keep the guest list small and the production tight: proper sound and lighting, trained floor staff, and rooms that are designed rather than improvised."
               />
@@ -375,18 +454,41 @@ export default function Home() {
           </div>
         </section>
 
+        {/* On stage */}
+        <section className={s.section} id="stage">
+          <div className={s.wrap}>
+            <Reveal>
+              <SectionHead
+                index="03 — On Stage"
+                title={<>Live, loud <em>and in heels.</em></>}
+                intro="The main stage runs from eleven until close: trans and drag headliners, burlesque, cabaret and the midnight domme show."
+              />
+              <div className={s.stageGrid}>
+                {STAGE.map((p) => (
+                  <figure key={p.caption} className={s.galleryItem}>
+                    <div className={s.stageMedia}>
+                      <Image src={p.src} alt={p.alt} fill sizes="(max-width: 760px) 50vw, 300px" className={s.coverImg} />
+                    </div>
+                    <figcaption>{p.caption}<span className={s.captionNote}>{p.note}</span></figcaption>
+                  </figure>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* Rooms */}
         <section className={s.section} id="rooms">
           <div className={s.wrap}>
             <Reveal>
               <SectionHead
-                index="02 — The Rooms"
+                index="04 — The Rooms"
                 title={<>Spaces built <em>for play.</em></>}
                 intro="Beyond the main floor, each room is lit, furnished and hosted with a purpose. Every room's rules are posted at the door."
               />
               <div className={s.gallery}>
                 {ROOMS.map((r) => (
-                  <figure key={r.src} className={`${s.galleryItem} ${r.wide ? s.galleryWide : ""}`}>
+                  <figure key={r.src} className={`${s.galleryItem} ${r.wide ? s.galleryWide : ""} ${r.full ? s.galleryFull : ""}`}>
                     <div className={s.galleryMedia}>
                       <Image src={r.src} alt={r.alt} fill sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 600px" className={s.coverImg} />
                     </div>
@@ -398,8 +500,11 @@ export default function Home() {
               <div className={s.playMenu}>
                 <div className={s.subhead}>On the play menu</div>
                 <ul className={s.playGrid}>
-                  {PLAY_MENU.map(([title, desc]) => (
+                  {PLAY_MENU.map(([title, desc, img, alt]) => (
                     <li key={title}>
+                      <div className={s.playMedia}>
+                        <Image src={img} alt={alt} fill sizes="(max-width: 760px) 100vw, (max-width: 980px) 50vw, 300px" className={s.coverImg} />
+                      </div>
                       <strong>{title}</strong>
                       <p>{desc}</p>
                     </li>
@@ -414,7 +519,7 @@ export default function Home() {
           <section className={s.section} id="past">
             <div className={s.wrap}>
               <Reveal>
-                <SectionHead index="— Past Parties" title={<>From <em>previous nights.</em></>} intro={<Link href="/past-parties" className={s.textLink}>Browse the full archive →</Link>} />
+                <SectionHead index="Archive — Past Parties" title={<>From <em>previous nights.</em></>} intro={<Link href="/past-parties" className={s.textLink}>Browse the full archive →</Link>} />
                 <div className={s.pastGrid}>
                   {PAST_PARTY_PHOTOS.map((ph) => (
                     <figure key={ph.src} className={s.galleryItem}>
@@ -435,7 +540,7 @@ export default function Home() {
           <div className={s.wrap}>
             <Reveal>
               <SectionHead
-                index="03 — Tickets"
+                index="05 — Tickets"
                 title={<>Choose how you&apos;d <em>like to arrive.</em></>}
                 intro={`All tickets are for ${EVENT.dateLabel}. Capacity is limited and we don't sell at the door.`}
               />
@@ -462,7 +567,10 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className={s.virtual}>
+              <div className={`${s.virtual} ${s.virtualWithImage}`}>
+                <div className={s.virtualMedia}>
+                  <Image src={ux("1560195183-570e72bb6fd8", 900)} alt="A performer in red under a single spotlight on a dark stage" fill sizes="(max-width: 760px) 100vw, 360px" className={s.coverImg} />
+                </div>
                 <div>
                   <h3 className={s.virtualTitle}>Can&apos;t be in LA? <span>Watch live.</span></h3>
                   <p style={{ color: "var(--muted)" }}>{VIRTUAL_TIER.summary}</p>
@@ -486,7 +594,7 @@ export default function Home() {
           <div className={s.wrap}>
             <Reveal>
               <SectionHead
-                index="04 — Guest Guide"
+                index="06 — Guest Guide"
                 title={<>Dress up. <em>Look after each other.</em></>}
               />
               <div className={s.lookbook}>
@@ -523,7 +631,7 @@ export default function Home() {
           <div className={s.wrap}>
             <Reveal>
               <SectionHead
-                index="— The Boutique"
+                index="07 — The Boutique"
                 title={<>Arrive <em>dressed for it.</em></>}
                 intro="Latex, leather, lingerie, heels, rope and restraints, picked by our hosts. Shipped discreetly in plain packaging."
               />
@@ -552,7 +660,7 @@ export default function Home() {
         <section className={s.section} id="faq">
           <div className={s.wrap}>
             <Reveal>
-              <SectionHead index="05 — Questions" title="Before you come." />
+              <SectionHead index="08 — Questions" title="Before you come." />
               <div className={`${s.faq} ${s.body}`}>
                 {FAQS.map((f) => (
                   <details key={f.q}>
@@ -569,7 +677,10 @@ export default function Home() {
         <section className={s.section} id="contact">
           <div className={s.wrap}>
             <Reveal>
-              <SectionHead index="06 — Contact" title={<>Questions, groups, <em>access needs.</em></>} />
+              <SectionHead index="09 — Contact" title={<>Questions, groups, <em>access needs.</em></>} />
+              <div className={s.bandMedia}>
+                <Image src={ux("1550218585-5a4e6bc59ebb", 2000)} alt="Pink and blue neon lights over a dark bar" fill sizes="(max-width: 1200px) 100vw, 1152px" className={s.coverImg} />
+              </div>
               <div className={`${s.twoCol} ${s.body}`}>
                 <div>
                   <div className={s.subhead}>Get in touch</div>

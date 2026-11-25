@@ -27,14 +27,14 @@ export default function ChatWidget() {
 
   return (
     <>
-      <button className="chat-toggle" onClick={() => setOpen(!open)}>
-        {open ? "✕" : "💬"}
+      <button className="chat-toggle" onClick={() => setOpen(!open)} aria-expanded={open}>
+        {open ? "Close" : "Message us"}
       </button>
 
       {open && (
         <div className="chat-window">
           <div className="chat-header">
-            <span>😈 Message Us</span>
+            <span>Message us</span>
             <button className="chat-close" onClick={() => setOpen(false)}>✕</button>
           </div>
           <div style={{ padding: "1rem" }}>

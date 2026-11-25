@@ -17,6 +17,8 @@ export default function CodeOfConduct() {
           eyebrow="Every guest agrees to this"
           title={<>Code of <em>conduct.</em></>}
           intro="Our parties work because everyone looks after everyone else. Buying a ticket means you agree to these rules. Breaking them means you leave, with no refund."
+          image="https://images.unsplash.com/photo-1643232880088-1596644e7e5c?w=2000&q=75"
+          imageAlt="Hands loosely tied with soft rope in low light"
         />
         <section className={s.section}>
           <div className={s.wrap}>

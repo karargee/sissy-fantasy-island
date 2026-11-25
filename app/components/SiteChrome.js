@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { EVENT } from "@/lib/event";
 import s from "@/app/home.module.css";
 
@@ -111,13 +112,18 @@ export function AgeGate({ children }) {
   );
 }
 
-export function PageHero({ eyebrow, title, intro }) {
+export function PageHero({ eyebrow, title, intro, image, imageAlt = "", imagePosition = "center" }) {
   return (
     <section className={s.pageHero}>
       <div className={s.wrap}>
         <div className={s.eyebrow}>{eyebrow}</div>
         <h1 className={s.pageTitle}>{title}</h1>
         {intro && <p className={s.sectionIntro}>{intro}</p>}
+        {image && (
+          <div className={s.bandMedia} style={{ marginTop: 48, marginBottom: 0 }}>
+            <Image src={image} alt={imageAlt} fill priority sizes="(max-width: 1200px) 100vw, 1152px" className={s.coverImg} style={{ objectPosition: imagePosition }} />
+          </div>
+        )}
       </div>
     </section>
   );
