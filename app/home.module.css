@@ -1045,6 +1045,210 @@
   .modal { padding: 24px; }
 }
 
+/* ════════════ Motion ════════════ */
+
+/* Scroll progress line */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--blue), var(--accent) 40%, #f4f1ee 50%, var(--accent) 60%, var(--blue));
+  pointer-events: none;
+}
+
+/* Hero: slow drift on the photo */
+.kenBurns { animation: kenBurns 28s ease-in-out infinite alternate; transform-origin: 60% 40%; }
+@keyframes kenBurns {
+  from { transform: scale(1.04) translate3d(0, 0, 0); }
+  to { transform: scale(1.16) translate3d(-2%, -1.5%, 0); }
+}
+
+/* Hero: floating light */
+.heroGlows { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.heroGlows span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.32;
+  mix-blend-mode: screen;
+}
+.glowPink {
+  width: 46vw; height: 46vw; max-width: 620px; max-height: 620px;
+  right: -8%; top: -12%;
+  background: radial-gradient(circle, #f0a6bb 0%, rgba(240, 166, 187, 0) 70%);
+  animation: drift1 18s ease-in-out infinite alternate;
+}
+.glowBlue {
+  width: 38vw; height: 38vw; max-width: 520px; max-height: 520px;
+  right: 22%; bottom: -24%;
+  background: radial-gradient(circle, #7cc8ec 0%, rgba(124, 200, 236, 0) 70%);
+  opacity: 0.22;
+  animation: drift2 22s ease-in-out infinite alternate;
+}
+@keyframes drift1 { to { transform: translate3d(-12vw, 10vh, 0) scale(1.15); } }
+@keyframes drift2 { to { transform: translate3d(10vw, -14vh, 0) scale(0.9); } }
+
+/* Hero: film grain */
+.grain {
+  position: absolute;
+  inset: -50%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: grain 0.9s steps(4) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-2%, -1%); }
+  100% { transform: translate(1%, 3%); }
+}
+
+/* Hero: headline lines slide up out of a mask */
+.lineMask { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.lineInner {
+  display: inline-block;
+  transform: translate3d(0, 105%, 0);
+  animation: lineUp 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes lineUp { to { transform: translate3d(0, 0, 0); } }
+
+.heroIn {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  animation: fadeUp 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes fadeUp { to { opacity: 1; transform: translate3d(0, 0, 0); } }
+
+/* Hero: slow shimmer across the italic line */
+.shimmer {
+  background: linear-gradient(100deg, var(--accent) 0%, var(--accent) 40%, #fde6ee 50%, var(--accent) 60%, var(--accent) 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: lineUp 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards, shimmer 7s ease-in-out 1.6s infinite;
+  animation-delay: var(--d, 0ms), 1.6s;
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  60%, 100% { background-position: -50% 0; }
+}
+
+/* Countdown digits roll in */
+.countNum { display: inline-block; overflow: hidden; vertical-align: bottom; }
+.countRoll { display: inline-block; animation: roll 0.45s cubic-bezier(0.19, 1, 0.22, 1); }
+@keyframes roll {
+  from { transform: translate3d(0, -60%, 0); opacity: 0; }
+  to { transform: translate3d(0, 0, 0); opacity: 1; }
+}
+
+/* Big scrolling text band */
+.ticker {
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  padding: 28px 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.tickerTrack { display: flex; width: max-content; animation: tickerScroll 45s linear infinite; }
+.tickerReverse { animation-direction: reverse; }
+.tickerRow { display: flex; align-items: center; flex: none; }
+.tickerWord, .tickerOutline {
+  font-family: var(--display);
+  font-size: clamp(2.6rem, 7vw, 5.6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  padding: 0 0.35em;
+}
+.tickerWord { color: var(--text); }
+.tickerOutline {
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--accent);
+}
+.tickerDot { color: var(--accent); font-size: clamp(1rem, 2vw, 1.5rem); }
+@keyframes tickerScroll { to { transform: translate3d(-50%, 0, 0); } }
+
+/* Scroll reveals: titles rise, photos wipe open */
+.reveal { opacity: 1; transform: none; }
+.reveal .sectionIndex,
+.reveal .sectionTitle,
+.reveal .sectionIntro {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 0.9s ease, transform 1.1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.reveal .sectionTitle { transition-delay: 80ms; }
+.reveal .sectionIntro { transition-delay: 180ms; }
+.revealIn .sectionIndex,
+.revealIn .sectionTitle,
+.revealIn .sectionIntro { opacity: 1; transform: none; }
+
+.reveal .galleryMedia,
+.reveal .mosaicMedia,
+.reveal .stageMedia,
+.reveal .playMedia,
+.reveal .bandMedia,
+.reveal .productMedia,
+.reveal .lookMedia,
+.reveal .tierMedia {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.reveal .coverImg { transform: scale(1.12); transition: transform 1.8s cubic-bezier(0.19, 1, 0.22, 1); }
+.revealIn .galleryMedia,
+.revealIn .mosaicMedia,
+.revealIn .stageMedia,
+.revealIn .playMedia,
+.revealIn .bandMedia,
+.revealIn .productMedia,
+.revealIn .lookMedia,
+.revealIn .tierMedia { clip-path: inset(0 0 0 0); }
+.revealIn .coverImg { transform: scale(1); }
+
+/* Stagger the wipes inside grids */
+.reveal :is(.gallery, .mosaic, .stageGrid, .playGrid, .productGrid, .lookbook, .tiers) > :nth-child(2) :is(.galleryMedia, .mosaicMedia, .stageMedia, .playMedia, .productMedia, .lookMedia, .tierMedia) { transition-delay: 120ms; }
+.reveal :is(.gallery, .mosaic, .stageGrid, .playGrid, .productGrid, .lookbook, .tiers) > :nth-child(3) :is(.galleryMedia, .mosaicMedia, .stageMedia, .playMedia, .productMedia, .lookMedia, .tierMedia) { transition-delay: 240ms; }
+.reveal :is(.gallery, .mosaic, .stageGrid, .playGrid, .productGrid, .lookbook, .tiers) > :nth-child(4) :is(.galleryMedia, .mosaicMedia, .stageMedia, .playMedia, .productMedia, .lookMedia, .tierMedia) { transition-delay: 360ms; }
+.reveal :is(.gallery, .mosaic, .stageGrid, .playGrid, .productGrid, .lookbook, .tiers) > :nth-child(n+5) :is(.galleryMedia, .mosaicMedia, .stageMedia, .playMedia, .productMedia, .lookMedia, .tierMedia) { transition-delay: 480ms; }
+
+/* Keep hover zooms working after the reveal */
+.revealIn .productCard:hover .productMedia img,
+.revealIn .tier:hover .tierMedia img,
+.revealIn .galleryItem:hover .mosaicMedia img,
+.revealIn .playGrid li:hover .playMedia img { transform: scale(1.04); }
+
+/* Buttons: subtle lift */
+.btn { transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.2s ease; }
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kenBurns, .heroGlows span, .grain, .tickerTrack, .shimmer, .countRoll { animation: none !important; }
+  .lineInner, .heroIn { animation: none !important; opacity: 1; transform: none; }
+  .shimmer { color: var(--accent); background: none; }
+  .reveal .sectionIndex, .reveal .sectionTitle, .reveal .sectionIntro { opacity: 1; transform: none; transition: none; }
+  .reveal :is(.galleryMedia, .mosaicMedia, .stageMedia, .playMedia, .bandMedia, .productMedia, .lookMedia, .tierMedia) { clip-path: none; transition: none; }
+  .reveal .coverImg { transform: none; transition: none; }
+  .progress { display: none; }
+  .btn:hover { transform: none; }
+}
+@media (max-width: 760px) {
+  .ticker { padding: 18px 0; }
+  .heroGlows span { filter: blur(60px); }
+}
+
 /* ── Final responsive overrides (must stay last so they beat the base rules above) ── */
 .tierMedia { width: calc(100% + 64px); max-width: none; }
 @media (max-width: 980px) {

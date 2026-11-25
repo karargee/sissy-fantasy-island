@@ -158,6 +158,44 @@ function Reveal({ children }) {
   return <div ref={ref} className={`${s.reveal} ${inView ? s.revealIn : ""}`}>{children}</div>;
 }
 
+function Ticker({ words, reverse = false }) {
+  const row = words.flatMap((w, i) => [
+    <span key={`w${i}`} className={i % 2 ? s.tickerOutline : s.tickerWord}>{w}</span>,
+    <span key={`d${i}`} className={s.tickerDot} aria-hidden="true">✦</span>,
+  ]);
+  return (
+    <div className={s.ticker} aria-label={words.join(", ")}>
+      <div className={`${s.tickerTrack} ${reverse ? s.tickerReverse : ""}`} aria-hidden="true">
+        <div className={s.tickerRow}>{row}</div>
+        <div className={s.tickerRow}>{row}</div>
+      </div>
+    </div>
+  );
+}
+
+function ScrollProgress() {
+  const ref = useRef(null);
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const h = document.documentElement;
+      const p = h.scrollHeight > h.clientHeight ? h.scrollTop / (h.scrollHeight - h.clientHeight) : 0;
+      if (ref.current) ref.current.style.transform = `scaleX(${p})`;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+  return <div ref={ref} className={s.progress} aria-hidden="true" />;
+}
+
 function SectionHead({ index, title, intro }) {
   return (
     <div className={s.sectionHead}>
@@ -343,17 +381,26 @@ export default function Home() {
       <a href="#main" className="skip-link">Skip to content</a>
       <FlagRule />
       <SiteHeader onHome />
+      <ScrollProgress />
 
       <main id="main">
         {/* Hero */}
         <section className={`${s.hero} ${s.heroWithImage}`} id="top">
           <div className={s.heroMedia} aria-hidden="true">
-            <Image src="/dungeon-9.jpg" alt="" fill priority sizes="100vw" className={s.heroImg} />
+            <Image src="/dungeon-9.jpg" alt="" fill priority sizes="100vw" className={`${s.heroImg} ${s.kenBurns}`} />
           </div>
+          <div className={s.heroGlows} aria-hidden="true">
+            <span className={s.glowPink} />
+            <span className={s.glowBlue} />
+          </div>
+          <div className={s.grain} aria-hidden="true" />
           <div className={`${s.wrap} ${s.heroContent}`}>
-            <div className={s.eyebrow}>{EVENT.edition} · Los Angeles</div>
-            <h1 className={s.heroTitle}>One night.<br /><em>Come as you are.</em></h1>
-            <div className={s.heroGrid}>
+            <div className={`${s.eyebrow} ${s.heroIn}`} style={{ "--d": "0ms" }}>{EVENT.edition} · Los Angeles</div>
+            <h1 className={s.heroTitle}>
+              <span className={s.lineMask}><span className={s.lineInner} style={{ "--d": "120ms" }}>One night.</span></span>
+              <span className={s.lineMask}><em className={`${s.lineInner} ${s.shimmer}`} style={{ "--d": "300ms" }}>Come as you are.</em></span>
+            </h1>
+            <div className={`${s.heroGrid} ${s.heroIn}`} style={{ "--d": "650ms" }}>
               <div>
                 <p className={s.heroLede}>
                   A private fetish party for trans women, sissies, subs, dommes and the people who adore them.
@@ -378,10 +425,12 @@ export default function Home() {
                 ))}
               </dl>
             </div>
-            <div className={s.countdown} aria-label="Time until doors open">
+            <div className={`${s.countdown} ${s.heroIn}`} style={{ "--d": "850ms" }} aria-label="Time until doors open">
               {Object.entries(countdown || { Days: "–", Hours: "–", Minutes: "–", Seconds: "–" }).map(([label, v]) => (
                 <div className={s.countUnit} key={label}>
-                  <span className={s.countNum}>{typeof v === "number" ? String(v).padStart(2, "0") : v}</span>
+                  <span className={s.countNum}>
+                    <span key={String(v)} className={s.countRoll}>{typeof v === "number" ? String(v).padStart(2, "0") : v}</span>
+                  </span>
                   <span className={s.countLabel}>{label}</span>
                 </div>
               ))}
@@ -477,6 +526,8 @@ export default function Home() {
           </div>
         </section>
 
+        <Ticker words={["Trans dommes", "Devoted subs", "Rope", "Latex", "Leather", "Live drag", "Domme hour"]} />
+
         {/* Rooms */}
         <section className={s.section} id="rooms">
           <div className={s.wrap}>
@@ -534,6 +585,8 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        <Ticker reverse words={["December 13, 2026", "Los Angeles", "Doors at nine", "Strictly 18+", "Tickets on sale"]} />
 
         {/* Tickets */}
         <section className={s.section} id="tickets">
